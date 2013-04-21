@@ -1,0 +1,3 @@
+[submodule "Vendor/twitter-text-objc"]
+	path = Vendor/twitter-text-objc
+	url = https://github.com/twitter/twitter-text-objc

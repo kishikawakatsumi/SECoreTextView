@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		141B274B1723BDF200E2A1B4 /* SECompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B274A1723BDF200E2A1B4 /* SECompatibility.m */; };
+		1450806217245DF200636965 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450805F17245DF200636965 /* TwitterText.m */; };
+		1450806317245DF200636965 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806117245DF200636965 /* TwitterTextEntity.m */; };
 		1488D5141722E98700F22C26 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D5131722E98700F22C26 /* Cocoa.framework */; };
 		1488D5311722E9A300F22C26 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D5301722E9A300F22C26 /* CoreText.framework */; };
 		1488D5511722EA3D00F22C26 /* SELineLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5461722EA3C00F22C26 /* SELineLayout.m */; };
@@ -18,8 +20,6 @@
 		1488D5561722EA3D00F22C26 /* SETextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5501722EA3D00F22C26 /* SETextView.m */; };
 		1488D55C1722EE1700F22C26 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D55B1722EE1600F22C26 /* Social.framework */; };
 		1488D55E1722EE4700F22C26 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D55D1722EE4700F22C26 /* Accounts.framework */; };
-		1488D56E172307D300F22C26 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D56B172307D300F22C26 /* TwitterText.m */; };
-		1488D56F172307D300F22C26 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D56D172307D300F22C26 /* TwitterTextEntity.m */; };
 		1488D5751723B05200F22C26 /* SEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5741723B05200F22C26 /* SEAppDelegate.m */; };
 		1488D5781723B06400F22C26 /* SETweetCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5771723B06400F22C26 /* SETweetCellView.m */; };
 		1488D57B1723B07F00F22C26 /* SEUserIconImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D57A1723B07F00F22C26 /* SEUserIconImageView.m */; };
@@ -36,6 +36,10 @@
 /* Begin PBXFileReference section */
 		141B27491723BDF200E2A1B4 /* SECompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SECompatibility.h; path = Lib/SECompatibility.h; sourceTree = SOURCE_ROOT; };
 		141B274A1723BDF200E2A1B4 /* SECompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SECompatibility.m; path = Lib/SECompatibility.m; sourceTree = SOURCE_ROOT; };
+		1450805E17245DF200636965 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "Vendor/twitter-text-objc/lib/TwitterText.h"; sourceTree = SOURCE_ROOT; };
+		1450805F17245DF200636965 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "Vendor/twitter-text-objc/lib/TwitterText.m"; sourceTree = SOURCE_ROOT; };
+		1450806017245DF200636965 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = SOURCE_ROOT; };
+		1450806117245DF200636965 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = SOURCE_ROOT; };
 		1488D5101722E98700F22C26 /* SECoreTextView-Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SECoreTextView-Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1488D5131722E98700F22C26 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1488D5161722E98700F22C26 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -56,10 +60,6 @@
 		1488D5501722EA3D00F22C26 /* SETextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextView.m; path = Lib/SETextView.m; sourceTree = SOURCE_ROOT; };
 		1488D55B1722EE1600F22C26 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		1488D55D1722EE4700F22C26 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
-		1488D56A172307D200F22C26 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "Vendor/twitter-text-objc/TwitterText.h"; sourceTree = SOURCE_ROOT; };
-		1488D56B172307D300F22C26 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "Vendor/twitter-text-objc/TwitterText.m"; sourceTree = SOURCE_ROOT; };
-		1488D56C172307D300F22C26 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "Vendor/twitter-text-objc/TwitterTextEntity.h"; sourceTree = SOURCE_ROOT; };
-		1488D56D172307D300F22C26 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "Vendor/twitter-text-objc/TwitterTextEntity.m"; sourceTree = SOURCE_ROOT; };
 		1488D5731723B05200F22C26 /* SEAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEAppDelegate.h; path = DemoApp/OSX/SEAppDelegate.h; sourceTree = SOURCE_ROOT; };
 		1488D5741723B05200F22C26 /* SEAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEAppDelegate.m; path = DemoApp/OSX/SEAppDelegate.m; sourceTree = SOURCE_ROOT; };
 		1488D5761723B06400F22C26 /* SETweetCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETweetCellView.h; path = DemoApp/OSX/SETweetCellView.h; sourceTree = SOURCE_ROOT; };
@@ -200,10 +200,10 @@
 		1488D570172307DC00F22C26 /* twitter-text-objc */ = {
 			isa = PBXGroup;
 			children = (
-				1488D56A172307D200F22C26 /* TwitterText.h */,
-				1488D56B172307D300F22C26 /* TwitterText.m */,
-				1488D56C172307D300F22C26 /* TwitterTextEntity.h */,
-				1488D56D172307D300F22C26 /* TwitterTextEntity.m */,
+				1450805E17245DF200636965 /* TwitterText.h */,
+				1450805F17245DF200636965 /* TwitterText.m */,
+				1450806017245DF200636965 /* TwitterTextEntity.h */,
+				1450806117245DF200636965 /* TwitterTextEntity.m */,
 			);
 			name = "twitter-text-objc";
 			sourceTree = "<group>";
@@ -300,8 +300,6 @@
 				1488D5541722EA3D00F22C26 /* SETextLayout.m in Sources */,
 				1488D5551722EA3D00F22C26 /* SETextSelection.m in Sources */,
 				1488D5561722EA3D00F22C26 /* SETextView.m in Sources */,
-				1488D56E172307D300F22C26 /* TwitterText.m in Sources */,
-				1488D56F172307D300F22C26 /* TwitterTextEntity.m in Sources */,
 				1488D5751723B05200F22C26 /* SEAppDelegate.m in Sources */,
 				1488D5781723B06400F22C26 /* SETweetCellView.m in Sources */,
 				1488D57B1723B07F00F22C26 /* SEUserIconImageView.m in Sources */,
@@ -309,6 +307,8 @@
 				1488D58C1723B0EE00F22C26 /* main.m in Sources */,
 				141B274B1723BDF200E2A1B4 /* SECompatibility.m in Sources */,
 				14B3B193172424E300E173E9 /* SETwitterHelper.m in Sources */,
+				1450806217245DF200636965 /* TwitterText.m in Sources */,
+				1450806317245DF200636965 /* TwitterTextEntity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

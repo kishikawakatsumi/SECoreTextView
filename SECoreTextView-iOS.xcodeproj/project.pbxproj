@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		141B27401723B90E00E2A1B4 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B273D1723B90E00E2A1B4 /* TwitterText.m */; };
-		141B27411723B90E00E2A1B4 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B273F1723B90E00E2A1B4 /* TwitterTextEntity.m */; };
 		141B27481723BBA200E2A1B4 /* SECompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B27471723BBA200E2A1B4 /* SECompatibility.m */; };
 		141B274D1723C36300E2A1B4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 141B274C1723C36200E2A1B4 /* CoreText.framework */; };
 		141B274F1723C36900E2A1B4 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 141B274E1723C36900E2A1B4 /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -16,6 +14,8 @@
 		141B27541723C6FB00E2A1B4 /* SETimelineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B27531723C6FB00E2A1B4 /* SETimelineCell.m */; };
 		141B27591723C74800E2A1B4 /* SETimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B27561723C74800E2A1B4 /* SETimelineViewController.m */; };
 		141B275A1723C74800E2A1B4 /* SETweetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B27581723C74800E2A1B4 /* SETweetViewController.m */; };
+		1450806817245E0800636965 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806517245E0800636965 /* TwitterText.m */; };
+		1450806917245E0800636965 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806717245E0800636965 /* TwitterTextEntity.m */; };
 		1488D59F1723B20200F22C26 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D59E1723B20200F22C26 /* UIKit.framework */; };
 		1488D5A11723B20200F22C26 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D5A01723B20200F22C26 /* Foundation.framework */; };
 		1488D5A31723B20200F22C26 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D5A21723B20200F22C26 /* CoreGraphics.framework */; };
@@ -41,10 +41,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		141B273C1723B90E00E2A1B4 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "Vendor/twitter-text-objc/TwitterText.h"; sourceTree = SOURCE_ROOT; };
-		141B273D1723B90E00E2A1B4 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "Vendor/twitter-text-objc/TwitterText.m"; sourceTree = SOURCE_ROOT; };
-		141B273E1723B90E00E2A1B4 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "Vendor/twitter-text-objc/TwitterTextEntity.h"; sourceTree = SOURCE_ROOT; };
-		141B273F1723B90E00E2A1B4 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "Vendor/twitter-text-objc/TwitterTextEntity.m"; sourceTree = SOURCE_ROOT; };
 		141B27441723BAEF00E2A1B4 /* SECompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SECompatibility.h; path = Lib/SECompatibility.h; sourceTree = SOURCE_ROOT; };
 		141B27471723BBA200E2A1B4 /* SECompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SECompatibility.m; path = Lib/SECompatibility.m; sourceTree = SOURCE_ROOT; };
 		141B274C1723C36200E2A1B4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -56,6 +52,10 @@
 		141B27561723C74800E2A1B4 /* SETimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETimelineViewController.m; path = DemoApp/iOS/SETimelineViewController.m; sourceTree = SOURCE_ROOT; };
 		141B27571723C74800E2A1B4 /* SETweetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETweetViewController.h; path = DemoApp/iOS/SETweetViewController.h; sourceTree = SOURCE_ROOT; };
 		141B27581723C74800E2A1B4 /* SETweetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETweetViewController.m; path = DemoApp/iOS/SETweetViewController.m; sourceTree = SOURCE_ROOT; };
+		1450806417245E0800636965 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "Vendor/twitter-text-objc/lib/TwitterText.h"; sourceTree = SOURCE_ROOT; };
+		1450806517245E0800636965 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "Vendor/twitter-text-objc/lib/TwitterText.m"; sourceTree = SOURCE_ROOT; };
+		1450806617245E0800636965 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = SOURCE_ROOT; };
+		1450806717245E0800636965 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = SOURCE_ROOT; };
 		1488D59B1723B20200F22C26 /* SECoreTextView-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SECoreTextView-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1488D59E1723B20200F22C26 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1488D5A01723B20200F22C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -114,10 +114,10 @@
 		141B27421723B91300E2A1B4 /* twitter-text-objc */ = {
 			isa = PBXGroup;
 			children = (
-				141B273C1723B90E00E2A1B4 /* TwitterText.h */,
-				141B273D1723B90E00E2A1B4 /* TwitterText.m */,
-				141B273E1723B90E00E2A1B4 /* TwitterTextEntity.h */,
-				141B273F1723B90E00E2A1B4 /* TwitterTextEntity.m */,
+				1450806417245E0800636965 /* TwitterText.h */,
+				1450806517245E0800636965 /* TwitterText.m */,
+				1450806617245E0800636965 /* TwitterTextEntity.h */,
+				1450806717245E0800636965 /* TwitterTextEntity.m */,
 			);
 			name = "twitter-text-objc";
 			sourceTree = "<group>";
@@ -319,14 +319,14 @@
 				1488D5F61723B67B00F22C26 /* SETextLayout.m in Sources */,
 				1488D5F71723B67B00F22C26 /* SETextSelection.m in Sources */,
 				1488D5F81723B67B00F22C26 /* SETextView.m in Sources */,
-				141B27401723B90E00E2A1B4 /* TwitterText.m in Sources */,
-				141B27411723B90E00E2A1B4 /* TwitterTextEntity.m in Sources */,
 				141B27481723BBA200E2A1B4 /* SECompatibility.m in Sources */,
 				141B27541723C6FB00E2A1B4 /* SETimelineCell.m in Sources */,
 				141B27591723C74800E2A1B4 /* SETimelineViewController.m in Sources */,
 				141B275A1723C74800E2A1B4 /* SETweetViewController.m in Sources */,
 				14B3B196172424F000E173E9 /* SETwitterHelper.m in Sources */,
 				14B3B19917242D7F00E173E9 /* SEWebViewController.m in Sources */,
+				1450806817245E0800636965 /* TwitterText.m in Sources */,
+				1450806917245E0800636965 /* TwitterTextEntity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
