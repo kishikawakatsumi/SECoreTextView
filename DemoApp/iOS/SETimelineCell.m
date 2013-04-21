@@ -26,7 +26,7 @@
     CGRect screenNameLabelFrame = self.screenNameLabel.frame;
     CGRect nameLabelFrame = self.nameLabel.frame;
     nameLabelFrame.origin.x = CGRectGetMaxX(screenNameLabelFrame) + 8.0f;
-    nameLabelFrame.size.width = MAX(CGRectGetMaxX(self.bounds) - CGRectGetMaxX(nameLabelFrame) - 8.0f, 0.0f);
+    nameLabelFrame.size.width = MAX(CGRectGetMaxX(self.bounds) - CGRectGetMinX(nameLabelFrame) - 8.0f, 0.0f);
     self.nameLabel.frame = nameLabelFrame;
 }
 
