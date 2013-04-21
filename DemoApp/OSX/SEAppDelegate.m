@@ -53,7 +53,7 @@ static const CGFloat LINE_SPACING = 4.0f;
 
 - (void)getHomeTimlineWithAccount:(ACAccount *)account
 {
-    NSURL *requestURL = [NSURL URLWithString:@"https://api.twitter.com/1/statuses/home_timeline.json"];
+    NSURL *requestURL = [NSURL URLWithString:@"https://api.twitter.com/1/statuses/user_timeline.json"];
     NSDictionary *params = @{@"count": @"200", @"include_entities": @"true", @"screen_name": @"k_katsumi"};
     
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter
