@@ -15,6 +15,9 @@ SECoreTextView is multi style and hyper link clickable text view.
 - Text selection (OS X only, yet)
 - Both OS X/iOS supported
 
+## Installation
+`git clone git@github.com:kishikawakatsumi/SECoreTextView.git --recursive`
+
 ## 3rd party libraries (for demo apps)
 **twitter-text-objc**  
 [https://github.com/twitter/twitter-text-objc](https://github.com/twitter/twitter-text-objc) 
