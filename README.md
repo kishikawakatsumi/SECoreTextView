@@ -3,6 +3,12 @@ SECoreTextView
 
 SECoreTextView is multi style and hyper link clickable text view.
 
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_01.png" alt="iOS ScreenShot 1" width="225px" style="width: 225px;" />&nbsp;
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_02.png" alt="iOS ScreenShot 1" width="225px" style="width: 225px;" />
+
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/OSX_01.png" alt="OS X ScreenShot 1" width="320px" style="width: 320px;" />&nbsp;
+
+
 ## Features
 - Multi style text
 - Clickable hyper link
