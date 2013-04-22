@@ -17,7 +17,6 @@
 		1450806817245E0800636965 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806517245E0800636965 /* TwitterText.m */; };
 		1450806917245E0800636965 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806717245E0800636965 /* TwitterTextEntity.m */; };
 		147FC14B172590AE00A11142 /* SETextMagnifierCaret.m in Sources */ = {isa = PBXBuildFile; fileRef = 147FC14A172590AE00A11142 /* SETextMagnifierCaret.m */; };
-		147FC15217259F2400A11142 /* RTKCaretLoupeMask.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15117259F2400A11142 /* RTKCaretLoupeMask.png */; };
 		147FC16117259F8100A11142 /* kb-loupe-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15317259F8000A11142 /* kb-loupe-hi.png */; };
 		147FC16217259F8100A11142 /* kb-loupe-hi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15417259F8000A11142 /* kb-loupe-hi@2x.png */; };
 		147FC16417259F8100A11142 /* kb-loupe-mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15617259F8000A11142 /* kb-loupe-mask@2x.png */; };
@@ -77,7 +76,6 @@
 		1450806717245E0800636965 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = SOURCE_ROOT; };
 		147FC149172590AE00A11142 /* SETextMagnifierCaret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextMagnifierCaret.h; path = Lib/SETextMagnifierCaret.h; sourceTree = SOURCE_ROOT; };
 		147FC14A172590AE00A11142 /* SETextMagnifierCaret.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextMagnifierCaret.m; path = Lib/SETextMagnifierCaret.m; sourceTree = SOURCE_ROOT; };
-		147FC15117259F2400A11142 /* RTKCaretLoupeMask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RTKCaretLoupeMask.png; sourceTree = "<group>"; };
 		147FC15317259F8000A11142 /* kb-loupe-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-loupe-hi.png"; path = "Lib/kb-loupe-hi.png"; sourceTree = SOURCE_ROOT; };
 		147FC15417259F8000A11142 /* kb-loupe-hi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-loupe-hi@2x.png"; path = "Lib/kb-loupe-hi@2x.png"; sourceTree = SOURCE_ROOT; };
 		147FC15617259F8000A11142 /* kb-loupe-mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-loupe-mask@2x.png"; path = "Lib/kb-loupe-mask@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -197,7 +195,6 @@
 			isa = PBXGroup;
 			children = (
 				1488D5FA1723B84200F22C26 /* Demo App */,
-				147FC15117259F2400A11142 /* RTKCaretLoupeMask.png */,
 				1488D5F91723B69400F22C26 /* Lib */,
 				1488D59D1723B20200F22C26 /* Frameworks */,
 				1488D59C1723B20200F22C26 /* Products */,
@@ -369,7 +366,6 @@
 				1488D5D71723B33E00F22C26 /* MainStoryboard.storyboard in Resources */,
 				1488D5E41723B64300F22C26 /* default_user_icon.png in Resources */,
 				1488D5E51723B64300F22C26 /* default_user_icon@2x.png in Resources */,
-				147FC15217259F2400A11142 /* RTKCaretLoupeMask.png in Resources */,
 				147FC16117259F8100A11142 /* kb-loupe-hi.png in Resources */,
 				147FC16217259F8100A11142 /* kb-loupe-hi@2x.png in Resources */,
 				147FC16417259F8100A11142 /* kb-loupe-mask@2x.png in Resources */,
