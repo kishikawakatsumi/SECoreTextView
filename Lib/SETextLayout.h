@@ -34,8 +34,13 @@
 - (void)update;
 - (void)drawInContext:(CGContextRef)context;
 
+- (CFIndex)stringIndexForPosition:(CGPoint)point;
+
 - (void)setSelectionStartWithPoint:(CGPoint)point;
 - (void)setSelectionEndWithPoint:(CGPoint)point;
+
+- (void)setSelectionWithPoint:(CGPoint)point;
+- (void)setSelectionWithFirstPoint:(CGPoint)firstPoint secondPoint:(CGPoint)secondPoint;
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize

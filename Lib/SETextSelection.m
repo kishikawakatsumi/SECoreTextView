@@ -30,11 +30,11 @@
     if (self.initialIndex <= index) {
         CFIndex start = self.initialIndex;
         CFIndex end = index;
-        self.selectedRange = NSMakeRange(start, end - start);
+        _selectedRange = NSMakeRange(start, end - start);
     } else {
         CFIndex start = index;
         CFIndex end = self.initialIndex;
-        self.selectedRange = NSMakeRange(start, end - start);
+        _selectedRange = NSMakeRange(start, end - start);
     }
 }
 

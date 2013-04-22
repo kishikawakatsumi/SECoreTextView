@@ -10,6 +10,8 @@
 #import "SETextLayout.h"
 #import "SELineLayout.h"
 #import "SETextSelection.h"
+#import "SETextMagnifierCaret.h"
+#import "SESelectionGrabber.h"
 #import "SELinkText.h"
 #import "SELinkGeometry.h"
 
@@ -30,6 +32,12 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 
 @property (copy, nonatomic) NSAttributedString *attributedTextCopy;
 
+#if TARGET_OS_IPHONE
+@property (strong, nonatomic) SETextMagnifierCaret *magnifierCaret;
+@property (strong, nonatomic) SESelectionGrabber *startGrabber;
+@property (strong, nonatomic) SESelectionGrabber *endGrabber;
+#endif
+
 @end
 
 @implementation SETextView
@@ -46,6 +54,12 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
     self.selectedTextBackgroundColor = [NSColor selectedTextBackgroundColor];
     self.linkHighlightColor = [NSColor selectedTextBackgroundColor];
     self.linkRolloverEffectColor = [NSColor selectedMenuItemColor];
+    
+#if TARGET_OS_IPHONE
+    self.selectionGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(selectionChanged:)];
+    [self addGestureRecognizer:self.selectionGestureRecognizer];
+#endif
 }
 
 - (void)awakeFromNib
@@ -224,16 +238,37 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 
 - (void)highlightSelection
 {
+    SETextSelection *textSelection = self.textLayout.textSelection;
+    if (!textSelection) {
+        return;
+    }
+    
+    NSInteger counter = 0;
+    CGRect selectionStartRect = CGRectZero;
+    CGRect selectionEndRect = CGRectZero;
+    
     for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
-        CGRect selectionRect = [lineLayout rectOfStringWithRange:self.textLayout.textSelection.selectedRange];
+        CGRect selectionRect = [lineLayout rectOfStringWithRange:textSelection.selectedRange];
         if (!CGRectIsEmpty(selectionRect)) {
             [self.selectedTextBackgroundColor set];
             CGFloat lineSpacing = self.lineSpacing;
             selectionRect.origin.y -= lineSpacing;
             selectionRect.size.height += lineSpacing;
             NSRectFill(selectionRect);
+            
+            if (counter == 0) {
+                selectionStartRect = selectionRect;
+                selectionEndRect = selectionRect;
+            } else {
+                selectionEndRect = selectionRect;
+            }
+            
+            counter++;
         }
     }
+    
+    textSelection.startRect = selectionStartRect;
+    textSelection.endRect = selectionEndRect;
 }
 
 - (CFIndex)stringIndexAtPoint:(CGPoint)point
@@ -413,6 +448,92 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
     return nil;
 }
 
+- (void)showMagnifierCaretAtPoint:(CGPoint)point
+{
+    if (!self.magnifierCaret) {
+        self.magnifierCaret = [[SETextMagnifierCaret alloc] initWithFrame:self.bounds];
+    }
+    
+    [self.magnifierCaret showInView:self.window atPoint:[self convertPoint:point toView:nil]];
+}
+
+- (void)moveMagnifierCaretToPoint:(CGPoint)point
+{
+    [self.magnifierCaret moveToPoint:[self convertPoint:point toView:nil]];
+}
+
+- (void)hideMagnifierCaret
+{
+    [self.magnifierCaret hide];
+    self.magnifierCaret = nil;
+}
+
+- (void)showSelectionGrabber
+{
+    SETextSelection *textSelection = self.textLayout.textSelection;
+    if (textSelection) {
+        CGRect startRect = textSelection.startRect;
+        CGRect endRect = textSelection.endRect;
+        
+        if (!self.startGrabber) {
+            self.startGrabber = [[SESelectionGrabber alloc] init];
+            [self addSubview:self.startGrabber];
+        }
+        CGRect startFrame = startRect;
+        startFrame.origin = CGPointMake(startFrame.origin.x - self.startGrabber.dotSize.width / 2, startFrame.origin.y - self.startGrabber.dotSize.height / 2);
+        startFrame.size.width = self.startGrabber.frame.size.width;
+        self.startGrabber.frame = startFrame;
+        
+        if (!self.endGrabber) {
+            self.endGrabber = [[SESelectionGrabber alloc] init];
+            [self addSubview:self.endGrabber];
+        }
+        CGRect endFrame = endRect;
+        endFrame.origin = CGPointMake(CGRectGetMaxX(endRect) - self.endGrabber.dotSize.width / 2, CGRectGetMaxY(endRect) - self.endGrabber.dotSize.height / 2);
+        endFrame.size.width = self.endGrabber.frame.size.width;
+        self.endGrabber.frame = endFrame;
+    }
+}
+
+- (void)hideSelectionGrabber
+{
+    [self.startGrabber removeFromSuperview];
+    self.startGrabber = nil;
+    
+    [self.endGrabber removeFromSuperview];
+    self.endGrabber = nil;
+}
+
+- (void)selectionChanged:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    self.mouseLocation = [gestureRecognizer locationInView:self];
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        self.mouseState = SEMouseStateDragging;
+        CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
+        
+        [self.textLayout setSelectionWithPoint:shiftedMouseLocation];
+        
+        [self showMagnifierCaretAtPoint:shiftedMouseLocation];
+        [self hideSelectionGrabber];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        self.mouseState = SEMouseStateDragging;
+        CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
+        
+        [self.textLayout setSelectionWithPoint:shiftedMouseLocation];
+        
+        [self moveMagnifierCaretToPoint:shiftedMouseLocation];
+        [self hideSelectionGrabber];
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
+               gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
+               gestureRecognizer.state == UIGestureRecognizerStateFailed) {
+        [self hideMagnifierCaret];
+        if (self.textLayout.textSelection) {
+            [self showSelectionGrabber];
+        }
+    }
+    [self setNeedsDisplay];
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = touches.anyObject;
@@ -420,7 +541,19 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
     self.mouseState = SEMouseStateNone;
     
     if (self.selectable) {
-        [self.textLayout setSelectionStartWithPoint:[self shiftedMouseLocation]];
+//        if (self.textLayout.textSelection) {
+//            CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
+//            
+//            SETextSelection *textSelection = self.textLayout.textSelection;
+//            CGPoint startPoint = textSelection.startRect.origin;
+//            CGPoint endPoint = CGPointMake(CGRectGetMaxX(textSelection.endRect), CGRectGetMaxY(textSelection.endRect));
+//            
+//            if (shiftedMouseLocation.x < startPoint.x) {
+//                [self.textLayout setSelectionWithFirstPoint:shiftedMouseLocation secondPoint:endPoint];
+//            } else {
+//                [self.textLayout setSelectionWithFirstPoint:startPoint secondPoint:shiftedMouseLocation];
+//            }
+//        }
     } else {
         self.mouseState = SEMouseStateClicked;
     }
@@ -430,7 +563,21 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+//    if (self.selectable) {
+//        if (self.textLayout.textSelection) {
+//            CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
+//            
+//            SETextSelection *textSelection = self.textLayout.textSelection;
+//            CGPoint startPoint = textSelection.startRect.origin;
+//            CGPoint endPoint = CGPointMake(CGRectGetMaxX(textSelection.endRect), CGRectGetMaxY(textSelection.endRect));
+//            
+//            if (shiftedMouseLocation.x < startPoint.x) {
+//                [self.textLayout setSelectionWithFirstPoint:shiftedMouseLocation secondPoint:endPoint];
+//            } else {
+//                [self.textLayout setSelectionWithFirstPoint:startPoint secondPoint:shiftedMouseLocation];
+//            }
+//        }
+//    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -446,6 +593,10 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
         if (link) {
             [self clickedOnLink:link];
         }
+    }
+    
+    if (!self.textLayout.textSelection) {
+        [self hideSelectionGrabber];
     }
     
     [self setNeedsDisplay];

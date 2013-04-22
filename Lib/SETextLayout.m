@@ -216,34 +216,79 @@
 
 #pragma mark -
 
-- (void)setSelectionStartWithPoint:(CGPoint)point;
+- (CFIndex)stringIndexForPosition:(CGPoint)point
 {
     for (SELineLayout *lineLayout in self.lineLayouts) {
         if ([lineLayout containsPoint:point]) {
-            NSInteger index = [lineLayout stringIndexForPosition:point];
+            CFIndex index = [lineLayout stringIndexForPosition:point];
             
-            if (index == kCFNotFound) {
-                continue;
+            if (index != kCFNotFound) {
+                return index;
             }
-            
-            self.textSelection = [[SETextSelection alloc] initWithIndex:index];
         }
+    }
+    
+    return kCFNotFound;
+}
+
+- (void)setSelectionStartWithPoint:(CGPoint)point;
+{
+    CFIndex index = [self stringIndexForPosition:point];
+    if (index != kCFNotFound) {
+        self.textSelection = [[SETextSelection alloc] initWithIndex:index];
     }
 }
 
 - (void)setSelectionEndWithPoint:(CGPoint)point;
 {
-    for (SELineLayout *lineLayout in self.lineLayouts) {
-        if ([lineLayout containsPoint:point]) {
-            NSInteger index = [lineLayout stringIndexForPosition:point];
-            
-            if (index == kCFNotFound) {
-                continue;
-            }
-            
-            [self.textSelection setSelectionEndAtIndex:index];
-        }
+    CFIndex index = [self stringIndexForPosition:point];
+    if (index != kCFNotFound) {
+        [self.textSelection setSelectionEndAtIndex:index];
     }
+}
+
+- (void)setSelectionWithPoint:(CGPoint)point
+{
+    CFIndex index = [self stringIndexForPosition:point];
+    if (index == kCFNotFound) {
+        return;
+    }
+    
+    CFStringRef string = (__bridge CFStringRef)self.attributedString.string;
+    CFRange range = CFRangeMake(0, CFStringGetLength(string));
+    CFStringTokenizerRef tokenizer = CFStringTokenizerCreate(
+                                                             NULL,
+                                                             string,
+                                                             range,
+                                                             kCFStringTokenizerUnitWordBoundary,
+                                                             NULL);
+    CFStringTokenizerTokenType tokenType = CFStringTokenizerGoToTokenAtIndex(tokenizer, 0);
+    while (tokenType != kCFStringTokenizerTokenNone || range.location + range.length < CFStringGetLength(string)) {
+        range = CFStringTokenizerGetCurrentTokenRange(tokenizer);
+        CFIndex first = range.location;
+        CFIndex second = range.location + range.length;
+        if (first != kCFNotFound && first <= index && index <= second) {
+            self.textSelection = [[SETextSelection alloc] initWithIndex:range.location];
+            [self.textSelection setSelectionEndAtIndex:range.location + range.length];
+        }
+        
+        tokenType = CFStringTokenizerAdvanceToNextToken(tokenizer);
+    }
+    CFRelease(tokenizer);
+}
+
+- (void)setSelectionWithFirstPoint:(CGPoint)firstPoint secondPoint:(CGPoint)secondPoint
+{
+    CFIndex firstIndex = [self stringIndexForPosition:firstPoint];
+    if (firstIndex == kCFNotFound) {
+        firstIndex = 0;
+    }
+    CFIndex secondIndex = [self stringIndexForPosition:secondPoint];
+    if (secondIndex == kCFNotFound) {
+        secondIndex = self.attributedString.length - firstIndex;
+    }
+    self.textSelection = [[SETextSelection alloc] initWithIndex:firstIndex];
+    [self.textSelection setSelectionEndAtIndex:secondIndex];
 }
 
 #pragma mark -

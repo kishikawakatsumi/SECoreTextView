@@ -61,6 +61,7 @@ static const CGFloat LINE_SPACING = 4.0f;
     
     self.tweetTextView.attributedText = attributedText;
     self.tweetTextView.lineSpacing = LINE_SPACING;
+    self.tweetTextView.selectable = YES;
     [self.tweetTextView clearSelection];
 }
 

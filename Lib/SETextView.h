@@ -34,8 +34,11 @@
 
 @property (assign, nonatomic, readonly) CGRect layoutFrame;
 
-@property(nonatomic, getter=isHighlighted) BOOL highlighted;
-@property(nonatomic, getter=isSelectable) BOOL selectable;
+@property(assign, nonatomic, getter=isHighlighted) BOOL highlighted;
+@property(assign, nonatomic, getter=isSelectable) BOOL selectable;
+#if TARGET_OS_IPHONE
+@property (strong, nonatomic) UILongPressGestureRecognizer *selectionGestureRecognizer;
+#endif
 
 - (id)initWithFrame:(CGRect)frame;
 - (id)initWithFrame:(CGRect)frame topPadding:(CGFloat)topPadding leftPadding:(CGFloat)leftPadding;

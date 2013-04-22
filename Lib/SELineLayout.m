@@ -38,7 +38,7 @@
     return CGRectContainsPoint(self.rect, point);
 }
 
-- (NSInteger)stringIndexForPosition:(CGPoint)point
+- (CFIndex)stringIndexForPosition:(CGPoint)point
 {
     CFIndex index = CTLineGetStringIndexForPosition(self.line, point);
     return index;

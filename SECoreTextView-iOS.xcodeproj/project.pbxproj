@@ -16,6 +16,25 @@
 		141B275A1723C74800E2A1B4 /* SETweetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B27581723C74800E2A1B4 /* SETweetViewController.m */; };
 		1450806817245E0800636965 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806517245E0800636965 /* TwitterText.m */; };
 		1450806917245E0800636965 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806717245E0800636965 /* TwitterTextEntity.m */; };
+		147FC14B172590AE00A11142 /* SETextMagnifierCaret.m in Sources */ = {isa = PBXBuildFile; fileRef = 147FC14A172590AE00A11142 /* SETextMagnifierCaret.m */; };
+		147FC15217259F2400A11142 /* RTKCaretLoupeMask.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15117259F2400A11142 /* RTKCaretLoupeMask.png */; };
+		147FC16117259F8100A11142 /* kb-loupe-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15317259F8000A11142 /* kb-loupe-hi.png */; };
+		147FC16217259F8100A11142 /* kb-loupe-hi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15417259F8000A11142 /* kb-loupe-hi@2x.png */; };
+		147FC16417259F8100A11142 /* kb-loupe-mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15617259F8000A11142 /* kb-loupe-mask@2x.png */; };
+		147FC16517259F8100A11142 /* kb-magnifier-ranged-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15717259F8000A11142 /* kb-magnifier-ranged-hi.png */; };
+		147FC16617259F8100A11142 /* kb-magnifier-ranged-hi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15817259F8000A11142 /* kb-magnifier-ranged-hi@2x.png */; };
+		147FC16717259F8100A11142 /* kb-magnifier-ranged-lo-stemless.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15917259F8100A11142 /* kb-magnifier-ranged-lo-stemless.png */; };
+		147FC16817259F8100A11142 /* kb-magnifier-ranged-lo-stemless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15A17259F8100A11142 /* kb-magnifier-ranged-lo-stemless@2x.png */; };
+		147FC16917259F8100A11142 /* kb-magnifier-ranged-lo.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15B17259F8100A11142 /* kb-magnifier-ranged-lo.png */; };
+		147FC16A17259F8100A11142 /* kb-magnifier-ranged-lo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15C17259F8100A11142 /* kb-magnifier-ranged-lo@2x.png */; };
+		147FC16B17259F8100A11142 /* kb-magnifier-ranged-mask-flipped.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15D17259F8100A11142 /* kb-magnifier-ranged-mask-flipped.png */; };
+		147FC16C17259F8100A11142 /* kb-magnifier-ranged-mask-flipped@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15E17259F8100A11142 /* kb-magnifier-ranged-mask-flipped@2x.png */; };
+		147FC16D17259F8100A11142 /* kb-magnifier-ranged-mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15F17259F8100A11142 /* kb-magnifier-ranged-mask.png */; };
+		147FC16E17259F8100A11142 /* kb-magnifier-ranged-mask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC16017259F8100A11142 /* kb-magnifier-ranged-mask@2x.png */; };
+		147FC1721725A0BB00A11142 /* kb-loupe-mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC1711725A0BB00A11142 /* kb-loupe-mask.png */; };
+		147FC1761725A71D00A11142 /* kb-drag-dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC1741725A71C00A11142 /* kb-drag-dot.png */; };
+		147FC1771725A71D00A11142 /* kb-drag-dot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC1751725A71D00A11142 /* kb-drag-dot@2x.png */; };
+		147FC17A1725B0B300A11142 /* SESelectionGrabber.m in Sources */ = {isa = PBXBuildFile; fileRef = 147FC1791725B0B300A11142 /* SESelectionGrabber.m */; };
 		1488D59F1723B20200F22C26 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D59E1723B20200F22C26 /* UIKit.framework */; };
 		1488D5A11723B20200F22C26 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D5A01723B20200F22C26 /* Foundation.framework */; };
 		1488D5A31723B20200F22C26 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D5A21723B20200F22C26 /* CoreGraphics.framework */; };
@@ -56,6 +75,27 @@
 		1450806517245E0800636965 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "Vendor/twitter-text-objc/lib/TwitterText.m"; sourceTree = SOURCE_ROOT; };
 		1450806617245E0800636965 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = SOURCE_ROOT; };
 		1450806717245E0800636965 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = SOURCE_ROOT; };
+		147FC149172590AE00A11142 /* SETextMagnifierCaret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextMagnifierCaret.h; path = Lib/SETextMagnifierCaret.h; sourceTree = SOURCE_ROOT; };
+		147FC14A172590AE00A11142 /* SETextMagnifierCaret.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextMagnifierCaret.m; path = Lib/SETextMagnifierCaret.m; sourceTree = SOURCE_ROOT; };
+		147FC15117259F2400A11142 /* RTKCaretLoupeMask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RTKCaretLoupeMask.png; sourceTree = "<group>"; };
+		147FC15317259F8000A11142 /* kb-loupe-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-loupe-hi.png"; path = "Lib/kb-loupe-hi.png"; sourceTree = SOURCE_ROOT; };
+		147FC15417259F8000A11142 /* kb-loupe-hi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-loupe-hi@2x.png"; path = "Lib/kb-loupe-hi@2x.png"; sourceTree = SOURCE_ROOT; };
+		147FC15617259F8000A11142 /* kb-loupe-mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-loupe-mask@2x.png"; path = "Lib/kb-loupe-mask@2x.png"; sourceTree = SOURCE_ROOT; };
+		147FC15717259F8000A11142 /* kb-magnifier-ranged-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-hi.png"; path = "Lib/kb-magnifier-ranged-hi.png"; sourceTree = SOURCE_ROOT; };
+		147FC15817259F8000A11142 /* kb-magnifier-ranged-hi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-hi@2x.png"; path = "Lib/kb-magnifier-ranged-hi@2x.png"; sourceTree = SOURCE_ROOT; };
+		147FC15917259F8100A11142 /* kb-magnifier-ranged-lo-stemless.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-lo-stemless.png"; path = "Lib/kb-magnifier-ranged-lo-stemless.png"; sourceTree = SOURCE_ROOT; };
+		147FC15A17259F8100A11142 /* kb-magnifier-ranged-lo-stemless@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-lo-stemless@2x.png"; path = "Lib/kb-magnifier-ranged-lo-stemless@2x.png"; sourceTree = SOURCE_ROOT; };
+		147FC15B17259F8100A11142 /* kb-magnifier-ranged-lo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-lo.png"; path = "Lib/kb-magnifier-ranged-lo.png"; sourceTree = SOURCE_ROOT; };
+		147FC15C17259F8100A11142 /* kb-magnifier-ranged-lo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-lo@2x.png"; path = "Lib/kb-magnifier-ranged-lo@2x.png"; sourceTree = SOURCE_ROOT; };
+		147FC15D17259F8100A11142 /* kb-magnifier-ranged-mask-flipped.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-mask-flipped.png"; path = "Lib/kb-magnifier-ranged-mask-flipped.png"; sourceTree = SOURCE_ROOT; };
+		147FC15E17259F8100A11142 /* kb-magnifier-ranged-mask-flipped@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-mask-flipped@2x.png"; path = "Lib/kb-magnifier-ranged-mask-flipped@2x.png"; sourceTree = SOURCE_ROOT; };
+		147FC15F17259F8100A11142 /* kb-magnifier-ranged-mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-mask.png"; path = "Lib/kb-magnifier-ranged-mask.png"; sourceTree = SOURCE_ROOT; };
+		147FC16017259F8100A11142 /* kb-magnifier-ranged-mask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-magnifier-ranged-mask@2x.png"; path = "Lib/kb-magnifier-ranged-mask@2x.png"; sourceTree = SOURCE_ROOT; };
+		147FC1711725A0BB00A11142 /* kb-loupe-mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-loupe-mask.png"; path = "Lib/kb-loupe-mask.png"; sourceTree = SOURCE_ROOT; };
+		147FC1741725A71C00A11142 /* kb-drag-dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-drag-dot.png"; path = "Lib/kb-drag-dot.png"; sourceTree = SOURCE_ROOT; };
+		147FC1751725A71D00A11142 /* kb-drag-dot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-drag-dot@2x.png"; path = "Lib/kb-drag-dot@2x.png"; sourceTree = SOURCE_ROOT; };
+		147FC1781725B0B200A11142 /* SESelectionGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SESelectionGrabber.h; path = Lib/SESelectionGrabber.h; sourceTree = SOURCE_ROOT; };
+		147FC1791725B0B300A11142 /* SESelectionGrabber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SESelectionGrabber.m; path = Lib/SESelectionGrabber.m; sourceTree = SOURCE_ROOT; };
 		1488D59B1723B20200F22C26 /* SECoreTextView-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SECoreTextView-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1488D59E1723B20200F22C26 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1488D5A01723B20200F22C26 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -130,10 +170,34 @@
 			name = Vendor;
 			sourceTree = "<group>";
 		};
+		147FC1731725A0C700A11142 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				147FC15317259F8000A11142 /* kb-loupe-hi.png */,
+				147FC15417259F8000A11142 /* kb-loupe-hi@2x.png */,
+				147FC1711725A0BB00A11142 /* kb-loupe-mask.png */,
+				147FC15617259F8000A11142 /* kb-loupe-mask@2x.png */,
+				147FC15717259F8000A11142 /* kb-magnifier-ranged-hi.png */,
+				147FC15817259F8000A11142 /* kb-magnifier-ranged-hi@2x.png */,
+				147FC15917259F8100A11142 /* kb-magnifier-ranged-lo-stemless.png */,
+				147FC15A17259F8100A11142 /* kb-magnifier-ranged-lo-stemless@2x.png */,
+				147FC15B17259F8100A11142 /* kb-magnifier-ranged-lo.png */,
+				147FC15C17259F8100A11142 /* kb-magnifier-ranged-lo@2x.png */,
+				147FC15D17259F8100A11142 /* kb-magnifier-ranged-mask-flipped.png */,
+				147FC15E17259F8100A11142 /* kb-magnifier-ranged-mask-flipped@2x.png */,
+				147FC15F17259F8100A11142 /* kb-magnifier-ranged-mask.png */,
+				147FC16017259F8100A11142 /* kb-magnifier-ranged-mask@2x.png */,
+				147FC1741725A71C00A11142 /* kb-drag-dot.png */,
+				147FC1751725A71D00A11142 /* kb-drag-dot@2x.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		1488D5921723B20200F22C26 = {
 			isa = PBXGroup;
 			children = (
 				1488D5FA1723B84200F22C26 /* Demo App */,
+				147FC15117259F2400A11142 /* RTKCaretLoupeMask.png */,
 				1488D5F91723B69400F22C26 /* Lib */,
 				1488D59D1723B20200F22C26 /* Frameworks */,
 				1488D59C1723B20200F22C26 /* Products */,
@@ -207,12 +271,17 @@
 				1488D5E81723B65A00F22C26 /* SELineLayout.m */,
 				1488D5EF1723B66900F22C26 /* SETextSelection.h */,
 				1488D5F01723B66E00F22C26 /* SETextSelection.m */,
+				147FC149172590AE00A11142 /* SETextMagnifierCaret.h */,
+				147FC14A172590AE00A11142 /* SETextMagnifierCaret.m */,
+				147FC1781725B0B200A11142 /* SESelectionGrabber.h */,
+				147FC1791725B0B300A11142 /* SESelectionGrabber.m */,
 				1488D5EB1723B65E00F22C26 /* SELinkText.h */,
 				1488D5EC1723B66000F22C26 /* SELinkText.m */,
 				1488D5E91723B65B00F22C26 /* SELinkGeometry.h */,
 				1488D5EA1723B65C00F22C26 /* SELinkGeometry.m */,
 				141B27441723BAEF00E2A1B4 /* SECompatibility.h */,
 				141B27471723BBA200E2A1B4 /* SECompatibility.m */,
+				147FC1731725A0C700A11142 /* Resources */,
 			);
 			name = Lib;
 			path = SECoreTextView;
@@ -300,6 +369,23 @@
 				1488D5D71723B33E00F22C26 /* MainStoryboard.storyboard in Resources */,
 				1488D5E41723B64300F22C26 /* default_user_icon.png in Resources */,
 				1488D5E51723B64300F22C26 /* default_user_icon@2x.png in Resources */,
+				147FC15217259F2400A11142 /* RTKCaretLoupeMask.png in Resources */,
+				147FC16117259F8100A11142 /* kb-loupe-hi.png in Resources */,
+				147FC16217259F8100A11142 /* kb-loupe-hi@2x.png in Resources */,
+				147FC16417259F8100A11142 /* kb-loupe-mask@2x.png in Resources */,
+				147FC16517259F8100A11142 /* kb-magnifier-ranged-hi.png in Resources */,
+				147FC16617259F8100A11142 /* kb-magnifier-ranged-hi@2x.png in Resources */,
+				147FC16717259F8100A11142 /* kb-magnifier-ranged-lo-stemless.png in Resources */,
+				147FC16817259F8100A11142 /* kb-magnifier-ranged-lo-stemless@2x.png in Resources */,
+				147FC16917259F8100A11142 /* kb-magnifier-ranged-lo.png in Resources */,
+				147FC16A17259F8100A11142 /* kb-magnifier-ranged-lo@2x.png in Resources */,
+				147FC16B17259F8100A11142 /* kb-magnifier-ranged-mask-flipped.png in Resources */,
+				147FC16C17259F8100A11142 /* kb-magnifier-ranged-mask-flipped@2x.png in Resources */,
+				147FC16D17259F8100A11142 /* kb-magnifier-ranged-mask.png in Resources */,
+				147FC16E17259F8100A11142 /* kb-magnifier-ranged-mask@2x.png in Resources */,
+				147FC1721725A0BB00A11142 /* kb-loupe-mask.png in Resources */,
+				147FC1761725A71D00A11142 /* kb-drag-dot.png in Resources */,
+				147FC1771725A71D00A11142 /* kb-drag-dot@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +413,8 @@
 				14B3B19917242D7F00E173E9 /* SEWebViewController.m in Sources */,
 				1450806817245E0800636965 /* TwitterText.m in Sources */,
 				1450806917245E0800636965 /* TwitterTextEntity.m in Sources */,
+				147FC14B172590AE00A11142 /* SETextMagnifierCaret.m in Sources */,
+				147FC17A1725B0B300A11142 /* SESelectionGrabber.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

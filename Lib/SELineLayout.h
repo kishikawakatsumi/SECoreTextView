@@ -35,7 +35,7 @@ typedef struct {
 - (id)initWithLine:(CTLineRef)line index:(NSInteger)index rect:(CGRect)rect metrics:(SELineMetrics)metrics;
 
 - (BOOL)containsPoint:(CGPoint)point;
-- (NSInteger)stringIndexForPosition:(CGPoint)point;
+- (CFIndex)stringIndexForPosition:(CGPoint)point;
 
 - (CGRect)rectOfStringWithRange:(NSRange)range;
 
