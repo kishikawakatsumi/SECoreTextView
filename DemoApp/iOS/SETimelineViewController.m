@@ -86,11 +86,12 @@ static const CGFloat LINE_SPACING = 4.0f;
                                                        defaultImage:[NSImage imageNamed:@"default_user_icon"]
                                                     completionBlock:^(NSImage *image, NSError *error)
                           {
-                              if (image) {
+                              if (image && [cell.profileIconURL isEqual:iconURL]) {
                                   cell.iconImageView.image = image;
                               }
                           }];
     cell.iconImageView.image = iconImage;
+    cell.profileIconURL = iconURL;
     
     NSDictionary *user = tweet[@"user"];
     cell.screenNameLabel.text = user[@"name"];
@@ -164,7 +165,6 @@ static const CGFloat LINE_SPACING = 4.0f;
     }
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error)
      {
-         
          if (error) {
              [self showAlertOnError:error];
              return;

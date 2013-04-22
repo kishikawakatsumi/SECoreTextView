@@ -141,11 +141,12 @@ static const CGFloat LINE_SPACING = 4.0f;
                                                         defaultImage:[NSImage imageNamed:@"default_user_icon"]
                                                      completionBlock:^(NSImage *image, NSError *error)
                           {
-                              if (image) {
+                              if (image && [cellView.profileIconURL isEqual:iconURL]) {
                                   cellView.iconImageView.image = image;
                               }
                           }];
     cellView.iconImageView.image = iconImage;
+    cellView.profileIconURL = iconURL;
     
     NSDictionary *user = tweet[@"user"];
     cellView.screenNameTextField.stringValue = user[@"name"];

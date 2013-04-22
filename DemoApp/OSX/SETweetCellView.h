@@ -15,5 +15,6 @@
 @property (weak, nonatomic) IBOutlet NSTextField *screenNameTextField;
 @property (weak, nonatomic) IBOutlet NSTextField *nameTextField;
 @property (weak, nonatomic) IBOutlet SETextView *tweetTextView;
+@property (strong, nonatomic) NSURL *profileIconURL;
 
 @end

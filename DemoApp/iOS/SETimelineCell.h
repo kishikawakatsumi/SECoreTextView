@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *screenNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet SETextView *tweetTextView;
+@property (strong, nonatomic) NSURL *profileIconURL;
 
 @end
