@@ -37,8 +37,11 @@
 - (NSAttributedString *)attributedStringWithTweet:(NSDictionary *)tweet
 {
     NSString *text = tweet[@"text"];
-    if ([_attributedStringCache objectForKey:@"text"]) {
-        return [_attributedStringCache objectForKey:@"text"];
+    if (!text) {
+        return [[NSAttributedString alloc] init];
+    }
+    if ([_attributedStringCache objectForKey:text]) {
+        return [_attributedStringCache objectForKey:text];
     }
     
     NSFont *font = [NSFont systemFontOfSize:13.0f];
@@ -100,6 +103,8 @@
             range = [attributedString.string rangeOfString:key];
         }
     }
+    
+    [_attributedStringCache setObject:attributedString forKey:text];
     
     return attributedString;
 }
