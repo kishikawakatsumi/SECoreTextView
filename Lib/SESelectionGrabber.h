@@ -11,7 +11,7 @@
 
 @interface SESelectionGrabber : UIView
 
-@property (assign, nonatomic, readonly) CGSize dotSize;
+@property (assign, nonatomic) BOOL dragging;
 
 @end
 #endif

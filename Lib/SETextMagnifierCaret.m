@@ -42,8 +42,8 @@
                                          CGImageGetDataProvider(maskImageRef),
                                          NULL,
                                          true);
-        
 	}
+    
 	return self;
 }
 
@@ -119,18 +119,18 @@
 	UIGraphicsEndImageContext();
 	
 	CGImageRef captureImageRef = captureImage.CGImage;
+
+	CGFloat scale = 1.2f;
+	CGRect box = CGRectMake(ceilf(self.touchPoint.x - self.mask.size.width / scale / 2),
+							ceilf(self.touchPoint.y - self.mask.size.height / scale / 2),
+							ceilf(self.mask.size.width / scale),
+							ceilf(self.mask.size.height / scale));
     
-	CGFloat scale = 1.5f;
-	CGRect box = CGRectMake(self.touchPoint.x - self.mask.size.width / scale / 2,
-							self.touchPoint.y - self.mask.size.height / scale / 2,
-							self.mask.size.width / scale,
-							self.mask.size.height / scale);
-	
 	CGImageRef subImage = CGImageCreateWithImageInRect(captureImageRef, box);
 	CGImageRef maskedImage = CGImageCreateWithMask(subImage, self.maskRef);
-	
+//
 	CGContextRef context = UIGraphicsGetCurrentContext();
-	
+
 	CGAffineTransform xform = CGAffineTransformMake(1.0,  0.0,
 													0.0, -1.0,
 													0.0,  0.0);

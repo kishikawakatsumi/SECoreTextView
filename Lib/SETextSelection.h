@@ -11,8 +11,6 @@
 @interface SETextSelection : NSObject
 
 @property (assign, nonatomic, readonly) NSRange selectedRange;
-@property (assign, nonatomic) CGRect startRect;
-@property (assign, nonatomic) CGRect endRect;
 
 - (id)initWithIndex:(NSInteger)index;
 - (void)setSelectionEndAtIndex:(NSInteger)index;
