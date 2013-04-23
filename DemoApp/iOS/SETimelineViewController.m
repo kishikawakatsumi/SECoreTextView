@@ -16,6 +16,7 @@
 #import "SETwitterHelper.h"
 
 static const CGFloat LINE_SPACING = 4.0f;
+static const CGFloat FONT_SIZE = 14.0f;
 
 @interface SETimelineViewController () <UITableViewDataSource, UITableViewDelegate, SETextViewDelegate>
 
@@ -68,7 +69,7 @@ static const CGFloat LINE_SPACING = 4.0f;
     NSAttributedString *attributedString = [[SETwitterHelper sharedInstance] attributedStringWithTweet:tweet];
     CGRect frameRect = [SETextView frameRectWithAttributtedString:attributedString
                                                    constraintSize:CGSizeMake(tableView.bounds.size.width - 72.0f, CGFLOAT_MAX)
-                                                      edgePadding:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)
+                                                             font:[UIFont systemFontOfSize:FONT_SIZE]
                                                       lineSpacing:LINE_SPACING];
     
     return MAX(tableView.rowHeight, frameRect.size.height + 26.0f);
@@ -99,6 +100,7 @@ static const CGFloat LINE_SPACING = 4.0f;
     
     cell.tweetTextView.attributedText = [[SETwitterHelper sharedInstance] attributedStringWithTweet:tweet];
     cell.tweetTextView.lineSpacing = LINE_SPACING;
+    cell.tweetTextView.font = [UIFont systemFontOfSize:FONT_SIZE];
     cell.tweetTextView.delegate = self;
     [cell.tweetTextView clearSelection];
     

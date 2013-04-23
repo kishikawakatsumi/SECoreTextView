@@ -51,6 +51,25 @@
                              edgePadding:(NSEdgeInsets)edgePadding;
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
+                             lineSpacing:(CGFloat)lineSpacing;
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                             edgePadding:(NSEdgeInsets)edgePadding
+                             lineSpacing:(CGFloat)lineSpacing;
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                                    font:(NSFont *)font;
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                                    font:(NSFont *)font
+                             lineSpacing:(CGFloat)lineSpacing;
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                                    font:(NSFont *)font
+                             edgePadding:(NSEdgeInsets)edgePadding;
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                                    font:(NSFont *)font
                              edgePadding:(NSEdgeInsets)edgePadding
                              lineSpacing:(CGFloat)lineSpacing;
 

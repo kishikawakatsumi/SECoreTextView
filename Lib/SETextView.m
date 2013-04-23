@@ -90,7 +90,8 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 
 #pragma mark -
 
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString constraintSize:(CGSize)constraintSize
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
 {
     return [self frameRectWithAttributtedString:attributedString
                                  constraintSize:constraintSize
@@ -109,9 +110,79 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
+                             lineSpacing:(CGFloat)lineSpacing
+{
+    return [self frameRectWithAttributtedString:attributedString
+                                 constraintSize:constraintSize
+                                    edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)
+                                    lineSpacing:lineSpacing];
+}
+
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
                              edgePadding:(NSEdgeInsets)edgePadding
                              lineSpacing:(CGFloat)lineSpacing
 {
+    return [self frameRectWithAttributtedString:attributedString
+                                 constraintSize:constraintSize
+                                           font:nil
+                                    edgePadding:edgePadding
+                                    lineSpacing:lineSpacing];
+}
+
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                                    font:(NSFont *)font
+{
+    return [self frameRectWithAttributtedString:attributedString
+                                 constraintSize:constraintSize
+                                           font:font
+                                    edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
+}
+
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                                    font:(NSFont *)font
+                             lineSpacing:(CGFloat)lineSpacing
+{
+    return [self frameRectWithAttributtedString:attributedString
+                                 constraintSize:constraintSize
+                                           font:font
+                                    edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)
+                                    lineSpacing:lineSpacing];
+}
+
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                                    font:(NSFont *)font
+                             edgePadding:(NSEdgeInsets)edgePadding
+{
+    return [self frameRectWithAttributtedString:attributedString
+                                 constraintSize:constraintSize
+                                           font:font
+                                    edgePadding:edgePadding
+                                    lineSpacing:0.0f];
+}
+
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                                    font:(NSFont *)font
+                             edgePadding:(NSEdgeInsets)edgePadding
+                             lineSpacing:(CGFloat)lineSpacing
+{
+    if (font) {
+        NSInteger length = attributedString.length;
+        NSMutableAttributedString *mutableAttributedString = [attributedString mutableCopy];
+        
+        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+        CGFloat fontSize = font.pointSize;
+        CTFontRef ctfont = CTFontCreateWithName(fontName, fontSize, NULL);
+        [mutableAttributedString addAttributes:@{(id)kCTFontAttributeName: (__bridge id)ctfont} range:NSMakeRange(0, length)];
+        CFRelease(ctfont);
+        
+        attributedString = mutableAttributedString;
+    }
+    
     return [SETextLayout frameRectWithAttributtedString:attributedString
                                          constraintSize:constraintSize
                                             edgePadding:edgePadding
@@ -206,7 +277,7 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 
 - (void)setAttributes:(NSDictionary *)attributes
 {
-    CFIndex length = self.attributedText.length;
+    NSInteger length = self.attributedText.length;
     NSMutableAttributedString *attributedString = [self.attributedText mutableCopy];
     
     if (attributedString && attributes) {

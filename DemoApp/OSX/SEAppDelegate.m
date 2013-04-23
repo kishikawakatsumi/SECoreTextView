@@ -166,7 +166,6 @@ static const CGFloat LINE_SPACING = 4.0f;
     NSAttributedString *attributedString = [[SETwitterHelper sharedInstance] attributedStringWithTweet:tweet];
     CGRect frameRect = [SETextView frameRectWithAttributtedString:attributedString
                                                    constraintSize:CGSizeMake(self.tableColumnWidth - 72.0f, CGFLOAT_MAX)
-                                                      edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)
                                                       lineSpacing:LINE_SPACING];
     
     return MAX(tableView.rowHeight, frameRect.size.height + 26.0f);
