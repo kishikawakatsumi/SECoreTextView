@@ -207,7 +207,9 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 - (void)setSelectable:(BOOL)selectable
 {
     _selectable = selectable;
+#if TARGET_OS_IPHONE
     self.selectionGestureRecognizer.enabled = self.selectable;
+#endif
 }
 
 - (void)setText:(NSString *)text
