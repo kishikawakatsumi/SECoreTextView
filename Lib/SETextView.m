@@ -529,7 +529,7 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 - (void)showMagnifierCaretAtPoint:(CGPoint)point
 {
     if (!self.magnifierCaret) {
-        self.magnifierCaret = [[SETextMagnifierCaret alloc] initWithFrame:self.bounds];
+        self.magnifierCaret = [[SETextMagnifierCaret alloc] init];
     }
     
     [self.magnifierCaret showInView:self.window atPoint:[self convertPoint:point toView:nil]];

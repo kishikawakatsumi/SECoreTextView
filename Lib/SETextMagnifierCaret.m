@@ -77,22 +77,18 @@
 
 - (void)hide
 {
-    CGRect frame = self.frame;
+    CGRect bounds = self.bounds;
+    bounds.size = CGSizeZero;
     
-    CGRect endFrame = frame;
-    endFrame.size = CGSizeZero;
-    
-    CGPoint endPosition = frame.origin;
-    endPosition.x += frame.size.width / 2;
-    endPosition.y += frame.size.height;
+    CGPoint position = self.touchPoint;
     
     [UIView animateWithDuration:0.15
                           delay:0.0
                         options:0
                      animations:^
      {
-         self.frame = endFrame;
-         self.center = endPosition;
+         self.bounds = bounds;
+         self.center = position;
      }
                      completion:^(BOOL finished)
      {
