@@ -24,7 +24,7 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-	UIImage *mask = [UIImage imageNamed:@"RTKCaretLoupeMask"];
+	UIImage *mask = [UIImage imageNamed:@"kb-loupe-mask"];
 	if (self = [super initWithFrame:CGRectMake(0.0f, 0.0f, mask.size.width, mask.size.height)]) {
 		self.backgroundColor = [UIColor clearColor];
 		self.mask = mask;
