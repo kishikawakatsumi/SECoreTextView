@@ -148,6 +148,8 @@ static const CGFloat FONT_SIZE = 14.0f;
 
 - (void)getHomeTimlineWithAccount:(ACAccount *)account
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
     NSURL *requestURL = [NSURL URLWithString:@"https://api.twitter.com/1/statuses/home_timeline.json"];
     NSDictionary *params = @{@"count": @"200", @"include_entities": @"true"};
     id request = nil;
@@ -167,6 +169,8 @@ static const CGFloat FONT_SIZE = 14.0f;
     }
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error)
      {
+         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+         
          if (error) {
              [self showAlertOnError:error];
              return;
