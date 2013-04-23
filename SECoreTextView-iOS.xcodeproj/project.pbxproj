@@ -48,7 +48,7 @@
 		1488D5E41723B64300F22C26 /* default_user_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1488D5E21723B64100F22C26 /* default_user_icon.png */; };
 		1488D5E51723B64300F22C26 /* default_user_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1488D5E31723B64200F22C26 /* default_user_icon@2x.png */; };
 		1488D5F31723B67B00F22C26 /* SELineLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5E81723B65A00F22C26 /* SELineLayout.m */; };
-		1488D5F41723B67B00F22C26 /* SELinkGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5EA1723B65C00F22C26 /* SELinkGeometry.m */; };
+		1488D5F41723B67B00F22C26 /* SETextGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5EA1723B65C00F22C26 /* SETextGeometry.m */; };
 		1488D5F51723B67B00F22C26 /* SELinkText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5EC1723B66000F22C26 /* SELinkText.m */; };
 		1488D5F61723B67B00F22C26 /* SETextLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5EE1723B66500F22C26 /* SETextLayout.m */; };
 		1488D5F71723B67B00F22C26 /* SETextSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5F01723B66E00F22C26 /* SETextSelection.m */; };
@@ -114,8 +114,8 @@
 		1488D5E31723B64200F22C26 /* default_user_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default_user_icon@2x.png"; path = "DemoApp/Shared/default_user_icon@2x.png"; sourceTree = SOURCE_ROOT; };
 		1488D5E71723B65A00F22C26 /* SELineLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SELineLayout.h; path = Lib/SELineLayout.h; sourceTree = SOURCE_ROOT; };
 		1488D5E81723B65A00F22C26 /* SELineLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SELineLayout.m; path = Lib/SELineLayout.m; sourceTree = SOURCE_ROOT; };
-		1488D5E91723B65B00F22C26 /* SELinkGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SELinkGeometry.h; path = Lib/SELinkGeometry.h; sourceTree = SOURCE_ROOT; };
-		1488D5EA1723B65C00F22C26 /* SELinkGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SELinkGeometry.m; path = Lib/SELinkGeometry.m; sourceTree = SOURCE_ROOT; };
+		1488D5E91723B65B00F22C26 /* SETextGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextGeometry.h; path = Lib/SETextGeometry.h; sourceTree = SOURCE_ROOT; };
+		1488D5EA1723B65C00F22C26 /* SETextGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextGeometry.m; path = Lib/SETextGeometry.m; sourceTree = SOURCE_ROOT; };
 		1488D5EB1723B65E00F22C26 /* SELinkText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SELinkText.h; path = Lib/SELinkText.h; sourceTree = SOURCE_ROOT; };
 		1488D5EC1723B66000F22C26 /* SELinkText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SELinkText.m; path = Lib/SELinkText.m; sourceTree = SOURCE_ROOT; };
 		1488D5ED1723B66200F22C26 /* SETextLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextLayout.h; path = Lib/SETextLayout.h; sourceTree = SOURCE_ROOT; };
@@ -274,8 +274,8 @@
 				147FC1791725B0B300A11142 /* SESelectionGrabber.m */,
 				1488D5EB1723B65E00F22C26 /* SELinkText.h */,
 				1488D5EC1723B66000F22C26 /* SELinkText.m */,
-				1488D5E91723B65B00F22C26 /* SELinkGeometry.h */,
-				1488D5EA1723B65C00F22C26 /* SELinkGeometry.m */,
+				1488D5E91723B65B00F22C26 /* SETextGeometry.h */,
+				1488D5EA1723B65C00F22C26 /* SETextGeometry.m */,
 				141B27441723BAEF00E2A1B4 /* SECompatibility.h */,
 				141B27471723BBA200E2A1B4 /* SECompatibility.m */,
 				147FC1731725A0C700A11142 /* Resources */,
@@ -396,7 +396,7 @@
 				1488D5CF1723B31600F22C26 /* main.m in Sources */,
 				1488D5E01723B44200F22C26 /* SEImageCache.m in Sources */,
 				1488D5F31723B67B00F22C26 /* SELineLayout.m in Sources */,
-				1488D5F41723B67B00F22C26 /* SELinkGeometry.m in Sources */,
+				1488D5F41723B67B00F22C26 /* SETextGeometry.m in Sources */,
 				1488D5F51723B67B00F22C26 /* SELinkText.m in Sources */,
 				1488D5F61723B67B00F22C26 /* SETextLayout.m in Sources */,
 				1488D5F71723B67B00F22C26 /* SETextSelection.m in Sources */,

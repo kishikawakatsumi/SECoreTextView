@@ -8,7 +8,7 @@
 
 #import "SELineLayout.h"
 #import "SELinkText.h"
-#import "SELinkGeometry.h"
+#import "SETextGeometry.h"
 
 @implementation SELineLayout
 
@@ -72,7 +72,7 @@
 - (SELinkText *)linkAtPoint:(CGPoint)point
 {
     for (SELinkText *link in self.links) {
-        for (SELinkGeometry *geometry in link.geometries) {
+        for (SETextGeometry *geometry in link.geometries) {
             if (CGRectContainsPoint(geometry.rect, point)) {
                 return link;
             }

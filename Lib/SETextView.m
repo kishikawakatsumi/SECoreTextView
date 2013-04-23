@@ -13,7 +13,7 @@
 #import "SETextMagnifierCaret.h"
 #import "SESelectionGrabber.h"
 #import "SELinkText.h"
-#import "SELinkGeometry.h"
+#import "SETextGeometry.h"
 
 typedef NS_ENUM(NSUInteger, SEMouseState) {
     SEMouseStateNone,
@@ -319,7 +319,7 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
     
     if (self.mouseState == SEMouseStateHover) {
         [self enumerateLinksUsingBlock:^(SELinkText *link, BOOL *stop) {
-            for (SELinkGeometry *geometry in link.geometries) {
+            for (SETextGeometry *geometry in link.geometries) {
                 [self addCursorRect:geometry.rect cursor:[NSCursor pointingHandCursor]];
             }
         }];
@@ -336,7 +336,7 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
     }
     
     [self enumerateLinksUsingBlock:^(SELinkText *link, BOOL *stop) {
-        for (SELinkGeometry *geometry in link.geometries) {
+        for (SETextGeometry *geometry in link.geometries) {
             NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:geometry.rect
                                                                         options:NSTrackingMouseEnteredAndExited | NSTrackingActiveInKeyWindow
                                                                           owner:self
@@ -350,7 +350,7 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 - (void)_highlightLinks
 {
     [self enumerateLinksUsingBlock:^(SELinkText *link, BOOL *stop) {
-        for (SELinkGeometry *geometry in link.geometries) {
+        for (SETextGeometry *geometry in link.geometries) {
             [self.linkHighlightColor set];
             CGRect linkRect = geometry.rect;
             
@@ -368,7 +368,7 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 {
     if (self.mouseState == SEMouseStateClicked) {
         SELinkText *link = [self linkAtPoint:self.mouseLocation];
-        for (SELinkGeometry *geometry in link.geometries) {
+        for (SETextGeometry *geometry in link.geometries) {
             [self.linkHighlightColor set];
             CGRect linkRect = geometry.rect;
             
@@ -387,7 +387,7 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 #if !TARGET_OS_IPHONE
     if (self.mouseState == SEMouseStateHover) {
         SELinkText *link = [self linkAtPoint:self.mouseLocation];
-        for (SELinkGeometry *geometry in link.geometries) {
+        for (SETextGeometry *geometry in link.geometries) {
             [self.linkRolloverEffectColor set];
             CGRect linkRect = geometry.rect;
             linkRect.size.height = 1.0f;

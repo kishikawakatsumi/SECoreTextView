@@ -7,7 +7,7 @@
 //
 
 #import "SELinkText.h"
-#import "SELinkGeometry.h"
+#import "SETextGeometry.h"
 
 @implementation SELinkText
 
@@ -29,7 +29,7 @@
     return self;
 }
 
-- (void)addLinkGeometry:(SELinkGeometry *)geometry
+- (void)addLinkGeometry:(SETextGeometry *)geometry
 {
     _geometries = [self.geometries arrayByAddingObject:geometry];
 }

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class SELinkGeometry;
+@class SETextGeometry;
 
 @interface SELinkText : NSObject
 
@@ -18,6 +18,6 @@
 @property (strong, nonatomic, readonly) NSArray *geometries;
 
 - (id)initWithText:(NSString *)text object:(id)object range:(NSRange)range;
-- (void)addLinkGeometry:(SELinkGeometry *)geometry;
+- (void)addLinkGeometry:(SETextGeometry *)geometry;
 
 @end

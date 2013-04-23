@@ -1,5 +1,5 @@
 //
-//  SELinkGeometry.h
+//  SETextGeometry.h
 //  SECoreTextView
 //
 //  Created by kishikawa katsumi on 2013/04/20.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SELinkGeometry : NSObject
+@interface SETextGeometry : NSObject
 
 @property (assign, nonatomic, readonly) CGRect rect;
 @property (assign, nonatomic, readonly) NSInteger lineNumber;

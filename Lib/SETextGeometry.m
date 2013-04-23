@@ -1,15 +1,15 @@
 //
-//  SELinkGeometry.m
+//  SETextGeometry.m
 //  SECoreTextView
 //
 //  Created by kishikawa katsumi on 2013/04/20.
 //  Copyright (c) 2013 kishikawa katsumi. All rights reserved.
 //
 
-#import "SELinkGeometry.h"
+#import "SETextGeometry.h"
 #import "SECompatibility.h"
 
-@implementation SELinkGeometry
+@implementation SETextGeometry
 
 - (id)init
 {

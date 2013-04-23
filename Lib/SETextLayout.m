@@ -10,7 +10,7 @@
 #import "SELineLayout.h"
 #import "SETextSelection.h"
 #import "SELinkText.h"
-#import "SELinkGeometry.h"
+#import "SETextGeometry.h"
 
 @interface SETextLayout () {
     CTFramesetterRef _framesetter;
@@ -178,8 +178,8 @@
         for (SELinkText *link in self.links) {
             CGRect linkRect = [lineLayout rectOfStringWithRange:link.range];
             if (!CGRectIsEmpty(linkRect)) {
-                SELinkGeometry *linkGeometry = [[SELinkGeometry alloc] initWithRect:linkRect lineNumber:index];
-                [link addLinkGeometry:linkGeometry];
+                SETextGeometry *geometry = [[SETextGeometry alloc] initWithRect:linkRect lineNumber:index];
+                [link addLinkGeometry:geometry];
                 
                 [lineLayout addLink:link];
             }
