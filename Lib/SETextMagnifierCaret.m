@@ -16,7 +16,9 @@
 
 @property (strong, nonatomic) UIImage *mask;
 @property (strong, nonatomic) UIImage *loupe;
-@property (strong, nonatomic) UIImage *cache;
+@property (strong, nonatomic) UIImage *loupeFrame;
+
+@property (assign, nonatomic) CGImageRef maskRef;
 
 @end
 
@@ -29,6 +31,18 @@
 		self.backgroundColor = [UIColor clearColor];
 		self.mask = mask;
 		self.loupe = [UIImage imageNamed:@"kb-loupe-hi"];
+		self.loupeFrame = [UIImage imageNamed:@"kb-loupe-lo"];
+        
+        CGImageRef maskImageRef = self.mask.CGImage;
+        self.maskRef = CGImageMaskCreate(CGImageGetWidth(maskImageRef),
+                                         CGImageGetHeight(maskImageRef),
+                                         CGImageGetBitsPerComponent(maskImageRef),
+                                         CGImageGetBitsPerPixel(maskImageRef),
+                                         CGImageGetBytesPerRow(maskImageRef),
+                                         CGImageGetDataProvider(maskImageRef),
+                                         NULL,
+                                         true);
+        
 	}
 	return self;
 }
@@ -101,20 +115,10 @@
 {
 	UIGraphicsBeginImageContext(self.magnifyToView.bounds.size);
 	[self.magnifyToView.layer renderInContext:UIGraphicsGetCurrentContext()];
-	self.cache = UIGraphicsGetImageFromCurrentImageContext();
+	UIImage *captureImage = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 	
-	CGImageRef imageRef = self.cache.CGImage;
-	CGImageRef maskRef = self.mask.CGImage;
-	CGImageRef overlay = self.loupe.CGImage;
-	CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(maskRef),
-										CGImageGetHeight(maskRef),
-										CGImageGetBitsPerComponent(maskRef),
-										CGImageGetBitsPerPixel(maskRef),
-										CGImageGetBytesPerRow(maskRef),
-										CGImageGetDataProvider(maskRef),
-										NULL,
-										true);
+	CGImageRef captureImageRef = captureImage.CGImage;
     
 	CGFloat scale = 1.5f;
 	CGRect box = CGRectMake(self.touchPoint.x - self.mask.size.width / scale / 2,
@@ -122,9 +126,8 @@
 							self.mask.size.width / scale,
 							self.mask.size.height / scale);
 	
-	CGImageRef subImage = CGImageCreateWithImageInRect(imageRef, box);
-	
-	CGImageRef xMaskedImage = CGImageCreateWithMask(subImage, mask);
+	CGImageRef subImage = CGImageCreateWithImageInRect(captureImageRef, box);
+	CGImageRef maskedImage = CGImageCreateWithMask(subImage, self.maskRef);
 	
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
@@ -133,10 +136,11 @@
 													0.0,  0.0);
 	CGContextConcatCTM(context, xform);
 	
-	CGRect area = CGRectMake(0, 0, self.mask.size.width, - self.mask.size.height);
+	CGRect area = CGRectMake(0, 0, self.mask.size.width, -self.mask.size.height);
 	
-	CGContextDrawImage(context, area, xMaskedImage);
-	CGContextDrawImage(context, area, overlay);
+	CGContextDrawImage(context, area, self.loupeFrame.CGImage);
+	CGContextDrawImage(context, area, maskedImage);
+	CGContextDrawImage(context, area, self.loupe.CGImage);
 }
 
 @end
