@@ -58,6 +58,7 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 #if TARGET_OS_IPHONE
     self.selectionGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                     action:@selector(selectionChanged:)];
+    self.selectionGestureRecognizer.enabled = self.selectable;
     [self addGestureRecognizer:self.selectionGestureRecognizer];
 #endif
 }
@@ -201,6 +202,12 @@ typedef NS_ENUM(NSUInteger, SEMouseState) {
 {
     [super setBounds:bounds];
     [self setNeedsDisplayInRect:self.bounds];
+}
+
+- (void)setSelectable:(BOOL)selectable
+{
+    _selectable = selectable;
+    self.selectionGestureRecognizer.enabled = self.selectable;
 }
 
 - (void)setText:(NSString *)text
