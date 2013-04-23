@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 kishikawa katsumi. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE
 #import "SESelectionGrabber.h"
 
 @interface SESelectionGrabber ()
@@ -47,3 +48,4 @@
 }
 
 @end
+#endif
