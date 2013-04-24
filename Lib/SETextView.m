@@ -255,6 +255,10 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 {
     _textColor = textColor;
     
+#if TARGET_OS_IPHONE
+    CGColorRef color = textColor.CGColor;
+    [self setAttributes:@{(id)kCTForegroundColorAttributeName: (__bridge id)color}];
+#else
     NSDictionary *attributes = nil;
     
     CGColorRef color = NULL;
@@ -267,6 +271,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         CGColorRelease(color);
     }
     [self setAttributes:attributes];
+#endif
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment
