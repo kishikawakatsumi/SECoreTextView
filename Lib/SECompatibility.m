@@ -24,4 +24,19 @@ NSString * const NSLinkAttributeName = @"NSLink";
 }
 
 @end
+#else
+@implementation NSColor (Compatibility)
+
+- (CGColorRef)createCGColor
+{
+    const NSInteger numberOfComponents = [self numberOfComponents];
+    CGFloat components[numberOfComponents];
+    CGColorSpaceRef colorSpace = [[self colorSpace] CGColorSpace];
+	
+    [self getComponents:(CGFloat *)&components];
+	
+    return CGColorCreate(colorSpace, components);
+}
+
+@end
 #endif

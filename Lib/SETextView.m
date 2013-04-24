@@ -255,8 +255,18 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 {
     _textColor = textColor;
     
-    CGColorRef color = textColor.CGColor;    
-    [self setAttributes:@{(id)kCTForegroundColorAttributeName: (__bridge id)color}];
+    NSDictionary *attributes = nil;
+    
+    CGColorRef color = NULL;
+    if ([textColor respondsToSelector:@selector(CGColor)]) {
+        color = textColor.CGColor;
+        attributes = @{(id)kCTForegroundColorAttributeName: (__bridge id)color};
+    } else {
+        color = [textColor createCGColor];
+        attributes = @{(id)kCTForegroundColorAttributeName: (__bridge id)color};
+        CGColorRelease(color);
+    }
+    [self setAttributes:attributes];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment

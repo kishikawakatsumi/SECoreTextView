@@ -45,4 +45,10 @@ typedef NSEdgeInsets UIEdgeInsets;
 #define UIRectFill NSRectFill
 #define NSStringFromCGRect NSStringFromRect
 
+@interface NSColor (Compatibility)
+
+- (CGColorRef)createCGColor;
+
+@end
+
 #endif
