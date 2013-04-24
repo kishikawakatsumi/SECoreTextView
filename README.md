@@ -1,10 +1,10 @@
 SECoreTextView
 ==============
 
-SECoreTextView is multi style and hyper link clickable text view.
+SECoreTextView is multi-line rich text view library with clickable links, selectable text and twitter style demo apps.
 
 ## Features
-### Rich text
+### Multi-Line Rich text
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_01.png" alt="iOS ScreenShot 1" width="225px" style="width: 225px;" />
 
 ### Clickable hyper link
@@ -14,8 +14,11 @@ SECoreTextView is multi style and hyper link clickable text view.
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_03.png" alt="iOS ScreenShot 3" width="225px" style="width: 225px;" />&nbsp;
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_04.png" alt="iOS ScreenShot 4" width="225px" style="width: 225px;" />
 
-### Both OS X/iOS supported
+### Both OS X / iOS supported
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/OSX_02.png" alt="OS X ScreenShot 1" width="320px" style="width: 320px;" />
+
+## System Requirement
+**OS X 10.7(Lion) or later / iOS 5 or later**
 
 ## Installation
 `git clone git@github.com:kishikawakatsumi/SECoreTextView.git --recursive`
