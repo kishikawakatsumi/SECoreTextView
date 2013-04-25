@@ -744,6 +744,10 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         } else {
             self.secondGrabber.dragging = NO;
         }
+        
+        if (self.textLayout.textSelection) {
+            [self showEditingMenu];
+        }
     }
     
     [self notifySelectionChanged];

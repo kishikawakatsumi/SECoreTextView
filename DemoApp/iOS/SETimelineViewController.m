@@ -150,7 +150,7 @@ static const CGFloat FONT_SIZE = 14.0f;
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    NSURL *requestURL = [NSURL URLWithString:@"https://api.twitter.com/1/statuses/home_timeline.json"];
+    NSURL *requestURL = [NSURL URLWithString:@"https://api.twitter.com/1/statuses/user_timeline.json"];
     NSDictionary *params = @{@"count": @"200", @"include_entities": @"true"};
     id request = nil;
     
