@@ -39,6 +39,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 #if TARGET_OS_IPHONE
 @property (strong, nonatomic) UILongPressGestureRecognizer *selectionGestureRecognizer;
 @property (strong, nonatomic) SETextMagnifierCaret *magnifierCaret;
+@property (strong, nonatomic) UIPanGestureRecognizer *firstGrabberGestureRecognizer;
+@property (strong, nonatomic) UIPanGestureRecognizer *secondGrabberGestureRecognizer;
 @property (strong, nonatomic) SESelectionGrabber *firstGrabber;
 @property (strong, nonatomic) SESelectionGrabber *secondGrabber;
 #endif
@@ -61,20 +63,34 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     self.linkRolloverEffectColor = [NSColor selectedMenuItemColor];
     
 #if TARGET_OS_IPHONE
-    self.firstGrabber = [[SESelectionGrabber alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
-    [self addSubview:self.firstGrabber];
-    
-    self.secondGrabber = [[SESelectionGrabber alloc] initWithFrame:CGRectMake(0, 0, 22, 22)];
-    [self addSubview:self.secondGrabber];
-    
-    [self hideSelectionGrabbers];
-    
-    self.selectionGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                    action:@selector(selectionChanged:)];
-    self.selectionGestureRecognizer.enabled = self.selectable;
-    [self addGestureRecognizer:self.selectionGestureRecognizer];
+    self.magnifierCaret = [[SETextMagnifierCaret alloc] init];
+    [self setupSelectionGestureRecognizers];
 #endif
 }
+
+#if TARGET_OS_IPHONE
+- (void)setupSelectionGestureRecognizers
+{
+    self.selectionGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                    action:@selector(selectionChanged:)];
+    self.selectionGestureRecognizer.enabled = NO;
+    [self addGestureRecognizer:self.selectionGestureRecognizer];
+    
+    self.firstGrabber = [[SESelectionGrabber alloc] init];
+    [self addSubview:self.firstGrabber];
+    
+    self.secondGrabber = [[SESelectionGrabber alloc] init];
+    [self addSubview:self.secondGrabber];
+    
+    self.firstGrabberGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                 action:@selector(grabberMoved:)];
+    [self.firstGrabber addGestureRecognizer:self.firstGrabberGestureRecognizer];
+    
+    self.secondGrabberGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                  action:@selector(grabberMoved:)];
+    [self.secondGrabber addGestureRecognizer:self.secondGrabberGestureRecognizer];
+}
+#endif
 
 - (void)awakeFromNib
 {
@@ -222,6 +238,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     _selectable = selectable;
 #if TARGET_OS_IPHONE
     self.selectionGestureRecognizer.enabled = self.selectable;
+    self.firstGrabberGestureRecognizer.enabled = self.selectable;
+    self.secondGrabberGestureRecognizer.enabled = self.selectable;
 #endif
 }
 
@@ -238,6 +256,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
     _attributedText = [attributedText copy];
+    _text = _attributedText.string;
+    
     [self setNeedsDisplayInRect:self.bounds];
 }
 
@@ -310,6 +330,11 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     return self.textLayout.frameRect;
 }
 
+- (NSRange)selectedRange
+{
+    return self.textLayout.textSelection.selectedRange;
+}
+
 #pragma mark -
 
 - (void)setAttributes:(NSDictionary *)attributes
@@ -331,14 +356,17 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     self.textLayout.textSelection = nil;
 }
 
+- (void)notifySelectionChanged
+{
+    if ([self.delegate respondsToSelector:@selector(textViewDidChangeSelection:)]) {
+        [self.delegate textViewDidChangeSelection:self];
+    }
+}
+
 - (void)clickedOnLink:(SELinkText *)link
 {
     if ([self.delegate respondsToSelector:@selector(textView:clickedOnLink:atIndex:)]) {
-#if TARGET_OS_IPHONE
         [self.delegate textView:self clickedOnLink:link atIndex:[self stringIndexAtPoint:[self shiftedMouseLocation]]];
-#else
-        [self.delegate textView:self clickedOnLink:link atIndex:[self stringIndexAtPoint:[self shiftedMouseLocation]]];
-#endif
     }
 }
 
@@ -417,41 +445,6 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     }
 }
 
-- (void)updateCursorRectsInLinks
-{
-#if !TARGET_OS_IPHONE
-    [self discardCursorRects];
-    
-    [self addCursorRect:self.textLayout.frameRect cursor:[NSCursor IBeamCursor]];
-    
-    [self enumerateLinksUsingBlock:^(SELinkText *link, BOOL *stop) {
-        for (SETextGeometry *geometry in link.geometries) {
-            [self addCursorRect:geometry.rect cursor:[NSCursor pointingHandCursor]];
-        }
-    }];
-#endif
-}
-
-- (void)updateTrackingAreasInLinks
-{
-#if !TARGET_OS_IPHONE
-    NSArray *trackingAreas = self.trackingAreas;
-    for (NSTrackingArea *trackingArea in trackingAreas) {
-        [self removeTrackingArea:trackingArea];
-    }
-    
-    [self enumerateLinksUsingBlock:^(SELinkText *link, BOOL *stop) {
-        for (SETextGeometry *geometry in link.geometries) {
-            NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:geometry.rect
-                                                                        options:NSTrackingMouseEnteredAndExited | NSTrackingActiveInKeyWindow
-                                                                          owner:self
-                                                                       userInfo:nil];
-            [self addTrackingArea:trackingArea];
-        }
-    }];
-#endif
-}
-
 - (void)__highlightLinks
 {
     [self enumerateLinksUsingBlock:^(SELinkText *link, BOOL *stop) {
@@ -467,7 +460,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 
 - (void)highlightClickedLink
 {
-    if (self.touchPhase & SETouchPhaseTouching ||  self.touchPhase & SETouchPhaseStationary) {
+    if (self.touchPhase & SETouchPhaseBegan || self.touchPhase & SETouchPhaseStationary) {
         SELinkText *link = [self linkAtPoint:self.mouseLocation];
         for (SETextGeometry *geometry in link.geometries) {
             [self.linkHighlightColor set];
@@ -479,9 +472,9 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     }
 }
 
+#if !TARGET_OS_IPHONE
 - (void)highlightRolloveredLink
 {
-#if !TARGET_OS_IPHONE
     if (self.touchPhase == SETouchPhaseNone) {
         SELinkText *link = [self linkAtPoint:self.mouseLocation];
         for (SETextGeometry *geometry in link.geometries) {
@@ -491,8 +484,39 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
             NSRectFill(linkRect);
         }
     }
-#endif
 }
+
+- (void)updateCursorRectsInLinks
+{
+    [self discardCursorRects];
+    
+    [self addCursorRect:self.textLayout.frameRect cursor:[NSCursor IBeamCursor]];
+    
+    [self enumerateLinksUsingBlock:^(SELinkText *link, BOOL *stop) {
+        for (SETextGeometry *geometry in link.geometries) {
+            [self addCursorRect:geometry.rect cursor:[NSCursor pointingHandCursor]];
+        }
+    }];
+}
+
+- (void)updateTrackingAreasInLinks
+{
+    NSArray *trackingAreas = self.trackingAreas;
+    for (NSTrackingArea *trackingArea in trackingAreas) {
+        [self removeTrackingArea:trackingArea];
+    }
+    
+    [self enumerateLinksUsingBlock:^(SELinkText *link, BOOL *stop) {
+        for (SETextGeometry *geometry in link.geometries) {
+            NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:geometry.rect
+                                                                        options:NSTrackingMouseEnteredAndExited | NSTrackingActiveInKeyWindow
+                                                                          owner:self
+                                                                       userInfo:nil];
+            [self addTrackingArea:trackingArea];
+        }
+    }];
+}
+#endif
 
 - (NSBezierPath *)bezierPathWithRoundedRect:(CGRect)rect cornerRadius:(CGFloat)radius
 {
@@ -514,13 +538,9 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     
     [self.textLayout update];
     
-    [self updateCursorRectsInLinks];
-    [self updateTrackingAreasInLinks];
+    [self highlightClickedLink];
     
     [self highlightSelection];
-    
-    [self highlightRolloveredLink];
-    [self highlightClickedLink];
     
 #if TARGET_OS_IPHONE
     [self resetSelectionGrabber];
@@ -530,6 +550,11 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     CGContextTranslateCTM(context, 0, self.bounds.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
 #else
+    [self highlightRolloveredLink];
+    
+    [self updateCursorRectsInLinks];
+    [self updateTrackingAreasInLinks];
+    
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
 #endif
     
@@ -556,28 +581,28 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     return nil;
 }
 
-- (void)showMagnifierCaretAtPoint:(CGPoint)point
-{
-    if (!self.magnifierCaret) {
-        self.magnifierCaret = [[SETextMagnifierCaret alloc] init];
-    }
-    
-    [self.magnifierCaret showInView:self.window atPoint:[self convertPoint:point toView:nil]];
-}
-
 - (void)moveMagnifierCaretToPoint:(CGPoint)point
 {
+    if (!self.magnifierCaret.superview) {
+        [self.magnifierCaret showInView:self.window atPoint:[self convertPoint:point toView:nil]];
+    }
     [self.magnifierCaret moveToPoint:[self convertPoint:point toView:nil]];
 }
 
 - (void)hideMagnifierCaret
 {
     [self.magnifierCaret hide];
-    self.magnifierCaret = nil;
 }
 
 - (void)resetSelectionGrabber
 {
+    if (!self.selectable) {
+        self.firstGrabberGestureRecognizer.enabled = NO;
+        self.secondGrabberGestureRecognizer.enabled = NO;
+        [self hideSelectionGrabbers];
+        return;
+    }
+    
     if (self.touchPhase & SETouchPhaseTouching) {
         [self hideSelectionGrabbers];
         return;
@@ -643,26 +668,63 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 - (void)selectionChanged:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     self.mouseLocation = [gestureRecognizer locationInView:self];
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        self.touchPhase = SETouchPhaseBegan;
-        CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
-        
-        [self.textLayout setSelectionWithPoint:shiftedMouseLocation];
-        
-        [self showMagnifierCaretAtPoint:shiftedMouseLocation];
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
+        gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         self.touchPhase = SETouchPhaseMoved;
         CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
         
         [self.textLayout setSelectionWithPoint:shiftedMouseLocation];
         
         [self moveMagnifierCaretToPoint:shiftedMouseLocation];
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
+    } if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
                gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
                gestureRecognizer.state == UIGestureRecognizerStateFailed) {
         self.touchPhase = SETouchPhaseNone;
         [self hideMagnifierCaret];
     }
+    
+    [self notifySelectionChanged];
+    
+    [self setNeedsDisplay];
+}
+
+- (void)grabberMoved:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    SETextSelection *textSelection = self.textLayout.textSelection;
+    if (!self.selectable || !textSelection) {
+        return;
+    }
+    
+    self.touchPhase = SETouchPhaseNone;
+    
+    self.mouseLocation = [gestureRecognizer locationInView:self];
+    CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
+    
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
+        gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        if (gestureRecognizer == self.firstGrabberGestureRecognizer) {
+            self.firstGrabber.dragging = YES;
+            
+            CGPoint firstPoint = CGPointMake(shiftedMouseLocation.x,
+                                             shiftedMouseLocation.y + CGRectGetHeight(self.firstGrabber.bounds) / 2);
+            [self.textLayout setSelectionStartWithFirstPoint:firstPoint];
+        } else {
+            CGPoint endPoint = CGPointMake(shiftedMouseLocation.x,
+                                           shiftedMouseLocation.y - CGRectGetHeight(self.secondGrabber.bounds) / 2);
+            [self.textLayout setSelectionEndWithPoint:endPoint];
+        }
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
+               gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
+               gestureRecognizer.state == UIGestureRecognizerStateFailed) {
+        if (gestureRecognizer == self.firstGrabberGestureRecognizer) {
+            self.firstGrabber.dragging = NO;
+        } else {
+            self.secondGrabber.dragging = NO;
+        }
+    }
+    
+    [self notifySelectionChanged];
+    
     [self setNeedsDisplay];
 }
 
@@ -671,33 +733,6 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     UITouch *touch = touches.anyObject;
     self.mouseLocation = [touch locationInView:self];
     self.touchPhase = SETouchPhaseBegan;
-    
-    SETextSelection *textSelection = self.textLayout.textSelection;
-    if (self.selectable && textSelection) {
-        self.firstGrabber.dragging = CGRectContainsPoint(self.firstGrabber.frame, self.mouseLocation);
-        self.secondGrabber.dragging = CGRectContainsPoint(self.secondGrabber.frame, self.mouseLocation);
-    }
-    
-    [self setNeedsDisplay];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch *touch = touches.anyObject;
-    self.mouseLocation = [touch locationInView:self];
-    self.touchPhase = SETouchPhaseNone;
-    
-    SETextSelection *textSelection = self.textLayout.textSelection;
-    if (self.selectable && textSelection) {
-        CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
-        if (self.firstGrabber.dragging) {
-            CGPoint firstPoint = CGPointMake(shiftedMouseLocation.x, shiftedMouseLocation.y);
-            [self.textLayout setSelectionStartWithFirstPoint:firstPoint];
-        } else if (self.secondGrabber.dragging) {
-            CGPoint endPoint = CGPointMake(shiftedMouseLocation.x, shiftedMouseLocation.y - CGRectGetHeight(self.secondGrabber.bounds));
-            [self.textLayout setSelectionEndWithPoint:endPoint];
-        }
-    }
     
     [self setNeedsDisplay];
 }
@@ -720,12 +755,6 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self setNeedsDisplay];
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    self.touchPhase = SETouchPhaseCancelled;
-    [self setNeedsDisplay];
-}
-
 #else
 - (CGPoint)mouseLocationOnEvent:(NSEvent *)theEvent
 {
@@ -744,6 +773,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         [self.textLayout setSelectionStartWithPoint:[self shiftedMouseLocation]];
     }
     
+    [self notifySelectionChanged];
+    
     [self setNeedsDisplay:YES];
 }
 
@@ -755,6 +786,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         self.touchPhase = SETouchPhaseMoved;
         [self.textLayout setSelectionEndWithPoint:[self shiftedMouseLocation]];
     }
+    
+    [self notifySelectionChanged];
     
     [self setNeedsDisplay:YES];
 }

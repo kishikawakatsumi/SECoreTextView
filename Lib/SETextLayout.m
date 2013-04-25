@@ -249,11 +249,15 @@
 
 - (void)setSelectionStartWithFirstPoint:(CGPoint)firstPoint
 {
+    CFIndex start = [self stringIndexForPosition:firstPoint];
     CFIndex end = NSMaxRange(self.textSelection.selectedRange);
     
-    CFIndex start = [self stringIndexForPosition:firstPoint];
     if (start != kCFNotFound) {
-        self.textSelection = [[SETextSelection alloc] initWithIndex:start];
+        if (start < end) {
+            self.textSelection = [[SETextSelection alloc] initWithIndex:start];
+        } else {
+            end = start;
+        }
     }
     
     [self.textSelection setSelectionEndAtIndex:end];

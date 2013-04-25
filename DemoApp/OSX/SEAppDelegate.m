@@ -201,4 +201,9 @@ static const CGFloat LINE_SPACING = 4.0f;
     return YES;
 }
 
+- (void)textViewDidChangeSelection:(SETextView *)aTextView
+{
+    NSLog(@"Selected Text: %@", [aTextView.text substringWithRange:aTextView.selectedRange]);
+}
+
 @end

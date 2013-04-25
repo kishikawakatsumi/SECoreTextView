@@ -17,25 +17,20 @@
 
 @implementation SESelectionGrabber
 
-- (id)init
-{
-    return [self initWithFrame:CGRectZero];
-}
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        self.userInteractionEnabled = NO;
         self.dotImage = [UIImage imageNamed:@"kb-drag-dot"];
     }
     return self;
 }
 
-- (CGSize)dotSize
+- (void)setFrame:(CGRect)frame
 {
-    return CGSizeMake(14.0f, 12.0f);
+    [super setFrame:frame];
+    [self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect
@@ -43,6 +38,11 @@
     [super drawRect:rect];
     [self.dotImage drawAtPoint:CGPointMake(ceilf((CGRectGetWidth(self.bounds) - self.dotSize.width) / 2),
                                            ceilf((CGRectGetHeight(self.bounds) - self.dotSize.height) / 2))];
+}
+
+- (CGSize)dotSize
+{
+    return CGSizeMake(14.0f, 12.0f);
 }
 
 @end

@@ -26,10 +26,13 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-	UIImage *mask = [UIImage imageNamed:@"kb-loupe-mask"];
-	if (self = [super initWithFrame:CGRectMake(0.0f, 0.0f, mask.size.width, mask.size.height)]) {
+    self = [super initWithFrame:frame];
+	if (self) {
 		self.backgroundColor = [UIColor clearColor];
+        
+        UIImage *mask = [UIImage imageNamed:@"kb-loupe-mask"];
 		self.mask = mask;
+        
 		self.loupe = [UIImage imageNamed:@"kb-loupe-hi"];
 		self.loupeFrame = [UIImage imageNamed:@"kb-loupe-lo"];
         
@@ -55,10 +58,12 @@
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point
 {
-    [view addSubview:self];
+    self.frame = CGRectMake(0.0f, 0.0f, self.mask.size.width, self.mask.size.height);
     
     self.magnifyToView = view;
     self.touchPoint = point;
+    
+    [view addSubview:self];
     
     CGRect frame = self.frame;
     CGPoint center = self.center;
