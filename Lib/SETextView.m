@@ -37,6 +37,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 @property (copy, nonatomic) NSAttributedString *attributedTextCopy;
 
 #if TARGET_OS_IPHONE
+@property (strong, nonatomic) UILongPressGestureRecognizer *selectionGestureRecognizer;
 @property (strong, nonatomic) SETextMagnifierCaret *magnifierCaret;
 @property (strong, nonatomic) SESelectionGrabber *firstGrabber;
 @property (strong, nonatomic) SESelectionGrabber *secondGrabber;
