@@ -37,7 +37,9 @@
 @property (assign, nonatomic, getter = isHighlighted) BOOL highlighted;
 @property (assign, nonatomic, getter = isSelectable) BOOL selectable;
 
-@property (assign, nonatomic) NSRange selectedRange;
+@property (assign, nonatomic, readonly) NSRange selectedRange;
+@property (strong, nonatomic, readonly) NSString *selectedText;
+@property (strong, nonatomic, readonly) NSString *selectedAttributedText;
 
 - (id)initWithFrame:(CGRect)frame;
 - (id)initWithFrame:(CGRect)frame topPadding:(CGFloat)topPadding leftPadding:(CGFloat)leftPadding;

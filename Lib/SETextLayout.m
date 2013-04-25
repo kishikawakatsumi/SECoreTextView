@@ -307,6 +307,12 @@
     [self.textSelection setSelectionEndAtIndex:secondIndex];
 }
 
+- (void)selectAll
+{
+    self.textSelection = [[SETextSelection alloc] initWithIndex:0];
+    [self.textSelection setSelectionEndAtIndex:self.attributedString.length];
+}
+
 #pragma mark -
 
 - (void)setParagraphStyle

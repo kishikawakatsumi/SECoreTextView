@@ -43,6 +43,8 @@
 - (void)setSelectionWithPoint:(CGPoint)point;
 - (void)setSelectionWithFirstPoint:(CGPoint)firstPoint secondPoint:(CGPoint)secondPoint;
 
+- (void)selectAll;
+
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
                              edgePadding:(NSEdgeInsets)edgePadding

@@ -335,6 +335,16 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     return self.textLayout.textSelection.selectedRange;
 }
 
+- (NSString *)selectedText
+{
+    return [self.text substringWithRange:self.selectedRange];
+}
+
+- (NSAttributedString *)selectedAttributedText
+{
+    return [self.attributedText attributedSubstringFromRange:self.selectedRange];
+}
+
 #pragma mark -
 
 - (void)setAttributes:(NSDictionary *)attributes
@@ -379,6 +389,11 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         return;
     }
     
+#if TARGET_OS_IPHONE
+    CGRect topRect = CGRectNull;
+    CGRect bottomRect = CGRectNull;
+#endif
+    
     for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
         CGRect selectionRect = [lineLayout rectOfStringWithRange:textSelection.selectedRange];
         if (!CGRectIsEmpty(selectionRect)) {
@@ -390,20 +405,27 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
             NSRectFill(selectionRect);
             
 #if TARGET_OS_IPHONE
-            if (!(self.touchPhase & SETouchPhaseTouching)) {
-                [[UIColor colorWithRed:0.133 green:0.357 blue:0.718 alpha:1.000] set];
-                NSRectFill(CGRectMake(selectionRect.origin.x,
-                                      selectionRect.origin.y,
-                                      2.0f,
-                                      selectionRect.size.height));
-                NSRectFill(CGRectMake(CGRectGetMaxX(selectionRect) - 2.0f,
-                                      selectionRect.origin.y,
-                                      2.0f,
-                                      selectionRect.size.height));
+            if (CGRectIsNull(topRect)) {
+                topRect = selectionRect;
             }
+            bottomRect = selectionRect;
 #endif
         }
     }
+    
+#if TARGET_OS_IPHONE
+    if (!(self.touchPhase & SETouchPhaseTouching)) {
+        [[UIColor colorWithRed:0.133 green:0.357 blue:0.718 alpha:1.000] set];
+        NSRectFill(CGRectMake(topRect.origin.x,
+                              topRect.origin.y,
+                              2.0f,
+                              topRect.size.height));
+        NSRectFill(CGRectMake(CGRectGetMaxX(bottomRect) - 2.0f,
+                              bottomRect.origin.y,
+                              2.0f,
+                              bottomRect.size.height));
+    }
+#endif
 }
 
 - (CFIndex)stringIndexAtPoint:(CGPoint)point
@@ -561,8 +583,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self.textLayout drawInContext:context];
 }
 
-#pragma mark -
-
+#pragma mark - iOS touch events
 #if TARGET_OS_IPHONE
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -681,6 +702,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
                gestureRecognizer.state == UIGestureRecognizerStateFailed) {
         self.touchPhase = SETouchPhaseNone;
         [self hideMagnifierCaret];
+        
+        [self showEditingMenu];
     }
     
     [self notifySelectionChanged];
@@ -737,6 +760,18 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self setNeedsDisplay];
 }
 
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if (self.selectionGestureRecognizer.state == UIGestureRecognizerStateBegan ||
+        self.selectionGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        self.touchPhase = SETouchPhaseMoved;
+    } else {
+        self.touchPhase = SETouchPhaseCancelled;
+    }
+    
+    [self setNeedsDisplay];
+}
+
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = touches.anyObject;
@@ -755,7 +790,69 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self setNeedsDisplay];
 }
 
+#pragma mark -
+
+- (void)showEditingMenu
+{
+    [self becomeFirstResponder];
+    
+    UIMenuController *menuController = [UIMenuController sharedMenuController];
+    menuController.arrowDirection = UIMenuControllerArrowDown;
+    [menuController setTargetRect:[self editingMenuRectForSelection] inView:self];
+    
+    [menuController setMenuVisible:YES animated:YES];
+}
+
+- (void)hideEditingMenu
+{
+    [self resignFirstResponder];
+    
+    UIMenuController *menuController = [UIMenuController sharedMenuController];
+    [menuController setMenuVisible:NO animated:YES];
+}
+
+- (CGRect)editingMenuRectForSelection
+{
+    SETextSelection *textSelection = self.textLayout.textSelection;
+    CGRect topRect = CGRectNull;
+    CGFloat minX = CGFLOAT_MAX;
+    CGFloat maxX = CGFLOAT_MIN;
+    
+    for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+        CGRect selectionRect = [lineLayout rectOfStringWithRange:textSelection.selectedRange];
+        if (!CGRectIsEmpty(selectionRect)) {
+            CGFloat lineSpacing = self.lineSpacing;
+            selectionRect.origin.y -= lineSpacing;
+            selectionRect.size.height += lineSpacing;
+            
+            if (CGRectIsNull(topRect)) {
+                topRect = selectionRect;
+            }
+            
+            minX = MIN(CGRectGetMinX(selectionRect), minX);
+            maxX = MAX(CGRectGetMaxX(selectionRect), maxX);
+            
+            topRect.origin.x = minX;
+            topRect.size.width = maxX - minX;
+        }
+    }
+    
+    return topRect;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return action == @selector(copy:) || (action == @selector(selectAll:) && self.selectedText.length < self.text.length);
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+#pragma mark - OS X mouse events
 #else
+
 - (CGPoint)mouseLocationOnEvent:(NSEvent *)theEvent
 {
     CGPoint locationInWindow = [theEvent locationInWindow];
@@ -821,7 +918,13 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self setNeedsDisplay:YES];
 }
 
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
+}
+
 #endif
+#pragma mark - Common
 
 - (BOOL)isMouseLocationInTextFrame
 {
@@ -847,6 +950,30 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         self.attributedText = self.attributedTextCopy;
         self.attributedTextCopy = nil;
     }
+}
+
+- (void)copy:(id)sender
+{
+#if TARGET_OS_IPHONE
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = self.selectedText;
+#else
+    NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+    [pasteboard clearContents];
+    [pasteboard writeObjects:[NSArray arrayWithObject:self.selectedAttributedText]];
+#endif
+}
+
+- (void)selectAll:(id)sender
+{
+    [self.textLayout selectAll];
+    
+#if TARGET_OS_IPHONE
+    [self hideEditingMenu];
+    [self showEditingMenu];
+#endif
+    
+    [self setNeedsDisplayInRect:self.bounds];
 }
 
 @end
