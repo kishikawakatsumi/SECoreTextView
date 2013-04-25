@@ -81,9 +81,11 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self addGestureRecognizer:self.selectionGestureRecognizer];
     
     self.firstGrabber = [[SESelectionGrabber alloc] init];
+    self.firstGrabber.dotMetric = SESelectionGrabberDotMetricTop;
     [self addSubview:self.firstGrabber];
     
     self.secondGrabber = [[SESelectionGrabber alloc] init];
+    self.secondGrabber.dotMetric = SESelectionGrabberDotMetricBottom;
     [self addSubview:self.secondGrabber];
     
     self.firstGrabberGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -420,11 +422,11 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 #if TARGET_OS_IPHONE
     if (!(self.touchPhase & SETouchPhaseTouching)) {
         [[UIColor colorWithRed:0.133 green:0.357 blue:0.718 alpha:1.000] set];
-        NSRectFill(CGRectMake(topRect.origin.x,
+        NSRectFill(CGRectMake(CGRectGetMinX(topRect) - 2.0f,
                               topRect.origin.y,
                               2.0f,
                               topRect.size.height));
-        NSRectFill(CGRectMake(CGRectGetMaxX(bottomRect) - 2.0f,
+        NSRectFill(CGRectMake(CGRectGetMaxX(bottomRect),
                               bottomRect.origin.y,
                               2.0f,
                               bottomRect.size.height));
@@ -676,16 +678,16 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     
     CGRect startFrame = startRect;
     startFrame.origin = CGPointMake(startFrame.origin.x - ceilf(CGRectGetHeight(endRect) / 2),
-                                    startFrame.origin.y - CGRectGetHeight(startRect) + 8.0f);
+                                    startFrame.origin.y);
     startFrame.size.width = CGRectGetHeight(startRect);
-    startFrame.size.height = CGRectGetHeight(startRect);
+    startFrame.size.height = CGRectGetHeight(startRect) + self.lineSpacing;
     self.firstGrabber.frame = startFrame;
     
     CGRect endFrame = endRect;
     endFrame.origin = CGPointMake(CGRectGetMaxX(endRect) - ceilf(CGRectGetHeight(endRect) / 2),
-                                  CGRectGetMaxY(endRect) - 8.0f);
+                                  CGRectGetMinY(endRect));
     endFrame.size.width = CGRectGetHeight(endRect);
-    endFrame.size.height = CGRectGetHeight(endRect);
+    endFrame.size.height = CGRectGetHeight(endRect) + self.lineSpacing;
     self.secondGrabber.frame = endFrame;
     
     [self showSelectionGrabbers];
@@ -746,13 +748,13 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
             self.firstGrabber.dragging = YES;
             
             CGPoint firstPoint = CGPointMake(shiftedMouseLocation.x,
-                                             shiftedMouseLocation.y + CGRectGetHeight(self.firstGrabber.bounds) / 2);
+                                             shiftedMouseLocation.y);
             [self.textLayout setSelectionStartWithFirstPoint:firstPoint];
             
             [self moveMagnifierRangedToPoint:self.firstGrabber.center];
         } else {
             CGPoint endPoint = CGPointMake(shiftedMouseLocation.x,
-                                           shiftedMouseLocation.y - CGRectGetHeight(self.secondGrabber.bounds) / 2);
+                                           shiftedMouseLocation.y);
             [self.textLayout setSelectionEndWithPoint:endPoint];
             
             [self moveMagnifierRangedToPoint:self.secondGrabber.center];

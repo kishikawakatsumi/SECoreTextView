@@ -12,6 +12,7 @@
 @interface SESelectionGrabber ()
 
 @property (strong, nonatomic) UIImage *dotImage;
+@property (strong, nonatomic) UIImageView *dotImageView;
 
 @end
 
@@ -23,6 +24,10 @@
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         self.dotImage = [UIImage imageNamed:@"kb-drag-dot"];
+        
+        self.dotImageView = [[UIImageView alloc] initWithImage:self.dotImage];
+        
+        [self addSubview:self.dotImageView];
     }
     return self;
 }
@@ -30,14 +35,16 @@
 - (void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];
-    [self setNeedsDisplay];
-}
-
-- (void)drawRect:(CGRect)rect
-{
-    [super drawRect:rect];
-    [self.dotImage drawAtPoint:CGPointMake(ceilf((CGRectGetWidth(self.bounds) - self.dotSize.width) / 2),
-                                           ceilf((CGRectGetHeight(self.bounds) - self.dotSize.height) / 2))];
+    
+    CGRect dotImageFrame = self.dotImageView.bounds;
+    if (self.dotMetric == SESelectionGrabberDotMetricTop) {
+        dotImageFrame.origin = CGPointMake(ceilf((CGRectGetWidth(self.bounds) - self.dotSize.width) / 2 - 2.0f),
+                                           -12.0f);
+    } else {
+        dotImageFrame.origin = CGPointMake(ceilf((CGRectGetWidth(self.bounds) - self.dotSize.width) / 2 + 2.0f),
+                                           CGRectGetHeight(self.bounds) - 6.0f);
+    }
+    self.dotImageView.frame = dotImageFrame;
 }
 
 - (CGSize)dotSize

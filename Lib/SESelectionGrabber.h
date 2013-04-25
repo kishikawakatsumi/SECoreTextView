@@ -9,9 +9,15 @@
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, SESelectionGrabberDotMetric) {
+    SESelectionGrabberDotMetricTop,
+    SESelectionGrabberDotMetricBottom
+};
+
 @interface SESelectionGrabber : UIView
 
 @property (assign, nonatomic) BOOL dragging;
+@property (assign, nonatomic) SESelectionGrabberDotMetric dotMetric;
 
 @end
 #endif
