@@ -11,6 +11,7 @@
 #import "SELineLayout.h"
 #import "SETextSelection.h"
 #import "SETextMagnifierCaret.h"
+#import "SETextMagnifierRanged.h"
 #import "SESelectionGrabber.h"
 #import "SELinkText.h"
 #import "SETextGeometry.h"
@@ -39,6 +40,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 #if TARGET_OS_IPHONE
 @property (strong, nonatomic) UILongPressGestureRecognizer *selectionGestureRecognizer;
 @property (strong, nonatomic) SETextMagnifierCaret *magnifierCaret;
+@property (strong, nonatomic) SETextMagnifierRanged *magnifierRanged;
 @property (strong, nonatomic) UIPanGestureRecognizer *firstGrabberGestureRecognizer;
 @property (strong, nonatomic) UIPanGestureRecognizer *secondGrabberGestureRecognizer;
 @property (strong, nonatomic) SESelectionGrabber *firstGrabber;
@@ -64,6 +66,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     
 #if TARGET_OS_IPHONE
     self.magnifierCaret = [[SETextMagnifierCaret alloc] init];
+    self.magnifierRanged = [[SETextMagnifierRanged alloc] init];
+    
     [self setupSelectionGestureRecognizers];
 #endif
 }
@@ -615,6 +619,19 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self.magnifierCaret hide];
 }
 
+- (void)moveMagnifierRangedToPoint:(CGPoint)point
+{
+    if (!self.magnifierRanged.superview) {
+        [self.magnifierRanged showInView:self.window atPoint:[self convertPoint:point toView:nil]];
+    }
+    [self.magnifierRanged moveToPoint:[self convertPoint:point toView:nil]];
+}
+
+- (void)hideMagnifierRanged
+{
+    [self.magnifierRanged hide];
+}
+
 - (void)resetSelectionGrabber
 {
     if (!self.selectable) {
@@ -731,10 +748,14 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
             CGPoint firstPoint = CGPointMake(shiftedMouseLocation.x,
                                              shiftedMouseLocation.y + CGRectGetHeight(self.firstGrabber.bounds) / 2);
             [self.textLayout setSelectionStartWithFirstPoint:firstPoint];
+            
+            [self moveMagnifierRangedToPoint:self.firstGrabber.center];
         } else {
             CGPoint endPoint = CGPointMake(shiftedMouseLocation.x,
                                            shiftedMouseLocation.y - CGRectGetHeight(self.secondGrabber.bounds) / 2);
             [self.textLayout setSelectionEndWithPoint:endPoint];
+            
+            [self moveMagnifierRangedToPoint:self.secondGrabber.center];
         }
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
                gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
@@ -744,6 +765,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         } else {
             self.secondGrabber.dragging = NO;
         }
+        
+        [self hideMagnifierRanged];
         
         if (self.textLayout.textSelection) {
             [self showEditingMenu];

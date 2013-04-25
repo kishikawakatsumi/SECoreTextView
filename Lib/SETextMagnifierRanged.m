@@ -1,15 +1,15 @@
 //
-//  SETextMagnifierCaret.m
+//  SETextMagnifierRanged.m
 //  SECoreTextView-iOS
 //
-//  Created by kishikawa katsumi on 2013/04/23.
+//  Created by kishikawa katsumi on 2013/04/26.
 //  Copyright (c) 2013 kishikawa katsumi. All rights reserved.
 //
 
 #if TARGET_OS_IPHONE
-#import "SETextMagnifierCaret.h"
+#import "SETextMagnifierRanged.h"
 
-@interface SETextMagnifierCaret ()
+@interface SETextMagnifierRanged ()
 
 @property (strong, nonatomic) UIView *magnifyToView;
 @property (assign, nonatomic) CGPoint touchPoint;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation SETextMagnifierCaret
+@implementation SETextMagnifierRanged
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -30,11 +30,11 @@
 	if (self) {
 		self.backgroundColor = [UIColor clearColor];
         
-        UIImage *mask = [UIImage imageNamed:@"kb-loupe-mask"];
+        UIImage *mask = [UIImage imageNamed:@"kb-magnifier-ranged-mask-flipped"];
 		self.mask = mask;
         
-		self.loupe = [UIImage imageNamed:@"kb-loupe-hi"];
-		self.loupeFrame = [UIImage imageNamed:@"kb-loupe-lo"];
+		self.loupe = [UIImage imageNamed:@"kb-magnifier-ranged-hi"];
+		self.loupeFrame = [UIImage imageNamed:@"kb-magnifier-ranged-lo"];
         
         CGImageRef maskImageRef = self.mask.CGImage;
         self.maskRef = CGImageMaskCreate(CGImageGetWidth(maskImageRef),
@@ -53,7 +53,7 @@
 - (void)setTouchPoint:(CGPoint)point
 {
 	_touchPoint = point;
-    self.center = CGPointMake(point.x, point.y - 65);
+    self.center = CGPointMake(point.x, point.y - CGRectGetHeight(self.bounds));
 }
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point
@@ -124,7 +124,7 @@
 	UIGraphicsEndImageContext();
 	
 	CGImageRef captureImageRef = captureImage.CGImage;
-
+    
 	CGFloat scale = 1.2f;
 	CGRect box = CGRectMake(ceilf(self.touchPoint.x - self.mask.size.width / scale / 2),
 							ceilf(self.touchPoint.y - self.mask.size.height / scale / 2),
@@ -133,9 +133,9 @@
     
 	CGImageRef subImage = CGImageCreateWithImageInRect(captureImageRef, box);
 	CGImageRef maskedImage = CGImageCreateWithMask(subImage, self.maskRef);
-
+    //
 	CGContextRef context = UIGraphicsGetCurrentContext();
-
+    
 	CGAffineTransform xform = CGAffineTransformMake(1.0,  0.0,
 													0.0, -1.0,
 													0.0,  0.0);

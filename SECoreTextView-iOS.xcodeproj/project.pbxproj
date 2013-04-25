@@ -58,6 +58,7 @@
 		14B3B196172424F000E173E9 /* SETwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B3B195172424F000E173E9 /* SETwitterHelper.m */; };
 		14B3B19917242D7F00E173E9 /* SEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B3B19817242D7F00E173E9 /* SEWebViewController.m */; };
 		14B3B19B1724342900E173E9 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14B3B19A1724342800E173E9 /* Twitter.framework */; };
+		14F0A0831729838C00163A90 /* SETextMagnifierRanged.m in Sources */ = {isa = PBXBuildFile; fileRef = 14F0A0821729838A00163A90 /* SETextMagnifierRanged.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,6 +134,8 @@
 		14B3B19717242D7F00E173E9 /* SEWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEWebViewController.h; path = DemoApp/iOS/SEWebViewController.h; sourceTree = SOURCE_ROOT; };
 		14B3B19817242D7F00E173E9 /* SEWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEWebViewController.m; path = DemoApp/iOS/SEWebViewController.m; sourceTree = SOURCE_ROOT; };
 		14B3B19A1724342800E173E9 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		14F0A0811729838900163A90 /* SETextMagnifierRanged.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextMagnifierRanged.h; path = Lib/SETextMagnifierRanged.h; sourceTree = SOURCE_ROOT; };
+		14F0A0821729838A00163A90 /* SETextMagnifierRanged.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextMagnifierRanged.m; path = Lib/SETextMagnifierRanged.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,22 +178,22 @@
 		147FC1731725A0C700A11142 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				147FC15317259F8000A11142 /* kb-loupe-hi.png */,
-				147FC15417259F8000A11142 /* kb-loupe-hi@2x.png */,
 				147FC1B217264F7C00A11142 /* kb-loupe-lo.png */,
 				147FC1B317264F7C00A11142 /* kb-loupe-lo@2x.png */,
+				147FC15317259F8000A11142 /* kb-loupe-hi.png */,
+				147FC15417259F8000A11142 /* kb-loupe-hi@2x.png */,
 				147FC1B81726595900A11142 /* kb-loupe-mask.png */,
 				147FC1B61726589600A11142 /* kb-loupe-mask@2x.png */,
-				147FC15717259F8000A11142 /* kb-magnifier-ranged-hi.png */,
-				147FC15817259F8000A11142 /* kb-magnifier-ranged-hi@2x.png */,
-				147FC15917259F8100A11142 /* kb-magnifier-ranged-lo-stemless.png */,
-				147FC15A17259F8100A11142 /* kb-magnifier-ranged-lo-stemless@2x.png */,
 				147FC15B17259F8100A11142 /* kb-magnifier-ranged-lo.png */,
 				147FC15C17259F8100A11142 /* kb-magnifier-ranged-lo@2x.png */,
-				147FC15D17259F8100A11142 /* kb-magnifier-ranged-mask-flipped.png */,
-				147FC15E17259F8100A11142 /* kb-magnifier-ranged-mask-flipped@2x.png */,
+				147FC15917259F8100A11142 /* kb-magnifier-ranged-lo-stemless.png */,
+				147FC15A17259F8100A11142 /* kb-magnifier-ranged-lo-stemless@2x.png */,
+				147FC15717259F8000A11142 /* kb-magnifier-ranged-hi.png */,
+				147FC15817259F8000A11142 /* kb-magnifier-ranged-hi@2x.png */,
 				147FC15F17259F8100A11142 /* kb-magnifier-ranged-mask.png */,
 				147FC16017259F8100A11142 /* kb-magnifier-ranged-mask@2x.png */,
+				147FC15D17259F8100A11142 /* kb-magnifier-ranged-mask-flipped.png */,
+				147FC15E17259F8100A11142 /* kb-magnifier-ranged-mask-flipped@2x.png */,
 				147FC1741725A71C00A11142 /* kb-drag-dot.png */,
 				147FC1751725A71D00A11142 /* kb-drag-dot@2x.png */,
 			);
@@ -276,6 +279,8 @@
 				1488D5F01723B66E00F22C26 /* SETextSelection.m */,
 				147FC149172590AE00A11142 /* SETextMagnifierCaret.h */,
 				147FC14A172590AE00A11142 /* SETextMagnifierCaret.m */,
+				14F0A0811729838900163A90 /* SETextMagnifierRanged.h */,
+				14F0A0821729838A00163A90 /* SETextMagnifierRanged.m */,
 				147FC1781725B0B200A11142 /* SESelectionGrabber.h */,
 				147FC1791725B0B300A11142 /* SESelectionGrabber.m */,
 				1488D5EB1723B65E00F22C26 /* SELinkText.h */,
@@ -419,6 +424,7 @@
 				1450806917245E0800636965 /* TwitterTextEntity.m in Sources */,
 				147FC14B172590AE00A11142 /* SETextMagnifierCaret.m in Sources */,
 				147FC17A1725B0B300A11142 /* SESelectionGrabber.m in Sources */,
+				14F0A0831729838C00163A90 /* SETextMagnifierRanged.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
