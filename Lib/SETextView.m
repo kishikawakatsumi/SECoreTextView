@@ -65,6 +65,8 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     self.linkRolloverEffectColor = [NSColor selectedMenuItemColor];
     
 #if TARGET_OS_IPHONE
+    self.showsEditingMenuAutomatically = YES;
+    
     self.magnifierCaret = [[SETextMagnifierCaret alloc] init];
     self.magnifierRanged = [[SETextMagnifierRanged alloc] init];
     
@@ -372,6 +374,20 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 - (void)clearSelection
 {
     self.textLayout.textSelection = nil;
+}
+
+- (void)finishSelecting
+{
+#if TARGET_OS_IPHONE
+    if (self.showsEditingMenuAutomatically) {
+        [self hideEditingMenu];
+        [self showEditingMenu];
+    }
+#endif
+    
+    if ([self respondsToSelector:@selector(textViewDidEndSelecting:)]) {
+        [self.delegate textViewDidEndSelecting:self];
+    }
 }
 
 - (void)notifySelectionChanged
@@ -724,7 +740,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         self.touchPhase = SETouchPhaseNone;
         [self hideMagnifierCaret];
         
-        [self showEditingMenu];
+        [self finishSelecting];
     }
     
     [self notifySelectionChanged];
@@ -773,7 +789,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
         [self hideMagnifierRanged];
         
         if (self.textLayout.textSelection) {
-            [self showEditingMenu];
+            [self finishSelecting];
         }
     }
     
@@ -996,8 +1012,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self.textLayout selectAll];
     
 #if TARGET_OS_IPHONE
-    [self hideEditingMenu];
-    [self showEditingMenu];
+    [self finishSelecting];
 #endif
     
     [self setNeedsDisplayInRect:self.bounds];

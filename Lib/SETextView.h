@@ -36,6 +36,9 @@
 
 @property (assign, nonatomic, getter = isHighlighted) BOOL highlighted;
 @property (assign, nonatomic, getter = isSelectable) BOOL selectable;
+#if TARGET_OS_IPHONE
+@property (assign, nonatomic) BOOL showsEditingMenuAutomatically;
+#endif
 
 @property (assign, nonatomic, readonly) NSRange selectedRange;
 @property (strong, nonatomic, readonly) NSString *selectedText;
@@ -81,10 +84,8 @@
 @protocol SETextViewDelegate <NSObject>
 
 @optional
-//- (NSURL *)textView:(SETextView *)textView URLForContentsOfTextAttachment:(NSTextAttachment *)textAttachment atIndex:(NSUInteger)charIndex;
 - (BOOL)textView:(SETextView *)aTextView clickedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
-//- (NSRange)textView:(SETextView *)aTextView willChangeSelectionFromCharacterRange:(NSRange)oldSelectedCharRange toCharacterRange:(NSRange)newSelectedCharRange;
-//- (NSArray *)textView:(SETextView *)aTextView willChangeSelectionFromCharacterRanges:(NSArray *)oldSelectedCharRanges toCharacterRanges:(NSArray *)newSelectedCharRanges;
 - (void)textViewDidChangeSelection:(SETextView *)aTextView;
+- (void)textViewDidEndSelecting:(SETextView *)aTextView;
 
 @end
