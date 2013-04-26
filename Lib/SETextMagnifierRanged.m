@@ -11,7 +11,7 @@
 
 @interface SETextMagnifierRanged ()
 
-@property (strong, nonatomic) UIView *magnifyToView;
+@property (weak, nonatomic) UIView *magnifyToView;
 @property (assign, nonatomic) CGPoint touchPoint;
 
 @property (strong, nonatomic) UIImage *mask;
@@ -48,6 +48,11 @@
 	}
     
 	return self;
+}
+
+- (void)dealloc
+{
+    CGImageRelease(self.maskRef);
 }
 
 - (void)setTouchPoint:(CGPoint)point
@@ -133,7 +138,7 @@
     
 	CGImageRef subImage = CGImageCreateWithImageInRect(captureImageRef, box);
 	CGImageRef maskedImage = CGImageCreateWithMask(subImage, self.maskRef);
-    //
+    
 	CGContextRef context = UIGraphicsGetCurrentContext();
     
 	CGAffineTransform xform = CGAffineTransformMake(1.0,  0.0,

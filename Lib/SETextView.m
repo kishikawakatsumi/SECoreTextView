@@ -65,6 +65,11 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     self.linkRolloverEffectColor = [NSColor selectedMenuItemColor];
     
 #if TARGET_OS_IPHONE
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(menuControllerDidHideMenu:)
+                                                 name:UIMenuControllerDidHideMenuNotification
+                                               object:nil];
+    
     self.magnifierCaret = [[SETextMagnifierCaret alloc] init];
     self.magnifierRanged = [[SETextMagnifierRanged alloc] init];
     
@@ -823,8 +828,6 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 
 - (void)showEditingMenu
 {
-    [self becomeFirstResponder];
-    
     UIMenuController *menuController = [UIMenuController sharedMenuController];
     menuController.arrowDirection = UIMenuControllerArrowDown;
     [menuController setTargetRect:[self editingMenuRectForSelection] inView:self];
@@ -834,10 +837,13 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 
 - (void)hideEditingMenu
 {
-    [self resignFirstResponder];
-    
     UIMenuController *menuController = [UIMenuController sharedMenuController];
     [menuController setMenuVisible:NO animated:YES];
+}
+
+- (void)menuControllerDidHideMenu:(NSNotification *)notification
+{
+    
 }
 
 - (CGRect)editingMenuRectForSelection
