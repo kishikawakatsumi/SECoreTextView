@@ -49,7 +49,7 @@
     
     NSColor *tweetColor = [NSColor blackColor];
     NSColor *hashTagColor = [NSColor grayColor];
-    NSColor *linkColor = [NSColor selectedMenuItemColor];
+    NSColor *linkColor = [NSColor blueColor];
     
 	NSDictionary *attributes = @{(id)kCTForegroundColorAttributeName: (id)tweetColor.CGColor, (id)kCTFontAttributeName: tweetfont};
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];

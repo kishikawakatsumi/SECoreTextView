@@ -30,6 +30,8 @@
 		1488D5891723B0D700F22C26 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 1488D5871723B0D700F22C26 /* Credits.rtf */; };
 		1488D58C1723B0EE00F22C26 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D58B1723B0EE00F22C26 /* main.m */; };
 		1488D58F1723B0FA00F22C26 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1488D58D1723B0FA00F22C26 /* InfoPlist.strings */; };
+		14911A65172AE59C003056B7 /* SETextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 14911A64172AE59C003056B7 /* SETextAttachment.m */; };
+		14911B01172B05D7003056B7 /* SEConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 14911B00172B05D7003056B7 /* SEConstants.m */; };
 		14B3B193172424E300E173E9 /* SETwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B3B192172424E300E173E9 /* SETwitterHelper.m */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +78,10 @@
 		1488D58B1723B0EE00F22C26 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = DemoApp/OSX/main.m; sourceTree = SOURCE_ROOT; };
 		1488D58E1723B0FA00F22C26 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = DemoApp/OSX/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		1488D5901723B10800F22C26 /* SECoreTextView-Mac-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "SECoreTextView-Mac-Info.plist"; path = "DemoApp/OSX/SECoreTextView-Mac-Info.plist"; sourceTree = SOURCE_ROOT; };
+		14911A63172AE59C003056B7 /* SETextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextAttachment.h; path = Lib/SETextAttachment.h; sourceTree = SOURCE_ROOT; };
+		14911A64172AE59C003056B7 /* SETextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextAttachment.m; path = Lib/SETextAttachment.m; sourceTree = SOURCE_ROOT; };
+		14911AFF172B05D7003056B7 /* SEConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEConstants.h; path = Lib/SEConstants.h; sourceTree = SOURCE_ROOT; };
+		14911B00172B05D7003056B7 /* SEConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEConstants.m; path = Lib/SEConstants.m; sourceTree = SOURCE_ROOT; };
 		14B3B191172424E300E173E9 /* SETwitterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETwitterHelper.h; path = DemoApp/Shared/SETwitterHelper.h; sourceTree = SOURCE_ROOT; };
 		14B3B192172424E300E173E9 /* SETwitterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETwitterHelper.m; path = DemoApp/Shared/SETwitterHelper.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -156,12 +162,16 @@
 				1488D54C1722EA3D00F22C26 /* SETextLayout.m */,
 				1488D5451722EA3C00F22C26 /* SELineLayout.h */,
 				1488D5461722EA3C00F22C26 /* SELineLayout.m */,
+				14911A63172AE59C003056B7 /* SETextAttachment.h */,
+				14911A64172AE59C003056B7 /* SETextAttachment.m */,
 				1488D54D1722EA3D00F22C26 /* SETextSelection.h */,
 				1488D54E1722EA3D00F22C26 /* SETextSelection.m */,
 				1488D5491722EA3C00F22C26 /* SELinkText.h */,
 				1488D54A1722EA3C00F22C26 /* SELinkText.m */,
 				1488D5471722EA3C00F22C26 /* SETextGeometry.h */,
 				1488D5481722EA3C00F22C26 /* SETextGeometry.m */,
+				14911AFF172B05D7003056B7 /* SEConstants.h */,
+				14911B00172B05D7003056B7 /* SEConstants.m */,
 				141B27491723BDF200E2A1B4 /* SECompatibility.h */,
 				141B274A1723BDF200E2A1B4 /* SECompatibility.m */,
 			);
@@ -309,6 +319,8 @@
 				14B3B193172424E300E173E9 /* SETwitterHelper.m in Sources */,
 				1450806217245DF200636965 /* TwitterText.m in Sources */,
 				1450806317245DF200636965 /* TwitterTextEntity.m in Sources */,
+				14911A65172AE59C003056B7 /* SETextAttachment.m in Sources */,
+				14911B01172B05D7003056B7 /* SEConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

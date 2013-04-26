@@ -24,13 +24,6 @@ typedef UIEdgeInsets NSEdgeInsets;
 
 extern NSString * const NSLinkAttributeName;
 
-@interface UIColor (Compatibility)
-
-+ (UIColor *)selectedTextBackgroundColor;
-+ (UIColor *)selectedMenuItemColor;
-
-@end
-
 #else
 #import <Cocoa/Cocoa.h>
 

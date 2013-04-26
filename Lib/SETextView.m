@@ -9,12 +9,14 @@
 #import "SETextView.h"
 #import "SETextLayout.h"
 #import "SELineLayout.h"
+#import "SETextAttachment.h"
 #import "SETextSelection.h"
 #import "SETextMagnifierCaret.h"
 #import "SETextMagnifierRanged.h"
 #import "SESelectionGrabber.h"
 #import "SELinkText.h"
 #import "SETextGeometry.h"
+#import "SEConstants.h"
 
 typedef NS_ENUM(NSUInteger, SETouchPhase) {
     SETouchPhaseNone       = 0,
@@ -27,9 +29,13 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     SETouchPhaseAny        = NSUIntegerMax
 };
 
+NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
+
 @interface SETextView ()
 
 @property (strong, nonatomic) SETextLayout *textLayout;
+
+@property (strong, nonatomic) NSMutableArray *attachments;
 
 @property (assign, nonatomic) SETouchPhase touchPhase;
 @property (assign, nonatomic) CGPoint clickPoint;
@@ -56,13 +62,15 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     self.textLayout = [[SETextLayout alloc] init];
     self.textLayout.bounds = self.bounds;
     
+    self.attachments = [[NSMutableArray alloc] init];
+    
     self.font = [NSFont systemFontOfSize:13.0f];
     self.textColor = [NSColor blackColor];
     self.highlightedTextColor = [NSColor whiteColor];
     
-    self.selectedTextBackgroundColor = [NSColor selectedTextBackgroundColor];
-    self.linkHighlightColor = [NSColor selectedTextBackgroundColor];
-    self.linkRolloverEffectColor = [NSColor selectedMenuItemColor];
+    self.selectedTextBackgroundColor = [SEConstants selectedTextBackgroundColor];
+    self.linkHighlightColor = [SEConstants selectedTextBackgroundColor];
+    self.linkRolloverEffectColor = [SEConstants linkColor];
     
 #if TARGET_OS_IPHONE
     self.showsEditingMenuAutomatically = YES;
@@ -362,11 +370,40 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     NSInteger length = self.attributedText.length;
     NSMutableAttributedString *attributedString = [self.attributedText mutableCopy];
     
-    if (attributedString && attributes) {
+    if (attributes) {
         [attributedString addAttributes:attributes range:NSMakeRange(0, length)];
     }
     
     self.attributedText = attributedString;
+}
+
+- (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index
+{
+    [self addObject:object size:size replaceRange:NSMakeRange(index, 0)];
+}
+
+- (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range
+{
+    NSMutableAttributedString *attributedString = [self.attributedText mutableCopy];
+    if (range.length > 0) {
+        [attributedString replaceCharactersInRange:range withString:OBJECT_REPLACEMENT_CHARACTER];
+    } else {
+        NSAttributedString *replacement = [[NSAttributedString alloc] initWithString:OBJECT_REPLACEMENT_CHARACTER];
+        [attributedString insertAttributedString:replacement atIndex:range.location];
+    }
+    
+#if TARGET_OS_IPHONE
+    NSRange raplaceRange = NSMakeRange(range.location, OBJECT_REPLACEMENT_CHARACTER.length);
+    SETextAttachment *attachment = [[SETextAttachment alloc] initWithObject:object size:size range:raplaceRange];
+    [self.attachments addObject:attachment];
+    
+    CTRunDelegateCallbacks callbacks = attachment.callbacks;
+    CTRunDelegateRef delegateRef = CTRunDelegateCreate(&callbacks, (__bridge void *)attachment);
+    
+    [attributedString addAttributes:@{(id)kCTRunDelegateAttributeName: (__bridge id)delegateRef} range:attachment.range];
+    
+    self.attributedText = attributedString;
+#endif
 }
 
 #pragma mark -
@@ -406,6 +443,32 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 
 #pragma mark -
 
+- (void)drawTextAttachments
+{
+#if TARGET_OS_IPHONE
+    for (SETextAttachment *attachment in self.attachments) {
+        for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+            CGRect rect = [lineLayout rectOfStringWithRange:attachment.range];
+            if (!CGRectIsEmpty(rect)) {
+                if ([attachment.object isKindOfClass:[UIView class]]) {
+                    UIView *view = attachment.object;
+                    view.frame = rect;
+                    if (!view.superview) {
+                        [self addSubview:view];
+                    }
+                } else if ([attachment.object isKindOfClass:[UIImage class]]) {
+                    UIImage *image = attachment.object;
+                    [image drawInRect:rect];
+                } else if ([attachment.object isKindOfClass:NSClassFromString(@"NSBlock")]) {
+                    SETextAttachmentDrawBlock draw = attachment.object;
+                    draw(rect);
+                }
+            }
+        }
+    }
+#endif
+}
+
 - (void)highlightSelection
 {
     SETextSelection *textSelection = self.textLayout.textSelection;
@@ -439,7 +502,7 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     
 #if TARGET_OS_IPHONE
     if (!(self.touchPhase & SETouchPhaseTouching)) {
-        [[UIColor colorWithRed:0.133 green:0.357 blue:0.718 alpha:1.000] set];
+        [[SEConstants selectionGrabberColor] set];
         NSRectFill(CGRectMake(CGRectGetMinX(topRect) - 2.0f,
                               topRect.origin.y,
                               2.0f,
@@ -578,30 +641,35 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
 - (void)drawRect:(CGRect)dirtyRect
 {
 	[super drawRect:dirtyRect];
+#if TARGET_OS_IPHONE
+    CGContextRef context = UIGraphicsGetCurrentContext();
+#else
+    CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+#endif
 	
     self.textLayout.bounds = self.bounds;
     self.textLayout.attributedString = self.attributedText;
     
     [self.textLayout update];
     
+    [self highlightSelection];
+    
     [self highlightClickedLink];
     
-    [self highlightSelection];
+    [self drawTextAttachments];
     
 #if TARGET_OS_IPHONE
     [self resetSelectionGrabber];
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextTranslateCTM(context, 0, self.bounds.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
 #else
     [self highlightRolloveredLink];
     
     [self updateCursorRectsInLinks];
     [self updateTrackingAreasInLinks];
+#endif
     
-    CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
+#if TARGET_OS_IPHONE
+    CGContextTranslateCTM(context, 0, self.bounds.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
 #endif
     
     [self.textLayout drawInContext:context];

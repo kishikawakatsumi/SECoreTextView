@@ -10,6 +10,8 @@
 #import <CoreText/CoreText.h>
 #import "SECompatibility.h"
 
+typedef void(^SETextAttachmentDrawBlock)(CGRect rect);
+
 @protocol SETextViewDelegate;
 @class SELinkText;
 
@@ -76,6 +78,9 @@
                                     font:(NSFont *)font
                              edgePadding:(NSEdgeInsets)edgePadding
                              lineSpacing:(CGFloat)lineSpacing;
+
+- (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index;
+- (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range;
 
 - (void)clearSelection;
 

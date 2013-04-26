@@ -53,6 +53,8 @@
 		1488D5F61723B67B00F22C26 /* SETextLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5EE1723B66500F22C26 /* SETextLayout.m */; };
 		1488D5F71723B67B00F22C26 /* SETextSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5F01723B66E00F22C26 /* SETextSelection.m */; };
 		1488D5F81723B67B00F22C26 /* SETextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5F21723B67600F22C26 /* SETextView.m */; };
+		14911A68172AE64F003056B7 /* SETextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 14911A67172AE64F003056B7 /* SETextAttachment.m */; };
+		14911AE9172AF0AA003056B7 /* SEConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 14911AE8172AF0AA003056B7 /* SEConstants.m */; };
 		14B3B196172424F000E173E9 /* SETwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B3B195172424F000E173E9 /* SETwitterHelper.m */; };
 		14B3B19917242D7F00E173E9 /* SEWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14B3B19817242D7F00E173E9 /* SEWebViewController.m */; };
 		14B3B19B1724342900E173E9 /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14B3B19A1724342800E173E9 /* Twitter.framework */; };
@@ -127,6 +129,10 @@
 		1488D5F01723B66E00F22C26 /* SETextSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextSelection.m; path = Lib/SETextSelection.m; sourceTree = SOURCE_ROOT; };
 		1488D5F11723B67100F22C26 /* SETextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextView.h; path = Lib/SETextView.h; sourceTree = SOURCE_ROOT; };
 		1488D5F21723B67600F22C26 /* SETextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextView.m; path = Lib/SETextView.m; sourceTree = SOURCE_ROOT; };
+		14911A66172AE64F003056B7 /* SETextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextAttachment.h; path = Lib/SETextAttachment.h; sourceTree = SOURCE_ROOT; };
+		14911A67172AE64F003056B7 /* SETextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextAttachment.m; path = Lib/SETextAttachment.m; sourceTree = SOURCE_ROOT; };
+		14911AE7172AF0A9003056B7 /* SEConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEConstants.h; path = Lib/SEConstants.h; sourceTree = SOURCE_ROOT; };
+		14911AE8172AF0AA003056B7 /* SEConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEConstants.m; path = Lib/SEConstants.m; sourceTree = SOURCE_ROOT; };
 		14B3B194172424F000E173E9 /* SETwitterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETwitterHelper.h; path = DemoApp/Shared/SETwitterHelper.h; sourceTree = SOURCE_ROOT; };
 		14B3B195172424F000E173E9 /* SETwitterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETwitterHelper.m; path = DemoApp/Shared/SETwitterHelper.m; sourceTree = SOURCE_ROOT; };
 		14B3B19717242D7F00E173E9 /* SEWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEWebViewController.h; path = DemoApp/iOS/SEWebViewController.h; sourceTree = SOURCE_ROOT; };
@@ -275,6 +281,8 @@
 				1488D5EE1723B66500F22C26 /* SETextLayout.m */,
 				1488D5E71723B65A00F22C26 /* SELineLayout.h */,
 				1488D5E81723B65A00F22C26 /* SELineLayout.m */,
+				14911A66172AE64F003056B7 /* SETextAttachment.h */,
+				14911A67172AE64F003056B7 /* SETextAttachment.m */,
 				1488D5EF1723B66900F22C26 /* SETextSelection.h */,
 				1488D5F01723B66E00F22C26 /* SETextSelection.m */,
 				147FC149172590AE00A11142 /* SETextMagnifierCaret.h */,
@@ -287,6 +295,8 @@
 				1488D5EC1723B66000F22C26 /* SELinkText.m */,
 				1488D5E91723B65B00F22C26 /* SETextGeometry.h */,
 				1488D5EA1723B65C00F22C26 /* SETextGeometry.m */,
+				14911AE7172AF0A9003056B7 /* SEConstants.h */,
+				14911AE8172AF0AA003056B7 /* SEConstants.m */,
 				141B27441723BAEF00E2A1B4 /* SECompatibility.h */,
 				141B27471723BBA200E2A1B4 /* SECompatibility.m */,
 				147FC1731725A0C700A11142 /* Resources */,
@@ -425,6 +435,8 @@
 				147FC14B172590AE00A11142 /* SETextMagnifierCaret.m in Sources */,
 				147FC17A1725B0B300A11142 /* SESelectionGrabber.m in Sources */,
 				14F0A0831729838C00163A90 /* SETextMagnifierRanged.m in Sources */,
+				14911A68172AE64F003056B7 /* SETextAttachment.m in Sources */,
+				14911AE9172AF0AA003056B7 /* SEConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

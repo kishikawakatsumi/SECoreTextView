@@ -102,7 +102,6 @@ static const CGFloat FONT_SIZE = 14.0f;
     cell.tweetTextView.lineSpacing = LINE_SPACING;
     cell.tweetTextView.font = [UIFont systemFontOfSize:FONT_SIZE];
     cell.tweetTextView.delegate = self;
-    [cell.tweetTextView clearSelection];
     
     return cell;
 }
