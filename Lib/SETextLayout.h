@@ -44,6 +44,7 @@
 - (void)setSelectionWithFirstPoint:(CGPoint)firstPoint secondPoint:(CGPoint)secondPoint;
 
 - (void)selectAll;
+- (void)clearSelection;
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize

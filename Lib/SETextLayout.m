@@ -313,6 +313,11 @@
     [self.textSelection setSelectionEndAtIndex:self.attributedString.length];
 }
 
+- (void)clearSelection
+{
+    self.textSelection = nil;
+}
+
 #pragma mark -
 
 - (void)setParagraphStyle

@@ -1005,4 +1005,12 @@ typedef NS_ENUM(NSUInteger, SETouchPhase) {
     [self setNeedsDisplayInRect:self.bounds];
 }
 
+- (BOOL)resignFirstResponder
+{
+    [self.textLayout clearSelection];
+    [self setNeedsDisplayInRect:self.bounds];
+    
+    return YES;
+}
+
 @end
