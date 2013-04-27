@@ -279,13 +279,14 @@
                                                              kCFStringTokenizerUnitWordBoundary,
                                                              NULL);
     CFStringTokenizerTokenType tokenType = CFStringTokenizerGoToTokenAtIndex(tokenizer, 0);
-    while (tokenType != kCFStringTokenizerTokenNone || range.location + range.length < CFStringGetLength(string)) {
+    while (tokenType != kCFStringTokenizerTokenNone) {
         range = CFStringTokenizerGetCurrentTokenRange(tokenizer);
         CFIndex first = range.location;
         CFIndex second = range.location + range.length;
         if (first != kCFNotFound && first <= index && index <= second) {
             self.textSelection = [[SETextSelection alloc] initWithIndex:range.location];
             [self.textSelection setSelectionEndAtIndex:range.location + range.length];
+            break;
         }
         
         tokenType = CFStringTokenizerAdvanceToNextToken(tokenizer);
