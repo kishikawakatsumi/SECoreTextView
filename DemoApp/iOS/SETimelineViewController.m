@@ -67,6 +67,7 @@ static const CGFloat FONT_SIZE = 14.0f;
 {
     NSDictionary *tweet = self.timeline[indexPath.row];
     NSAttributedString *attributedString = [[SETwitterHelper sharedInstance] attributedStringWithTweet:tweet];
+    
     CGRect frameRect = [SETextView frameRectWithAttributtedString:attributedString
                                                    constraintSize:CGSizeMake(tableView.bounds.size.width - 72.0f, CGFLOAT_MAX)
                                                       lineSpacing:LINE_SPACING

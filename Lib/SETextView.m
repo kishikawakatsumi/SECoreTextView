@@ -192,7 +192,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)sizeToFit
 {
-    CGSize size = [self sizeThatFits:self.bounds.size];
+    CGSize size = [self sizeThatFits:CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX)];
     CGRect frame = self.frame;
     frame.size = size;
     self.frame = frame;
@@ -868,6 +868,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     if (![self containsPointInSelection:self.mouseLocation]) {
         [self.textLayout clearSelection];
         [self hideEditingMenu];
+    } else {
+        [self hideEditingMenu];
+        [self showEditingMenu];
     }
     
     if ([self containsPointInTextFrame:self.mouseLocation]) {

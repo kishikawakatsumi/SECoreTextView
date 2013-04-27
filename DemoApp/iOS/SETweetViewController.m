@@ -62,7 +62,6 @@ static const CGFloat LINE_SPACING = 4.0f;
     self.tweetTextView.attributedText = attributedText;
     self.tweetTextView.lineSpacing = LINE_SPACING;
     self.tweetTextView.selectable = YES;
-    [self.tweetTextView clearSelection];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -71,6 +70,19 @@ static const CGFloat LINE_SPACING = 4.0f;
 }
 
 #pragma mark -
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return tableView.rowHeight;
+    } else {
+        CGRect frameRect = [SETextView frameRectWithAttributtedString:self.tweetTextView.attributedText
+                                                       constraintSize:CGSizeMake(CGRectGetWidth(self.tweetTextView.bounds), CGFLOAT_MAX)
+                                                          lineSpacing:self.tweetTextView.lineSpacing];
+        
+        return frameRect.size.height + 20.0f;
+    }
+}
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
