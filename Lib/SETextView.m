@@ -64,10 +64,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     self.attachments = [[NSMutableArray alloc] init];
     
-    self.font = [NSFont systemFontOfSize:13.0f];
-    self.textColor = [NSColor blackColor];
     self.highlightedTextColor = [NSColor whiteColor];
-    
     self.selectedTextBackgroundColor = [SEConstants selectedTextBackgroundColor];
     self.linkHighlightColor = [SEConstants selectedTextBackgroundColor];
     self.linkRolloverEffectColor = [SEConstants linkColor];
@@ -182,6 +179,27 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [self setNeedsDisplayInRect:self.bounds];
 }
 
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    [self setAdditionalAttributes];
+    
+    CGRect frameRect = [self.class frameRectWithAttributtedString:self.attributedText
+                                                   constraintSize:size
+                                                      lineSpacing:self.lineSpacing
+                                                             font:self.font];
+    return frameRect.size;
+}
+
+- (void)sizeToFit
+{
+    CGSize size = [self sizeThatFits:self.bounds.size];
+    CGRect frame = self.frame;
+    frame.size = size;
+    self.frame = frame;
+}
+
+#pragma mark -
+
 - (void)setSelectable:(BOOL)selectable
 {
     _selectable = selectable;
@@ -198,7 +216,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     if (self.text) {
         self.attributedText = [[NSAttributedString alloc] initWithString:text];
     } else {
-        self.attributedText = [[NSAttributedString alloc] initWithString:@""];
+        self.attributedText = nil;
     }
 }
 
@@ -208,40 +226,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     _text = _attributedText.string;
     
     [self setNeedsDisplayInRect:self.bounds];
-}
-
-- (void)setFont:(NSFont *)font
-{
-    _font = font;
-    
-    CFStringRef fontName = (__bridge CFStringRef)font.fontName;
-    CGFloat fontSize = font.pointSize;
-	CTFontRef ctfont = CTFontCreateWithName(fontName, fontSize, NULL);
-    [self setAttributes:@{(id)kCTFontAttributeName: (__bridge id)ctfont}];
-	CFRelease(ctfont);
-}
-
-- (void)setTextColor:(NSColor *)textColor
-{
-    _textColor = textColor;
-    
-#if TARGET_OS_IPHONE
-    CGColorRef color = textColor.CGColor;
-    [self setAttributes:@{(id)kCTForegroundColorAttributeName: (__bridge id)color}];
-#else
-    NSDictionary *attributes = nil;
-    
-    CGColorRef color = NULL;
-    if ([textColor respondsToSelector:@selector(CGColor)]) {
-        color = textColor.CGColor;
-        attributes = @{(id)kCTForegroundColorAttributeName: (__bridge id)color};
-    } else {
-        color = [textColor createCGColor];
-        attributes = @{(id)kCTForegroundColorAttributeName: (__bridge id)color};
-        CGColorRelease(color);
-    }
-    [self setAttributes:attributes];
-#endif
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment
@@ -286,6 +270,87 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 #pragma mark -
 
+- (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index
+{
+    [self addObject:object size:size replaceRange:NSMakeRange(index, 0)];
+}
+
+- (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range
+{
+    NSRange raplaceRange = NSMakeRange(range.location, OBJECT_REPLACEMENT_CHARACTER.length);
+    SETextAttachment *attachment = [[SETextAttachment alloc] initWithObject:object size:size range:raplaceRange];
+    [self.attachments addObject:attachment];
+}
+
+- (void)setAdditionalAttributes
+{
+    [self setFontAttributes];
+    [self setTextColorAttributes];
+    [self setTextAttachmentAttributes];
+}
+
+- (void)setFontAttributes
+{
+    if (!self.font) {
+        return;
+    }
+    
+    CFStringRef fontName = (__bridge CFStringRef)self.font.fontName;
+    CGFloat fontSize = self.font.pointSize;
+	CTFontRef ctfont = CTFontCreateWithName(fontName, fontSize, NULL);
+    [self setAttributes:@{(id)kCTFontAttributeName: (__bridge id)ctfont}];
+	CFRelease(ctfont);
+}
+
+- (void)setTextColorAttributes
+{
+    if (!self.textColor) {
+        return;
+    }
+    
+#if TARGET_OS_IPHONE
+    CGColorRef color = self.textColor.CGColor;
+    [self setAttributes:@{(id)kCTForegroundColorAttributeName: (__bridge id)color}];
+#else
+    NSDictionary *attributes = nil;
+    
+    CGColorRef color = NULL;
+    if ([textColor respondsToSelector:@selector(CGColor)]) {
+        color = textColor.CGColor;
+        attributes = @{(id)kCTForegroundColorAttributeName: (__bridge id)color};
+    } else {
+        color = [textColor createCGColor];
+        attributes = @{(id)kCTForegroundColorAttributeName: (__bridge id)color};
+        CGColorRelease(color);
+    }
+    [self setAttributes:attributes];
+#endif
+}
+
+- (void)setTextAttachmentAttributes
+{
+    for (SETextAttachment *attachment in self.attachments) {
+        NSRange range = attachment.range;
+        
+        NSMutableAttributedString *attributedString = [self.attributedText mutableCopy];
+        if (range.length > 0) {
+            [attributedString replaceCharactersInRange:range withString:OBJECT_REPLACEMENT_CHARACTER];
+        } else {
+            NSAttributedString *replacement = [[NSAttributedString alloc] initWithString:OBJECT_REPLACEMENT_CHARACTER];
+            [attributedString insertAttributedString:replacement atIndex:range.location];
+        }
+        
+#if TARGET_OS_IPHONE
+        CTRunDelegateCallbacks callbacks = attachment.callbacks;
+        CTRunDelegateRef delegateRef = CTRunDelegateCreate(&callbacks, (__bridge void *)attachment);
+        
+        [attributedString addAttributes:@{(id)kCTRunDelegateAttributeName: (__bridge id)delegateRef} range:attachment.range];
+        
+        self.attributedText = attributedString;
+#endif
+    }
+}
+
 - (void)setAttributes:(NSDictionary *)attributes
 {
     NSInteger length = self.attributedText.length;
@@ -296,35 +361,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
     
     self.attributedText = attributedString;
-}
-
-- (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index
-{
-    [self addObject:object size:size replaceRange:NSMakeRange(index, 0)];
-}
-
-- (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range
-{
-    NSMutableAttributedString *attributedString = [self.attributedText mutableCopy];
-    if (range.length > 0) {
-        [attributedString replaceCharactersInRange:range withString:OBJECT_REPLACEMENT_CHARACTER];
-    } else {
-        NSAttributedString *replacement = [[NSAttributedString alloc] initWithString:OBJECT_REPLACEMENT_CHARACTER];
-        [attributedString insertAttributedString:replacement atIndex:range.location];
-    }
-    
-#if TARGET_OS_IPHONE
-    NSRange raplaceRange = NSMakeRange(range.location, OBJECT_REPLACEMENT_CHARACTER.length);
-    SETextAttachment *attachment = [[SETextAttachment alloc] initWithObject:object size:size range:raplaceRange];
-    [self.attachments addObject:attachment];
-    
-    CTRunDelegateCallbacks callbacks = attachment.callbacks;
-    CTRunDelegateRef delegateRef = CTRunDelegateCreate(&callbacks, (__bridge void *)attachment);
-    
-    [attributedString addAttributes:@{(id)kCTRunDelegateAttributeName: (__bridge id)delegateRef} range:attachment.range];
-    
-    self.attributedText = attributedString;
-#endif
 }
 
 #pragma mark -
@@ -364,7 +400,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 #pragma mark -
 
-- (void)drawTextAttachments
+- (void)drawTextAttachmentsInContext:(CGContextRef)context
 {
 #if TARGET_OS_IPHONE
     for (SETextAttachment *attachment in self.attachments) {
@@ -382,7 +418,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
                     [image drawInRect:rect];
                 } else if ([attachment.object isKindOfClass:NSClassFromString(@"NSBlock")]) {
                     SETextAttachmentDrawBlock draw = attachment.object;
-                    draw(rect);
+                    CGContextSaveGState(context);
+                    draw(rect, context);
+                    CGContextRestoreGState(context);
                 }
             }
         }
@@ -564,12 +602,15 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)drawRect:(CGRect)dirtyRect
 {
 	[super drawRect:dirtyRect];
+    
 #if TARGET_OS_IPHONE
     CGContextRef context = UIGraphicsGetCurrentContext();
 #else
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
 #endif
 	
+    [self setAdditionalAttributes];
+    
     self.textLayout.bounds = self.bounds;
     self.textLayout.attributedString = self.attributedText;
     
@@ -579,7 +620,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     [self highlightClickedLink];
     
-    [self drawTextAttachments];
+    [self drawTextAttachmentsInContext:context];
     
 #if TARGET_OS_IPHONE
     [self resetSelectionGrabber];

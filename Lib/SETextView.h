@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
+#import "SELinkText.h"
 #import "SECompatibility.h"
 
-typedef void(^SETextAttachmentDrawBlock)(CGRect rect);
+typedef void(^SETextAttachmentDrawBlock)(CGRect rect, CGContextRef context);
 
 @protocol SETextViewDelegate;
 @class SELinkText;
