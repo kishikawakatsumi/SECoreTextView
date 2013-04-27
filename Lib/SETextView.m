@@ -277,9 +277,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range
 {
+#if TARGET_OS_IPHONE
     NSRange raplaceRange = NSMakeRange(range.location, OBJECT_REPLACEMENT_CHARACTER.length);
     SETextAttachment *attachment = [[SETextAttachment alloc] initWithObject:object size:size range:raplaceRange];
     [self.attachments addObject:attachment];
+#endif
 }
 
 - (void)setAdditionalAttributes
@@ -315,11 +317,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     NSDictionary *attributes = nil;
     
     CGColorRef color = NULL;
-    if ([textColor respondsToSelector:@selector(CGColor)]) {
-        color = textColor.CGColor;
+    if ([self.textColor respondsToSelector:@selector(CGColor)]) {
+        color = self.textColor.CGColor;
         attributes = @{(id)kCTForegroundColorAttributeName: (__bridge id)color};
     } else {
-        color = [textColor createCGColor];
+        color = [self.textColor createCGColor];
         attributes = @{(id)kCTForegroundColorAttributeName: (__bridge id)color};
         CGColorRelease(color);
     }
@@ -329,6 +331,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)setTextAttachmentAttributes
 {
+#if TARGET_OS_IPHONE
     for (SETextAttachment *attachment in self.attachments) {
         NSRange range = attachment.range;
         
@@ -340,15 +343,14 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             [attributedString insertAttributedString:replacement atIndex:range.location];
         }
         
-#if TARGET_OS_IPHONE
         CTRunDelegateCallbacks callbacks = attachment.callbacks;
         CTRunDelegateRef delegateRef = CTRunDelegateCreate(&callbacks, (__bridge void *)attachment);
         
         [attributedString addAttributes:@{(id)kCTRunDelegateAttributeName: (__bridge id)delegateRef} range:attachment.range];
         
         self.attributedText = attributedString;
-#endif
     }
+#endif
 }
 
 - (void)setAttributes:(NSDictionary *)attributes
@@ -952,7 +954,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     self.mouseLocation = [self mouseLocationOnEvent:theEvent];
     
-    if ([self isMouseLocationInTextFrame]) {
+    if ([self containsPointInTextFrame:self.mouseLocation]) {
         self.touchPhase = SETouchPhaseBegan;
         [self.textLayout setSelectionStartWithPoint:self.mouseLocation];
     }
@@ -966,7 +968,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     self.mouseLocation = [self mouseLocationOnEvent:theEvent];
     
-    if ([self isMouseLocationInTextFrame]) {
+    if ([self containsPointInTextFrame:self.mouseLocation]) {
         self.touchPhase = SETouchPhaseMoved;
         [self.textLayout setSelectionEndWithPoint:self.mouseLocation];
     }
@@ -983,7 +985,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     self.touchPhase = SETouchPhaseEnded;
     
-    if ([self isMouseLocationInTextFrame]) {
+    if ([self containsPointInTextFrame:self.mouseLocation]) {
         SELinkText *link = [self linkAtPoint:self.mouseLocation];
         if (link) {
             [self clickedOnLink:link];
