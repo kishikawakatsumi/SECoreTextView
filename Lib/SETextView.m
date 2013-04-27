@@ -489,6 +489,18 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return kCFNotFound;
 }
 
+- (BOOL)containsPointInSelection:(CGPoint)point
+{
+    CFIndex index = [self stringIndexAtPoint:point];
+    NSRange selectedRange = self.selectedRange;
+    return NSLocationInRange(index, selectedRange);
+}
+
+- (BOOL)containsPointInTextFrame:(CGPoint)point
+{
+    return CGRectContainsPoint(self.textLayout.frameRect, point);
+}
+
 - (SELinkText *)linkAtPoint:(CGPoint)point
 {
     for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
@@ -851,7 +863,12 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.touchPhase = SETouchPhaseEnded;;
     self.clickPoint = CGPointZero;
     
-    if ([self isMouseLocationInTextFrame]) {
+    if (![self containsPointInSelection:self.mouseLocation]) {
+        [self.textLayout clearSelection];
+        [self hideEditingMenu];
+    }
+    
+    if ([self containsPointInTextFrame:self.mouseLocation]) {
         SELinkText *link = [self linkAtPoint:self.mouseLocation];
         if (link) {
             [self clickedOnLink:link];
@@ -992,11 +1009,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 #endif
 #pragma mark - Common
-
-- (BOOL)isMouseLocationInTextFrame
-{
-    return CGRectContainsPoint(self.textLayout.frameRect, self.mouseLocation);
-}
 
 - (void)setHighlighted:(BOOL)highlighted
 {
