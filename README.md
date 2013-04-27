@@ -10,16 +10,20 @@ SECoreTextView is multi-line rich text view library with clickable links, select
 ### Clickable hyper link
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_02.png" alt="iOS ScreenShot 2" width="225px" style="width: 225px;" />
 
+### Embedding Images, Custom views, or Any blocks
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_07.png" alt="iOS ScreenShot 7" width="225px" style="width: 225px;" />&nbsp;
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_08.png" alt="iOS ScreenShot 8" width="225px" style="width: 225px;" />
+
 ### Text selection
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_03.png" alt="iOS ScreenShot 3" width="225px" style="width: 225px;" />&nbsp;
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_04.png" alt="iOS ScreenShot 4" width="225px" style="width: 225px;" />&nbsp;
-<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_06.png" alt="iOS ScreenShot 4" width="225px" style="width: 225px;" />
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_06.png" alt="iOS ScreenShot 6" width="225px" style="width: 225px;" />
 
 ### Copy & Paste
-<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_05.png" alt="iOS ScreenShot 3" width="225px" style="width: 225px;" />
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/iOS_05.png" alt="iOS ScreenShot 5" width="225px" style="width: 225px;" />
 
 ### Both OS X / iOS supported
-<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/OSX_02.png" alt="OS X ScreenShot 1" width="320px" style="width: 320px;" />
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/DemoApp/Screenshot/OSX_02.png" alt="OS X ScreenShot 2" width="320px" style="width: 320px;" />
 
 ## System Requirement
 **OS X 10.7(Lion) or later / iOS 5 or later**
