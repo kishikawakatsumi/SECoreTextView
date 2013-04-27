@@ -42,7 +42,6 @@
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
-                             edgePadding:(NSEdgeInsets)edgePadding
                              lineSpacing:(CGFloat)lineSpacing
 {
     SETextLayout *textLayout = [[SETextLayout alloc] initWithAttributedString:attributedString];
@@ -51,7 +50,6 @@
     bounds.size = constraintSize;
     
     textLayout.bounds = bounds;
-    textLayout.edgePadding = edgePadding;
     textLayout.lineSpacing = lineSpacing;
     
     [textLayout setParagraphStyle];
@@ -87,34 +85,23 @@
     }
     
     CGRect frameRect = _bounds;
-    NSEdgeInsets padding = _edgePadding;
-	frameRect.size.width -= (padding.left + padding.right);
-	frameRect.origin.x += padding.left;
-#if TARGET_OS_IPHONE
-	frameRect.origin.y -= padding.top;
-#else
-	frameRect.origin.y -= (padding.top + padding.bottom);
-#endif
-    
 	CGSize frameSize = CTFramesetterSuggestFrameSizeWithConstraints(_framesetter,
                                                                     CFRangeMake(0, _attributedString.length),
                                                                     NULL,
                                                                     CGSizeMake(frameRect.size.width, CGFLOAT_MAX),
                                                                     NULL);
 	frameRect.origin.y = CGRectGetMaxY(frameRect) - frameSize.height;
-    frameRect.size = CGSizeMake(frameSize.width, frameSize.height + padding.bottom);
-    _frameRect = frameRect;
-    
-#if TARGET_OS_IPHONE
-    CGRect drawingFrameRect = _frameRect;
-    drawingFrameRect.origin.y = padding.top;
-    _frameRect = drawingFrameRect;
-#endif
+    frameRect.size = frameSize;
 	
 	CGMutablePathRef path = CGPathCreateMutable();
 	CGPathAddRect(path, NULL, frameRect);
 	_frame = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, 0), path, NULL);
 	CGPathRelease(path);
+    
+    _frameRect = frameRect;
+#if TARGET_OS_IPHONE
+    _frameRect.origin.y = 0.0f;
+#endif
 }
 
 - (void)detectLinks

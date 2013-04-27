@@ -117,19 +117,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (id)initWithFrame:(CGRect)frame
 {
-    return [self initWithFrame:frame edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-}
-
-- (id)initWithFrame:(CGRect)frame topPadding:(CGFloat)topPadding leftPadding:(CGFloat)leftPadding
-{
-    return [self initWithFrame:frame edgePadding:NSEdgeInsetsMake(topPadding, leftPadding, topPadding, leftPadding)];
-}
-
-- (id)initWithFrame:(CGRect)frame edgePadding:(NSEdgeInsets)edgePadding
-{
     self = [super initWithFrame:frame];
     if (self) {
-        self.edgePadding = edgePadding;
         [self commonInit];
     }
     
@@ -143,16 +132,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     return [self frameRectWithAttributtedString:attributedString
                                  constraintSize:constraintSize
-                                    edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-}
-
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
-                             edgePadding:(NSEdgeInsets)edgePadding
-{
-    return [self frameRectWithAttributtedString:attributedString
-                                 constraintSize:constraintSize
-                                    edgePadding:edgePadding
                                     lineSpacing:0.0f];
 }
 
@@ -162,61 +141,14 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     return [self frameRectWithAttributtedString:attributedString
                                  constraintSize:constraintSize
-                                    edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)
-                                    lineSpacing:lineSpacing];
+                                    lineSpacing:lineSpacing
+                                           font:nil];
 }
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
-                             edgePadding:(NSEdgeInsets)edgePadding
                              lineSpacing:(CGFloat)lineSpacing
-{
-    return [self frameRectWithAttributtedString:attributedString
-                                 constraintSize:constraintSize
-                                           font:nil
-                                    edgePadding:edgePadding
-                                    lineSpacing:lineSpacing];
-}
-
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
                                     font:(NSFont *)font
-{
-    return [self frameRectWithAttributtedString:attributedString
-                                 constraintSize:constraintSize
-                                           font:font
-                                    edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-}
-
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
-                                    font:(NSFont *)font
-                             lineSpacing:(CGFloat)lineSpacing
-{
-    return [self frameRectWithAttributtedString:attributedString
-                                 constraintSize:constraintSize
-                                           font:font
-                                    edgePadding:NSEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)
-                                    lineSpacing:lineSpacing];
-}
-
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
-                                    font:(NSFont *)font
-                             edgePadding:(NSEdgeInsets)edgePadding
-{
-    return [self frameRectWithAttributtedString:attributedString
-                                 constraintSize:constraintSize
-                                           font:font
-                                    edgePadding:edgePadding
-                                    lineSpacing:0.0f];
-}
-
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
-                                    font:(NSFont *)font
-                             edgePadding:(NSEdgeInsets)edgePadding
-                             lineSpacing:(CGFloat)lineSpacing
 {
     if (font) {
         NSInteger length = attributedString.length;
@@ -233,7 +165,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     return [SETextLayout frameRectWithAttributtedString:attributedString
                                          constraintSize:constraintSize
-                                            edgePadding:edgePadding
                                             lineSpacing:lineSpacing];
 }
 
@@ -333,16 +264,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return self.textLayout.lineSpacing;
 }
 
-- (void)setEdgePadding:(NSEdgeInsets)edgePadding
-{
-    self.textLayout.edgePadding = edgePadding;
-}
-
-- (NSEdgeInsets)edgePadding
-{
-    return self.textLayout.edgePadding;
-}
-
 - (CGRect)layoutFrame
 {
     return self.textLayout.frameRect;
@@ -437,7 +358,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)clickedOnLink:(SELinkText *)link
 {
     if ([self.delegate respondsToSelector:@selector(textView:clickedOnLink:atIndex:)]) {
-        [self.delegate textView:self clickedOnLink:link atIndex:[self stringIndexAtPoint:[self shiftedMouseLocation]]];
+        [self.delegate textView:self clickedOnLink:link atIndex:[self stringIndexAtPoint:self.mouseLocation]];
     }
 }
 
@@ -485,6 +406,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         CGRect selectionRect = [lineLayout rectOfStringWithRange:textSelection.selectedRange];
         if (!CGRectIsEmpty(selectionRect)) {
             [self.selectedTextBackgroundColor set];
+            
             CGFloat lineSpacing = self.lineSpacing;
             selectionRect.origin.y -= lineSpacing;
             selectionRect.size.height += lineSpacing;
@@ -590,6 +512,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             [self.linkRolloverEffectColor set];
             CGRect linkRect = geometry.rect;
             linkRect.size.height = 1.0f;
+            
             NSRectFill(linkRect);
         }
     }
@@ -680,15 +603,13 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if (CGRectContainsPoint(self.bounds, point)) {
-        if (self.selectable) {
-            return [super hitTest:point withEvent:event];
-        } else {
-            SELinkText *link = [self linkAtPoint:point];
-            if (link) {
-                return [super hitTest:point withEvent:event];
-            }
-        }
+    if (self.selectable) {
+        return [super hitTest:point withEvent:event];
+    }
+    
+    SELinkText *link = [self linkAtPoint:point];
+    if (link) {
+        return [super hitTest:point withEvent:event];
     }
     
     return nil;
@@ -794,14 +715,15 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)selectionChanged:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     self.mouseLocation = [gestureRecognizer locationInView:self];
+    
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
         gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         self.touchPhase = SETouchPhaseMoved;
-        CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
+        CGPoint shiftedMouseLocation = self.mouseLocation;
         
         [self.textLayout setSelectionWithPoint:shiftedMouseLocation];
         
-        [self moveMagnifierCaretToPoint:shiftedMouseLocation];
+        [self moveMagnifierCaretToPoint:self.mouseLocation];
     } if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
                gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
                gestureRecognizer.state == UIGestureRecognizerStateFailed) {
@@ -826,23 +748,16 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.touchPhase = SETouchPhaseNone;
     
     self.mouseLocation = [gestureRecognizer locationInView:self];
-    CGPoint shiftedMouseLocation = [self shiftedMouseLocation];
     
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
         gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         if (gestureRecognizer == self.firstGrabberGestureRecognizer) {
             self.firstGrabber.dragging = YES;
             
-            CGPoint firstPoint = CGPointMake(shiftedMouseLocation.x,
-                                             shiftedMouseLocation.y);
-            [self.textLayout setSelectionStartWithFirstPoint:firstPoint];
-            
+            [self.textLayout setSelectionStartWithFirstPoint:self.mouseLocation];
             [self moveMagnifierRangedToPoint:self.firstGrabber.center];
         } else {
-            CGPoint endPoint = CGPointMake(shiftedMouseLocation.x,
-                                           shiftedMouseLocation.y);
-            [self.textLayout setSelectionEndWithPoint:endPoint];
-            
+            [self.textLayout setSelectionEndWithPoint:self.mouseLocation];
             [self moveMagnifierRangedToPoint:self.secondGrabber.center];
         }
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
@@ -910,7 +825,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)showEditingMenu
 {
     UIMenuController *menuController = [UIMenuController sharedMenuController];
-    menuController.arrowDirection = UIMenuControllerArrowDown;
+    menuController.arrowDirection = UIMenuControllerArrowDefault;
     [menuController setTargetRect:[self editingMenuRectForSelection] inView:self];
     
     [menuController setMenuVisible:YES animated:YES];
@@ -978,7 +893,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     if ([self isMouseLocationInTextFrame]) {
         self.touchPhase = SETouchPhaseBegan;
-        [self.textLayout setSelectionStartWithPoint:[self shiftedMouseLocation]];
+        [self.textLayout setSelectionStartWithPoint:self.mouseLocation];
     }
     
     [self notifySelectionChanged];
@@ -992,7 +907,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     if ([self isMouseLocationInTextFrame]) {
         self.touchPhase = SETouchPhaseMoved;
-        [self.textLayout setSelectionEndWithPoint:[self shiftedMouseLocation]];
+        [self.textLayout setSelectionEndWithPoint:self.mouseLocation];
     }
     
     [self notifySelectionChanged];
@@ -1040,11 +955,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (BOOL)isMouseLocationInTextFrame
 {
     return CGRectContainsPoint(self.textLayout.frameRect, self.mouseLocation);
-}
-
-- (CGPoint)shiftedMouseLocation
-{
-    return CGPointMake(self.mouseLocation.x - self.edgePadding.left, self.mouseLocation.y);
 }
 
 - (void)setHighlighted:(BOOL)highlighted

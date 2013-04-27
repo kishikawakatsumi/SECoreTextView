@@ -22,7 +22,6 @@
 @property (assign, nonatomic) CGFloat paragraphSpacing;
 
 @property (assign, nonatomic) CGRect bounds;
-@property (assign, nonatomic) NSEdgeInsets edgePadding;
 
 @property (assign, nonatomic, readonly) CGRect frameRect;
 @property (strong, nonatomic, readonly) NSArray *lineLayouts;
@@ -48,7 +47,6 @@
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
-                             edgePadding:(NSEdgeInsets)edgePadding
                              lineSpacing:(CGFloat)lineSpacing;
 
 @end

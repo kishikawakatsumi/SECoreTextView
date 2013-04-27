@@ -28,8 +28,6 @@ typedef void(^SETextAttachmentDrawBlock)(CGRect rect);
 @property (assign, nonatomic) NSTextAlignment textAlignment;
 @property (assign, nonatomic) CGFloat lineSpacing;
 
-@property (assign, nonatomic) NSEdgeInsets edgePadding;
-
 @property (strong, nonatomic) NSColor *selectedTextBackgroundColor;
 @property (strong, nonatomic) NSColor *linkHighlightColor;
 @property (strong, nonatomic) NSColor *linkRolloverEffectColor;
@@ -47,37 +45,16 @@ typedef void(^SETextAttachmentDrawBlock)(CGRect rect);
 @property (strong, nonatomic, readonly) NSString *selectedAttributedText;
 
 - (id)initWithFrame:(CGRect)frame;
-- (id)initWithFrame:(CGRect)frame topPadding:(CGFloat)topPadding leftPadding:(CGFloat)leftPadding;
-- (id)initWithFrame:(CGRect)frame edgePadding:(NSEdgeInsets)edgePadding;
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize;
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
-                             edgePadding:(NSEdgeInsets)edgePadding;
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
                              lineSpacing:(CGFloat)lineSpacing;
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
-                             edgePadding:(NSEdgeInsets)edgePadding
-                             lineSpacing:(CGFloat)lineSpacing;
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
+                             lineSpacing:(CGFloat)lineSpacing
                                     font:(NSFont *)font;
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
-                                    font:(NSFont *)font
-                             lineSpacing:(CGFloat)lineSpacing;
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
-                                    font:(NSFont *)font
-                             edgePadding:(NSEdgeInsets)edgePadding;
-+ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
-                                    font:(NSFont *)font
-                             edgePadding:(NSEdgeInsets)edgePadding
-                             lineSpacing:(CGFloat)lineSpacing;
 
 - (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index;
 - (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range;

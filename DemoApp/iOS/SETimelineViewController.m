@@ -69,8 +69,8 @@ static const CGFloat FONT_SIZE = 14.0f;
     NSAttributedString *attributedString = [[SETwitterHelper sharedInstance] attributedStringWithTweet:tweet];
     CGRect frameRect = [SETextView frameRectWithAttributtedString:attributedString
                                                    constraintSize:CGSizeMake(tableView.bounds.size.width - 72.0f, CGFLOAT_MAX)
-                                                             font:[UIFont systemFontOfSize:FONT_SIZE]
-                                                      lineSpacing:LINE_SPACING];
+                                                      lineSpacing:LINE_SPACING
+                                                             font:[UIFont systemFontOfSize:FONT_SIZE]];
     
     return MAX(tableView.rowHeight, frameRect.size.height + 26.0f);
 }
