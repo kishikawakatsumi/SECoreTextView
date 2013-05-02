@@ -10,10 +10,17 @@
 #import <CoreText/CoreText.h>
 #import "SELinkText.h"
 #import "SECompatibility.h"
+#import "NSMutableAttributedString+Helper.h"
 
-typedef void(^SETextAttachmentDrawBlock)(CGRect rect, CGContextRef context);
+typedef void(^SETextAttachmentDrawingBlock)(CGRect rect, CGContextRef context);
+
+typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
+    SETextAttachmentDrawingOptionNone = 0,
+    SETextAttachmentDrawingOptionNewLine  = 1 << 0
+};
 
 @protocol SETextViewDelegate;
+
 @class SELinkText;
 
 @interface SETextView : NSView
@@ -28,6 +35,8 @@ typedef void(^SETextAttachmentDrawBlock)(CGRect rect, CGContextRef context);
 @property (strong, nonatomic) NSColor *highlightedTextColor;
 @property (assign, nonatomic) NSTextAlignment textAlignment;
 @property (assign, nonatomic) CGFloat lineSpacing;
+@property (assign, nonatomic) CGFloat lineHeight;
+@property (assign, nonatomic) CGFloat paragraphSpacing;
 
 @property (strong, nonatomic) NSColor *selectedTextBackgroundColor;
 @property (strong, nonatomic) NSColor *linkHighlightColor;

@@ -16,11 +16,6 @@
 
 @property (copy, nonatomic) NSAttributedString *attributedString;
 
-@property (assign, nonatomic) NSTextAlignment textAlignment;
-@property (assign, nonatomic) CGFloat lineSpacing;
-@property (assign, nonatomic) CGFloat lineHeight;
-@property (assign, nonatomic) CGFloat paragraphSpacing;
-
 @property (assign, nonatomic) CGRect bounds;
 
 @property (assign, nonatomic, readonly) CGRect frameRect;
@@ -46,7 +41,6 @@
 - (void)clearSelection;
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
-                          constraintSize:(CGSize)constraintSize
-                             lineSpacing:(CGFloat)lineSpacing;
+                          constraintSize:(CGSize)constraintSize;
 
 @end

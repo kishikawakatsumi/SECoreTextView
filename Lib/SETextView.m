@@ -161,8 +161,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
     
     return [SETextLayout frameRectWithAttributtedString:attributedString
-                                         constraintSize:constraintSize
-                                            lineSpacing:lineSpacing];
+                                         constraintSize:constraintSize];
 }
 
 #pragma mark -
@@ -228,26 +227,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [self setNeedsDisplayInRect:self.bounds];
 }
 
-- (void)setTextAlignment:(NSTextAlignment)textAlignment
-{
-    self.textLayout.textAlignment = textAlignment;
-}
-
-- (NSTextAlignment)textAlignment
-{
-    return self.textLayout.textAlignment;
-}
-
-- (void)setLineSpacing:(CGFloat)lineSpacing
-{
-    self.textLayout.lineSpacing = lineSpacing;
-}
-
-- (CGFloat)lineSpacing
-{
-    return self.textLayout.lineSpacing;
-}
-
 - (CGRect)layoutFrame
 {
     return self.textLayout.frameRect;
@@ -277,11 +256,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range
 {
-#if TARGET_OS_IPHONE
     NSRange raplaceRange = NSMakeRange(range.location, OBJECT_REPLACEMENT_CHARACTER.length);
     SETextAttachment *attachment = [[SETextAttachment alloc] initWithObject:object size:size range:raplaceRange];
     [self.attachments addObject:attachment];
-#endif
 }
 
 - (void)setAdditionalAttributes
@@ -289,6 +266,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [self setFontAttributes];
     [self setTextColorAttributes];
     [self setTextAttachmentAttributes];
+    [self setParagraphStyle];
 }
 
 - (void)setFontAttributes
@@ -331,7 +309,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)setTextAttachmentAttributes
 {
-#if TARGET_OS_IPHONE
     for (SETextAttachment *attachment in self.attachments) {
         NSRange range = attachment.range;
         
@@ -350,7 +327,31 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         
         self.attributedText = attributedString;
     }
+}
+
+- (void)setParagraphStyle
+{
+#if TARGET_OS_IPHONE
+    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
+#else
+    CTTextAlignment textAlignment = self.textAlignment;
 #endif
+    CGFloat lineSpacing = self.lineSpacing;
+    CGFloat lineHeight = self.lineHeight;
+    CGFloat paragraphSpacing = self.paragraphSpacing;
+    
+    CTParagraphStyleSetting setting[] = {
+        { kCTParagraphStyleSpecifierAlignment, sizeof(textAlignment), &textAlignment},
+        { kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(lineHeight), &lineHeight },
+        { kCTParagraphStyleSpecifierMaximumLineHeight, sizeof(lineHeight), &lineHeight },
+        { kCTParagraphStyleSpecifierLineSpacing, sizeof(lineSpacing), &lineSpacing },
+        { kCTParagraphStyleSpecifierMinimumLineSpacing, sizeof(lineSpacing), &lineSpacing },
+        { kCTParagraphStyleSpecifierMaximumLineSpacing, sizeof(lineSpacing), &lineSpacing },
+        { kCTParagraphStyleSpecifierParagraphSpacing, sizeof(paragraphSpacing), &paragraphSpacing }
+    };
+    
+    CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(setting, sizeof(setting) / sizeof(CTParagraphStyleSetting));
+    [self setAttributes:@{(id)kCTParagraphStyleAttributeName: (__bridge id)paragraphStyle}];
 }
 
 - (void)setAttributes:(NSDictionary *)attributes
@@ -404,22 +405,25 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)drawTextAttachmentsInContext:(CGContextRef)context
 {
-#if TARGET_OS_IPHONE
     for (SETextAttachment *attachment in self.attachments) {
         for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
             CGRect rect = [lineLayout rectOfStringWithRange:attachment.range];
             if (!CGRectIsEmpty(rect)) {
-                if ([attachment.object isKindOfClass:[UIView class]]) {
+                if ([attachment.object isKindOfClass:[NSView class]]) {
                     UIView *view = attachment.object;
                     view.frame = rect;
                     if (!view.superview) {
                         [self addSubview:view];
                     }
-                } else if ([attachment.object isKindOfClass:[UIImage class]]) {
-                    UIImage *image = attachment.object;
+                } else if ([attachment.object isKindOfClass:[NSImage class]]) {
+                    NSImage *image = attachment.object;
+#if TARGET_OS_IPHONE
                     [image drawInRect:rect];
+#else
+                    [image drawInRect:rect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0f];
+#endif
                 } else if ([attachment.object isKindOfClass:NSClassFromString(@"NSBlock")]) {
-                    SETextAttachmentDrawBlock draw = attachment.object;
+                    SETextAttachmentDrawingBlock draw = attachment.object;
                     CGContextSaveGState(context);
                     draw(rect, context);
                     CGContextRestoreGState(context);
@@ -427,7 +431,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             }
         }
     }
-#endif
 }
 
 - (void)highlightSelection
@@ -643,11 +646,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     [self updateCursorRectsInLinks];
     [self updateTrackingAreasInLinks];
-#endif
-    
-#if TARGET_OS_IPHONE
-    CGContextTranslateCTM(context, 0, self.bounds.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
 #endif
     
     [self.textLayout drawInContext:context];

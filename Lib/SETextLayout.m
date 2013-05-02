@@ -42,7 +42,6 @@
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
-                             lineSpacing:(CGFloat)lineSpacing
 {
     SETextLayout *textLayout = [[SETextLayout alloc] initWithAttributedString:attributedString];
     
@@ -50,9 +49,6 @@
     bounds.size = constraintSize;
     
     textLayout.bounds = bounds;
-    textLayout.lineSpacing = lineSpacing;
-    
-    [textLayout setParagraphStyle];
     
     [textLayout createFramesetter];
     [textLayout createFrame];
@@ -180,8 +176,6 @@
 
 - (void)update
 {
-    [self setParagraphStyle];
-    
     [self createFramesetter];
     [self createFrame];
     
@@ -192,12 +186,17 @@
 
 - (void)drawFrameInContext:(CGContextRef)context
 {
+#if TARGET_OS_IPHONE
+    CGContextTranslateCTM(context, 0, self.bounds.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+#endif
+
 	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
 	CTFrameDraw(_frame, context);
 }
 
 - (void)drawInContext:(CGContextRef)context
-{
+{    
     [self drawFrameInContext:context];    
 }
 
@@ -304,35 +303,6 @@
 - (void)clearSelection
 {
     self.textSelection = nil;
-}
-
-#pragma mark -
-
-- (void)setParagraphStyle
-{
-    NSTextAlignment textAlignment = _textAlignment;
-    CGFloat lineSpacing = _lineSpacing;
-    CGFloat lineHeight = _lineHeight;
-    CGFloat paragraphSpacing = _paragraphSpacing;
-    
-    CTParagraphStyleSetting setting[] = {
-        { kCTParagraphStyleSpecifierAlignment, sizeof(textAlignment), &textAlignment},
-        { kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(lineHeight), &lineHeight },
-        { kCTParagraphStyleSpecifierMaximumLineHeight, sizeof(lineHeight), &lineHeight },
-        { kCTParagraphStyleSpecifierLineSpacing, sizeof(lineSpacing), &lineSpacing },
-        { kCTParagraphStyleSpecifierMinimumLineSpacing, sizeof(lineSpacing), &lineSpacing },
-        { kCTParagraphStyleSpecifierMaximumLineSpacing, sizeof(lineSpacing), &lineSpacing },
-        { kCTParagraphStyleSpecifierParagraphSpacing, sizeof(paragraphSpacing), &paragraphSpacing }
-    };
-    
-    CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(setting, sizeof(setting) / sizeof(CTParagraphStyleSetting));
-    
-    CFIndex length = _attributedString.length;
-    NSMutableAttributedString *attributedString = [_attributedString mutableCopy];
-    [attributedString addAttributes:@{(id)kCTParagraphStyleAttributeName: (__bridge id)paragraphStyle} range:NSMakeRange(0, length)];
-    CFRelease(paragraphStyle);
-    
-    self.attributedString = attributedString;
 }
 
 @end

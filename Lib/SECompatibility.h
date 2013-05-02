@@ -15,6 +15,7 @@
 @compatibility_alias NSFont UIFont;
 @compatibility_alias NSColor UIColor;
 @compatibility_alias NSBezierPath UIBezierPath;
+@compatibility_alias NSImage UIImage;
 
 typedef UIEdgeInsets NSEdgeInsets;
 
@@ -31,6 +32,7 @@ extern NSString * const NSLinkAttributeName;
 @compatibility_alias UIFont NSFont;
 @compatibility_alias UIColor NSColor;
 @compatibility_alias UIBezierPath NSBezierPath;
+@compatibility_alias UIImage NSImage;
 
 typedef NSEdgeInsets UIEdgeInsets;
 
