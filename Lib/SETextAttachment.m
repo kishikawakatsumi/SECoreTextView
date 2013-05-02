@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 kishikawa katsumi. All rights reserved.
 //
 
-#if TARGET_OS_IPHONE
 #import "SETextAttachment.h"
 
 static void RunDelegateDeallocateCallback(void *refCon)
@@ -57,4 +56,3 @@ static CGFloat RunDelegateGetWidthCallback(void *refCon)
 }
 
 @end
-#endif

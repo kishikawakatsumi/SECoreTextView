@@ -8,12 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonDigest.h>
-
-#if TARGET_OS_IPHONE
-@compatibility_alias NSImage UIImage;
-#else
-@compatibility_alias UIImage NSImage;
-#endif
+#import "SECompatibility.h"
 
 typedef void(^SEImageDownloadCompletionBlock)(NSImage *image, NSError *error);
 

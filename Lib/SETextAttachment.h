@@ -6,9 +6,32 @@
 //  Copyright (c) 2013 kishikawa katsumi. All rights reserved.
 //
 
-#if TARGET_OS_IPHONE
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
+
+#if !TARGET_OS_IPHONE
+enum {
+	kCTRunDelegateVersion1 = 1,
+	kCTRunDelegateCurrentVersion = kCTRunDelegateVersion1
+};
+
+typedef void (*CTRunDelegateDeallocateCallback) ( void* refCon );
+typedef CGFloat (*CTRunDelegateGetAscentCallback) ( void* refCon );
+typedef CGFloat (*CTRunDelegateGetDescentCallback) ( void* refCon );
+typedef CGFloat (*CTRunDelegateGetWidthCallback) ( void* refCon );
+
+typedef struct {
+	CFIndex							version;
+	CTRunDelegateDeallocateCallback	dealloc;
+	CTRunDelegateGetAscentCallback	getAscent;
+	CTRunDelegateGetDescentCallback	getDescent;
+	CTRunDelegateGetWidthCallback	getWidth;
+} CTRunDelegateCallbacks;
+
+typedef const struct __CTRunDelegate * CTRunDelegateRef;
+CTRunDelegateRef CTRunDelegateCreate(const CTRunDelegateCallbacks* callbacks,
+                                     void* refCon );
+#endif
 
 @interface SETextAttachment : NSObject
 
@@ -21,4 +44,3 @@
 - (id)initWithObject:(id)object size:(CGSize)size range:(NSRange)range;
 
 @end
-#endif

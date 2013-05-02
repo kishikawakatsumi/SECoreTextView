@@ -134,7 +134,7 @@ static const CGFloat FONT_SIZE = 14.0f;
     } else if ([text hasPrefix:@"@"]) {
         self.nextURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://twitter.com/%@", [text substringFromIndex:1]]];
     } else if ([text hasPrefix:@"#"]) {
-        self.nextURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://twitter.com/search?q=%%23%@", [text substringFromIndex:1]]];
+        self.nextURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://twitter.com/search?q=%@", [text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     }
     
     if (self.nextURL) {

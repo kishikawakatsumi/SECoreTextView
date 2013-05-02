@@ -16,6 +16,7 @@
 		141B275A1723C74800E2A1B4 /* SETweetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B27581723C74800E2A1B4 /* SETweetViewController.m */; };
 		1450806817245E0800636965 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806517245E0800636965 /* TwitterText.m */; };
 		1450806917245E0800636965 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806717245E0800636965 /* TwitterTextEntity.m */; };
+		146B27DC172EC8E30033AE4B /* NSMutableAttributedString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 146B27DB172EC8E30033AE4B /* NSMutableAttributedString+Helper.m */; };
 		147FC14B172590AE00A11142 /* SETextMagnifierCaret.m in Sources */ = {isa = PBXBuildFile; fileRef = 147FC14A172590AE00A11142 /* SETextMagnifierCaret.m */; };
 		147FC16117259F8100A11142 /* kb-loupe-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15317259F8000A11142 /* kb-loupe-hi.png */; };
 		147FC16217259F8100A11142 /* kb-loupe-hi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 147FC15417259F8000A11142 /* kb-loupe-hi@2x.png */; };
@@ -79,6 +80,8 @@
 		1450806517245E0800636965 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "Vendor/twitter-text-objc/lib/TwitterText.m"; sourceTree = SOURCE_ROOT; };
 		1450806617245E0800636965 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = SOURCE_ROOT; };
 		1450806717245E0800636965 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = SOURCE_ROOT; };
+		146B27DA172EC8E30033AE4B /* NSMutableAttributedString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableAttributedString+Helper.h"; path = "Lib/NSMutableAttributedString+Helper.h"; sourceTree = SOURCE_ROOT; };
+		146B27DB172EC8E30033AE4B /* NSMutableAttributedString+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableAttributedString+Helper.m"; path = "Lib/NSMutableAttributedString+Helper.m"; sourceTree = SOURCE_ROOT; };
 		147FC149172590AE00A11142 /* SETextMagnifierCaret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextMagnifierCaret.h; path = Lib/SETextMagnifierCaret.h; sourceTree = SOURCE_ROOT; };
 		147FC14A172590AE00A11142 /* SETextMagnifierCaret.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextMagnifierCaret.m; path = Lib/SETextMagnifierCaret.m; sourceTree = SOURCE_ROOT; };
 		147FC15317259F8000A11142 /* kb-loupe-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "kb-loupe-hi.png"; path = "Lib/kb-loupe-hi.png"; sourceTree = SOURCE_ROOT; };
@@ -299,6 +302,8 @@
 				14911AE8172AF0AA003056B7 /* SEConstants.m */,
 				141B27441723BAEF00E2A1B4 /* SECompatibility.h */,
 				141B27471723BBA200E2A1B4 /* SECompatibility.m */,
+				146B27DA172EC8E30033AE4B /* NSMutableAttributedString+Helper.h */,
+				146B27DB172EC8E30033AE4B /* NSMutableAttributedString+Helper.m */,
 				147FC1731725A0C700A11142 /* Resources */,
 			);
 			name = Lib;
@@ -437,6 +442,7 @@
 				14F0A0831729838C00163A90 /* SETextMagnifierRanged.m in Sources */,
 				14911A68172AE64F003056B7 /* SETextAttachment.m in Sources */,
 				14911AE9172AF0AA003056B7 /* SEConstants.m in Sources */,
+				146B27DC172EC8E30033AE4B /* NSMutableAttributedString+Helper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
