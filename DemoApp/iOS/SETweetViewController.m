@@ -78,9 +78,8 @@ static const CGFloat FONT_SIZE = 16.0f;
         return tableView.rowHeight;
     } else {
         CGRect frameRect = [SETextView frameRectWithAttributtedString:self.tweetTextView.attributedText
-                                                       constraintSize:CGSizeMake(CGRectGetWidth(self.tweetTextView.bounds), CGFLOAT_MAX)
-                                                          lineSpacing:self.tweetTextView.lineSpacing
-                                                                 font:[UIFont systemFontOfSize:FONT_SIZE]];
+                                                       constraintSize:CGSizeMake(284.0f, CGFLOAT_MAX)
+                                                          lineSpacing:self.tweetTextView.lineSpacing];
         
         return frameRect.size.height + 20.0f;
     }

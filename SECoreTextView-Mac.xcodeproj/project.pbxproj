@@ -10,6 +10,7 @@
 		141B274B1723BDF200E2A1B4 /* SECompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 141B274A1723BDF200E2A1B4 /* SECompatibility.m */; };
 		1450806217245DF200636965 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450805F17245DF200636965 /* TwitterText.m */; };
 		1450806317245DF200636965 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1450806117245DF200636965 /* TwitterTextEntity.m */; };
+		1465EDF91732B97300BDBC1D /* NSMutableAttributedString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1465EDF81732B97300BDBC1D /* NSMutableAttributedString+Helper.m */; };
 		1488D5141722E98700F22C26 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D5131722E98700F22C26 /* Cocoa.framework */; };
 		1488D5311722E9A300F22C26 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1488D5301722E9A300F22C26 /* CoreText.framework */; };
 		1488D5511722EA3D00F22C26 /* SELineLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1488D5461722EA3C00F22C26 /* SELineLayout.m */; };
@@ -42,6 +43,8 @@
 		1450805F17245DF200636965 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "Vendor/twitter-text-objc/lib/TwitterText.m"; sourceTree = SOURCE_ROOT; };
 		1450806017245DF200636965 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = SOURCE_ROOT; };
 		1450806117245DF200636965 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = SOURCE_ROOT; };
+		1465EDF71732B97300BDBC1D /* NSMutableAttributedString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableAttributedString+Helper.h"; path = "Lib/NSMutableAttributedString+Helper.h"; sourceTree = SOURCE_ROOT; };
+		1465EDF81732B97300BDBC1D /* NSMutableAttributedString+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableAttributedString+Helper.m"; path = "Lib/NSMutableAttributedString+Helper.m"; sourceTree = SOURCE_ROOT; };
 		1488D5101722E98700F22C26 /* SECoreTextView-Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SECoreTextView-Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1488D5131722E98700F22C26 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1488D5161722E98700F22C26 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -174,6 +177,8 @@
 				14911B00172B05D7003056B7 /* SEConstants.m */,
 				141B27491723BDF200E2A1B4 /* SECompatibility.h */,
 				141B274A1723BDF200E2A1B4 /* SECompatibility.m */,
+				1465EDF71732B97300BDBC1D /* NSMutableAttributedString+Helper.h */,
+				1465EDF81732B97300BDBC1D /* NSMutableAttributedString+Helper.m */,
 			);
 			name = Lib;
 			path = SECoreTextView;
@@ -321,6 +326,7 @@
 				1450806317245DF200636965 /* TwitterTextEntity.m in Sources */,
 				14911A65172AE59C003056B7 /* SETextAttachment.m in Sources */,
 				14911B01172B05D7003056B7 /* SEConstants.m in Sources */,
+				1465EDF91732B97300BDBC1D /* NSMutableAttributedString+Helper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

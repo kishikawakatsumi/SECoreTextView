@@ -168,6 +168,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [mutableAttributedString addAttributes:@{(id)kCTParagraphStyleAttributeName: (__bridge id)paragraphStyle} range:NSMakeRange(0, length)];
     CFRelease(paragraphStyle);
     
+    attributedString = mutableAttributedString;
+    
     if (font) {
         CFStringRef fontName = (__bridge CFStringRef)font.fontName;
         CGFloat fontSize = font.pointSize;
@@ -177,7 +179,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         
         attributedString = mutableAttributedString;
     }
-    
+
     return [SETextLayout frameRectWithAttributtedString:attributedString
                                          constraintSize:constraintSize];
 }
