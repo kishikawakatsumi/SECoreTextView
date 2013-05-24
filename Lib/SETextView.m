@@ -77,7 +77,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     [self setupSelectionGestureRecognizers];
     
-    [self becomeFirstResponder];
+//    [self becomeFirstResponder];
 #endif
 }
 
@@ -147,10 +147,28 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
                              lineSpacing:(CGFloat)lineSpacing
                                     font:(NSFont *)font
 {
+    NSInteger length = attributedString.length;
+    NSMutableAttributedString *mutableAttributedString = [attributedString mutableCopy];
+    
+    CTTextAlignment textAlignment = kCTTextAlignmentNatural;
+    CGFloat lineHeight = 0.0f;
+    CGFloat paragraphSpacing = 0.0f;
+    
+    CTParagraphStyleSetting setting[] = {
+        { kCTParagraphStyleSpecifierAlignment, sizeof(textAlignment), &textAlignment},
+        { kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(lineHeight), &lineHeight },
+        { kCTParagraphStyleSpecifierMaximumLineHeight, sizeof(lineHeight), &lineHeight },
+        { kCTParagraphStyleSpecifierLineSpacing, sizeof(lineSpacing), &lineSpacing },
+        { kCTParagraphStyleSpecifierMinimumLineSpacing, sizeof(lineSpacing), &lineSpacing },
+        { kCTParagraphStyleSpecifierMaximumLineSpacing, sizeof(lineSpacing), &lineSpacing },
+        { kCTParagraphStyleSpecifierParagraphSpacing, sizeof(paragraphSpacing), &paragraphSpacing }
+    };
+    
+    CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(setting, sizeof(setting) / sizeof(CTParagraphStyleSetting));
+    [mutableAttributedString addAttributes:@{(id)kCTParagraphStyleAttributeName: (__bridge id)paragraphStyle} range:NSMakeRange(0, length)];
+    CFRelease(paragraphStyle);
+    
     if (font) {
-        NSInteger length = attributedString.length;
-        NSMutableAttributedString *mutableAttributedString = [attributedString mutableCopy];
-        
         CFStringRef fontName = (__bridge CFStringRef)font.fontName;
         CGFloat fontSize = font.pointSize;
         CTFontRef ctfont = CTFontCreateWithName(fontName, fontSize, NULL);
@@ -322,8 +340,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         
         CTRunDelegateCallbacks callbacks = attachment.callbacks;
         CTRunDelegateRef delegateRef = CTRunDelegateCreate(&callbacks, (__bridge void *)attachment);
-        
         [attributedString addAttributes:@{(id)kCTRunDelegateAttributeName: (__bridge id)delegateRef} range:attachment.range];
+        CFRelease(delegateRef);
         
         self.attributedText = attributedString;
     }
@@ -332,7 +350,15 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)setParagraphStyle
 {
 #if TARGET_OS_IPHONE
-    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
+    CTTextAlignment textAlignment;
+    if (self.textAlignment == NSTextAlignmentRight) {
+        textAlignment = kCTTextAlignmentCenter;
+    } else if (self.textAlignment == NSTextAlignmentCenter) {
+        textAlignment = kCTTextAlignmentRight;
+    } else {
+        textAlignment = (CTTextAlignment)self.textAlignment;
+    }
+//    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
 #else
     CTTextAlignment textAlignment = self.textAlignment;
 #endif
@@ -352,6 +378,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(setting, sizeof(setting) / sizeof(CTParagraphStyleSetting));
     [self setAttributes:@{(id)kCTParagraphStyleAttributeName: (__bridge id)paragraphStyle}];
+    CFRelease(paragraphStyle);
 }
 
 - (void)setAttributes:(NSDictionary *)attributes
