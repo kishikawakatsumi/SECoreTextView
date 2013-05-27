@@ -3,7 +3,7 @@
 //  SECoreTextView-iOS
 //
 //  Created by kishikawa katsumi on 2013/04/27.
-//  Copyright (c) 2013年 kishikawa katsumi. All rights reserved.
+//  Copyright (c) 2013 kishikawa katsumi. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
