@@ -77,7 +77,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     [self setupSelectionGestureRecognizers];
     
-//    [self becomeFirstResponder];
+    [self becomeFirstResponder];
 #endif
 }
 
@@ -179,7 +179,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         
         attributedString = mutableAttributedString;
     }
-
+    
     return [SETextLayout frameRectWithAttributtedString:attributedString
                                          constraintSize:constraintSize];
 }
@@ -360,7 +360,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     } else {
         textAlignment = (CTTextAlignment)self.textAlignment;
     }
-//    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
+    //    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
 #else
     CTTextAlignment textAlignment = self.textAlignment;
 #endif
@@ -807,8 +807,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         
         [self moveMagnifierCaretToPoint:self.mouseLocation];
     } if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
-               gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
-               gestureRecognizer.state == UIGestureRecognizerStateFailed) {
+          gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
+          gestureRecognizer.state == UIGestureRecognizerStateFailed) {
         self.touchPhase = SETouchPhaseNone;
         [self hideMagnifierCaret];
         
@@ -864,7 +864,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{    
+{
     UITouch *touch = touches.anyObject;
     self.mouseLocation = [touch locationInView:self];
     self.touchPhase = SETouchPhaseBegan;
@@ -888,7 +888,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     UITouch *touch = touches.anyObject;
     self.mouseLocation = [touch locationInView:self];
-        
+    
     self.touchPhase = SETouchPhaseEnded;;
     self.clickPoint = CGPointZero;
     
@@ -1084,12 +1084,17 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [self setNeedsDisplayInRect:self.bounds];
 }
 
-- (BOOL)resignFirstResponder
+- (BOOL)canResignFirstResponder
 {
-    [self.textLayout clearSelection];
-    [self setNeedsDisplayInRect:self.bounds];
-    
     return YES;
 }
+
+//- (BOOL)resignFirstResponder
+//{
+//    [self.textLayout clearSelection];
+//    [self setNeedsDisplayInRect:self.bounds];
+//    
+//    return YES;
+//}
 
 @end
