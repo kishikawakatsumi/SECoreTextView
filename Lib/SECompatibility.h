@@ -42,7 +42,7 @@ typedef NSEdgeInsets UIEdgeInsets;
 
 @interface NSColor (Compatibility)
 
-- (CGColorRef)createCGColor;
+- (CGColorRef)createCGColor CF_RETURNS_RETAINED;
 
 @end
 
