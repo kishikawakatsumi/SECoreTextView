@@ -10,6 +10,9 @@
 #import "SETextMagnifierRanged.h"
 
 @interface SETextMagnifierRanged ()
+{
+    CGImageRef _maskRef;
+}
 
 @property (weak, nonatomic) UIView *magnifyToView;
 @property (assign, nonatomic) CGPoint touchPoint;
@@ -17,8 +20,6 @@
 @property (strong, nonatomic) UIImage *mask;
 @property (strong, nonatomic) UIImage *loupe;
 @property (strong, nonatomic) UIImage *loupeFrame;
-
-@property (assign, nonatomic) CGImageRef maskRef;
 
 @end
 
@@ -37,14 +38,14 @@
 		self.loupeFrame = [UIImage imageNamed:@"kb-magnifier-ranged-lo"];
         
         CGImageRef maskImageRef = self.mask.CGImage;
-        self.maskRef = CGImageMaskCreate(CGImageGetWidth(maskImageRef),
-                                         CGImageGetHeight(maskImageRef),
-                                         CGImageGetBitsPerComponent(maskImageRef),
-                                         CGImageGetBitsPerPixel(maskImageRef),
-                                         CGImageGetBytesPerRow(maskImageRef),
-                                         CGImageGetDataProvider(maskImageRef),
-                                         NULL,
-                                         true);
+        _maskRef = CGImageMaskCreate(CGImageGetWidth(maskImageRef),
+                                     CGImageGetHeight(maskImageRef),
+                                     CGImageGetBitsPerComponent(maskImageRef),
+                                     CGImageGetBitsPerPixel(maskImageRef),
+                                     CGImageGetBytesPerRow(maskImageRef),
+                                     CGImageGetDataProvider(maskImageRef),
+                                     NULL,
+                                     true);
 	}
     
 	return self;
@@ -52,7 +53,7 @@
 
 - (void)dealloc
 {
-    CGImageRelease(self.maskRef);
+    CGImageRelease(_maskRef);
 }
 
 - (void)setTouchPoint:(CGPoint)point
@@ -137,7 +138,7 @@
 							ceilf(self.mask.size.height / scale));
     
 	CGImageRef subImage = CGImageCreateWithImageInRect(captureImageRef, box);
-	CGImageRef maskedImage = CGImageCreateWithMask(subImage, self.maskRef);
+	CGImageRef maskedImage = CGImageCreateWithMask(subImage, _maskRef);
     
 	CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -151,6 +152,9 @@
 	CGContextDrawImage(context, area, self.loupeFrame.CGImage);
 	CGContextDrawImage(context, area, maskedImage);
 	CGContextDrawImage(context, area, self.loupe.CGImage);
+    
+    CGImageRelease(subImage);
+    CGImageRelease(maskedImage);
 }
 
 @end
