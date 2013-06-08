@@ -364,9 +364,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 #else
     CTTextAlignment textAlignment = self.textAlignment;
 #endif
-    CGFloat lineSpacing = self.lineSpacing;
-    CGFloat lineHeight = self.lineHeight;
-    CGFloat paragraphSpacing = self.paragraphSpacing;
+    CGFloat lineSpacing = roundf(self.lineSpacing);
+    CGFloat lineHeight = roundf(self.lineHeight);
+    CGFloat paragraphSpacing = roundf(self.paragraphSpacing);
     
     CTParagraphStyleSetting setting[] = {
         { kCTParagraphStyleSpecifierAlignment, sizeof(textAlignment), &textAlignment},
