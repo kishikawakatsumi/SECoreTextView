@@ -151,6 +151,9 @@
 	CGContextDrawImage(context, area, self.loupeFrame.CGImage);
 	CGContextDrawImage(context, area, maskedImage);
 	CGContextDrawImage(context, area, self.loupe.CGImage);
+    
+    CGImageRelease(subImage);
+    CGImageRelease(maskedImage);
 }
 
 @end
