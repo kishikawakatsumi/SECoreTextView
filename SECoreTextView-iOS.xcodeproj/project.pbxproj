@@ -156,6 +156,7 @@
 				14E4144F1761A36E005E13A9 /* SECoreTextView.bundle */,
 			);
 			name = Resources;
+			path = SECoreTextView;
 			sourceTree = "<group>";
 		};
 		1488D5921723B20200F22C26 = {
@@ -163,6 +164,7 @@
 			children = (
 				1488D5FA1723B84200F22C26 /* Demo App */,
 				1488D5F91723B69400F22C26 /* Lib */,
+				147FC1731725A0C700A11142 /* Resources */,
 				1488D59D1723B20200F22C26 /* Frameworks */,
 				1488D59C1723B20200F22C26 /* Products */,
 			);
@@ -253,7 +255,6 @@
 				141B27471723BBA200E2A1B4 /* SECompatibility.m */,
 				146B27DA172EC8E30033AE4B /* NSMutableAttributedString+Helper.h */,
 				146B27DB172EC8E30033AE4B /* NSMutableAttributedString+Helper.m */,
-				147FC1731725A0C700A11142 /* Resources */,
 			);
 			name = Lib;
 			path = SECoreTextView;
