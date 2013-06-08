@@ -31,11 +31,11 @@
 	if (self) {
 		self.backgroundColor = [UIColor clearColor];
         
-        UIImage *mask = [UIImage imageNamed:@"kb-loupe-mask"];
+        UIImage *mask = [UIImage imageNamed:@"SECoreTextView.bundle/kb-loupe-mask"];
 		self.mask = mask;
         
-		self.loupe = [UIImage imageNamed:@"kb-loupe-hi"];
-		self.loupeFrame = [UIImage imageNamed:@"kb-loupe-lo"];
+		self.loupe = [UIImage imageNamed:@"SECoreTextView.bundle/kb-loupe-hi"];
+		self.loupeFrame = [UIImage imageNamed:@"SECoreTextView.bundle/kb-loupe-lo"];
         
         CGImageRef maskImageRef = self.mask.CGImage;
         _maskRef = CGImageMaskCreate(CGImageGetWidth(maskImageRef),

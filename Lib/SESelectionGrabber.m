@@ -23,7 +23,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        self.dotImage = [UIImage imageNamed:@"kb-drag-dot"];
+        self.dotImage = [UIImage imageNamed:@"SECoreTextView.bundle/kb-drag-dot"];
         
         self.dotImageView = [[UIImageView alloc] initWithImage:self.dotImage];
         

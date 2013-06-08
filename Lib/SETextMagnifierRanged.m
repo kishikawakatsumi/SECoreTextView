@@ -31,11 +31,11 @@
 	if (self) {
 		self.backgroundColor = [UIColor clearColor];
         
-        UIImage *mask = [UIImage imageNamed:@"kb-magnifier-ranged-mask-flipped"];
+        UIImage *mask = [UIImage imageNamed:@"SECoreTextView.bundle/kb-magnifier-ranged-mask-flipped"];
 		self.mask = mask;
         
-		self.loupe = [UIImage imageNamed:@"kb-magnifier-ranged-hi"];
-		self.loupeFrame = [UIImage imageNamed:@"kb-magnifier-ranged-lo"];
+		self.loupe = [UIImage imageNamed:@"SECoreTextView.bundle/kb-magnifier-ranged-hi"];
+		self.loupeFrame = [UIImage imageNamed:@"SECoreTextView.bundle/kb-magnifier-ranged-lo"];
         
         CGImageRef maskImageRef = self.mask.CGImage;
         _maskRef = CGImageMaskCreate(CGImageGetWidth(maskImageRef),
