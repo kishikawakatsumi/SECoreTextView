@@ -428,17 +428,17 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
 }
 
-- (void)didClickOnLink:(SELinkText *)link
+- (void)clickedOnLink:(SELinkText *)link
 {
-    if ([self.delegate respondsToSelector:@selector(textView:didClickOnLink:atIndex:)]) {
-        [self.delegate textView:self didClickOnLink:link atIndex:[self stringIndexAtPoint:self.mouseLocation]];
+    if ([self.delegate respondsToSelector:@selector(textView:clickedOnLink:atIndex:)]) {
+        [self.delegate textView:self clickedOnLink:link atIndex:[self stringIndexAtPoint:self.mouseLocation]];
     }
 }
 
-- (void)didLongPressOnLink:(SELinkText *)link
+- (void)longPressedOnLink:(SELinkText *)link
 {
-    if ([self.delegate respondsToSelector:@selector(textView:didLongPressOnLink:atIndex:)]) {
-        [self.delegate textView:self didLongPressOnLink:link atIndex:[self stringIndexAtPoint:self.mouseLocation]];
+    if ([self.delegate respondsToSelector:@selector(textView:longPressedOnLink:atIndex:)]) {
+        [self.delegate textView:self longPressedOnLink:link atIndex:[self stringIndexAtPoint:self.mouseLocation]];
     }
 }
 
@@ -722,7 +722,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     if ([self containsPointInTextFrame:self.mouseLocation]) {
         SELinkText *link = [self linkAtPoint:self.mouseLocation];
         if (link) {
-            [self didLongPressOnLink:link];
+            [self longPressedOnLink:link];
             
 #if TARGET_OS_IPHONE
             [self.textLayout clearSelection];
@@ -1089,7 +1089,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         if ([self containsPointInTextFrame:self.mouseLocation]) {
             SELinkText *link = [self linkAtPoint:self.mouseLocation];
             if (link) {
-                [self didClickOnLink:link];
+                [self clickedOnLink:link];
             }
         }
     }

@@ -97,7 +97,7 @@ static const CGFloat FONT_SIZE = 16.0f;
 
 #pragma mark -
 
-- (BOOL)textView:(SETextView *)aTextView didClickOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex
+- (BOOL)textView:(SETextView *)textView clickedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex
 {
     NSString *text = link.object;
     if ([text hasPrefix:@"http"]) {

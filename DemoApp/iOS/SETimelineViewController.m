@@ -18,7 +18,7 @@
 static const CGFloat LINE_SPACING = 4.0f;
 static const CGFloat FONT_SIZE = 14.0f;
 
-@interface SETimelineViewController () <UITableViewDataSource, UITableViewDelegate, SETextViewDelegate>
+@interface SETimelineViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, SETextViewDelegate>
 
 @property (strong, nonatomic) NSArray *timeline;
 @property (strong, nonatomic) NSURL *nextURL;
@@ -126,7 +126,7 @@ static const CGFloat FONT_SIZE = 14.0f;
 
 #pragma mark -
 
-- (BOOL)textView:(SETextView *)aTextView didClickOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex
+- (BOOL)textView:(SETextView *)textView clickedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex
 {
     NSString *text = link.object;
     if ([text hasPrefix:@"http"]) {
@@ -144,11 +144,21 @@ static const CGFloat FONT_SIZE = 14.0f;
     return YES;
 }
 
-- (BOOL)textView:(SETextView *)aTextView didLongPressOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex
+- (BOOL)textView:(SETextView *)aTextView longPressedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex
 {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:link.text
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil otherButtonTitles:@"Copy link", @"Open in Safari", nil];
+    
+    [actionSheet showInView:self.view];
     return YES;
 }
 
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+}
 
 #pragma mark -
 

@@ -54,7 +54,7 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @property (strong, nonatomic, readonly) NSString *selectedText;
 @property (strong, nonatomic, readonly) NSString *selectedAttributedText;
 
-@property (nonatomic, assign) NSTimeInterval minimumLongPressDuration;
+@property (assign, nonatomic) NSTimeInterval minimumLongPressDuration;
 
 - (id)initWithFrame:(CGRect)frame;
 
@@ -78,9 +78,9 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @protocol SETextViewDelegate <NSObject>
 
 @optional
-- (BOOL)textView:(SETextView *)aTextView didClickOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
-- (BOOL)textView:(SETextView *)aTextView didLongPressOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
-- (void)textViewDidChangeSelection:(SETextView *)aTextView;
-- (void)textViewDidEndSelecting:(SETextView *)aTextView;
+- (BOOL)textView:(SETextView *)textView clickedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
+- (BOOL)textView:(SETextView *)textView longPressedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
+- (void)textViewDidChangeSelection:(SETextView *)textView;
+- (void)textViewDidEndSelecting:(SETextView *)textView;
 
 @end
