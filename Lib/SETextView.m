@@ -43,6 +43,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 @property (copy, nonatomic) NSAttributedString *attributedTextCopy;
 
+@property (nonatomic, weak) NSTimer *longPressTimer;
+@property (nonatomic, assign, getter = isLongPressing) BOOL longPressing;
+
 #if TARGET_OS_IPHONE
 @property (strong, nonatomic) UILongPressGestureRecognizer *selectionGestureRecognizer;
 @property (strong, nonatomic) SETextMagnifierCaret *magnifierCaret;
@@ -79,6 +82,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     [self becomeFirstResponder];
 #endif
+    
+    self.minimumLongPressDuration = 0.5;
 }
 
 #if TARGET_OS_IPHONE
@@ -423,10 +428,17 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
 }
 
-- (void)clickedOnLink:(SELinkText *)link
+- (void)didClickOnLink:(SELinkText *)link
 {
-    if ([self.delegate respondsToSelector:@selector(textView:clickedOnLink:atIndex:)]) {
-        [self.delegate textView:self clickedOnLink:link atIndex:[self stringIndexAtPoint:self.mouseLocation]];
+    if ([self.delegate respondsToSelector:@selector(textView:didClickOnLink:atIndex:)]) {
+        [self.delegate textView:self didClickOnLink:link atIndex:[self stringIndexAtPoint:self.mouseLocation]];
+    }
+}
+
+- (void)didLongPressOnLink:(SELinkText *)link
+{
+    if ([self.delegate respondsToSelector:@selector(textView:didLongPressOnLink:atIndex:)]) {
+        [self.delegate textView:self didLongPressOnLink:link atIndex:[self stringIndexAtPoint:self.mouseLocation]];
     }
 }
 
@@ -680,6 +692,48 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [self.textLayout drawInContext:context];
 }
 
+#pragma mark - Touch and Hold on Link
+
+- (void)startLongPressTimer
+{
+    [self stopLongPressTimer];
+    
+    NSTimer *holdTimer = [NSTimer scheduledTimerWithTimeInterval:self.minimumLongPressDuration
+                                                          target:self
+                                                        selector:@selector(handleLongPress:)
+                                                        userInfo:nil
+                                                         repeats:NO];
+    self.longPressTimer = holdTimer;
+}
+
+- (void)stopLongPressTimer
+{
+    if (self.longPressTimer && [self.longPressTimer isValid]) {
+        [self.longPressTimer invalidate];
+    }
+    
+    self.longPressTimer = nil;
+}
+
+- (void)handleLongPress:(NSTimer *)timer
+{
+    [self stopLongPressTimer];
+    
+    if ([self containsPointInTextFrame:self.mouseLocation]) {
+        SELinkText *link = [self linkAtPoint:self.mouseLocation];
+        if (link) {
+            [self didLongPressOnLink:link];
+            
+#if TARGET_OS_IPHONE
+            [self.textLayout clearSelection];
+            [self hideEditingMenu];
+#endif
+            
+            self.longPressing = YES;
+        }
+    }
+}
+
 #pragma mark - iOS touch events
 #if TARGET_OS_IPHONE
 
@@ -865,6 +919,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [self startLongPressTimer];
+    
     UITouch *touch = touches.anyObject;
     self.mouseLocation = [touch locationInView:self];
     self.touchPhase = SETouchPhaseBegan;
@@ -874,6 +930,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [self stopLongPressTimer];
+    
     if (self.selectionGestureRecognizer.state == UIGestureRecognizerStateBegan ||
         self.selectionGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         self.touchPhase = SETouchPhaseMoved;
@@ -886,27 +944,33 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [self stopLongPressTimer];
+    
     UITouch *touch = touches.anyObject;
     self.mouseLocation = [touch locationInView:self];
     
-    self.touchPhase = SETouchPhaseEnded;;
+    self.touchPhase = SETouchPhaseEnded;
     self.clickPoint = CGPointZero;
     
-    if (![self containsPointInSelection:self.mouseLocation]) {
-        [self.textLayout clearSelection];
-        [self hideEditingMenu];
+    if (self.longPressing) {
+        self.longPressing = NO;
     } else {
-        [self hideEditingMenu];
-        [self showEditingMenu];
-    }
-    
-    if ([self containsPointInTextFrame:self.mouseLocation]) {
-        SELinkText *link = [self linkAtPoint:self.mouseLocation];
-        if (link) {
-            [self clickedOnLink:link];
-            
+        if (![self containsPointInSelection:self.mouseLocation]) {
             [self.textLayout clearSelection];
             [self hideEditingMenu];
+        } else {
+            [self hideEditingMenu];
+            [self showEditingMenu];
+        }
+        
+        if ([self containsPointInTextFrame:self.mouseLocation]) {
+            SELinkText *link = [self linkAtPoint:self.mouseLocation];
+            if (link) {
+                [self didClickOnLink:link];
+                
+                [self.textLayout clearSelection];
+                [self hideEditingMenu];
+            }
         }
     }
     
@@ -982,6 +1046,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
+    [self startLongPressTimer];
+    
     self.mouseLocation = [self mouseLocationOnEvent:theEvent];
     
     if ([self containsPointInTextFrame:self.mouseLocation]) {
@@ -1010,15 +1076,21 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
+    [self stopLongPressTimer];
+    
     self.mouseLocation = [self mouseLocationOnEvent:theEvent];
     self.clickPoint = CGPointZero;
     
     self.touchPhase = SETouchPhaseEnded;
     
-    if ([self containsPointInTextFrame:self.mouseLocation]) {
-        SELinkText *link = [self linkAtPoint:self.mouseLocation];
-        if (link) {
-            [self clickedOnLink:link];
+    if (self.longPressing) {
+        self.longPressing = NO;
+    } else {
+        if ([self containsPointInTextFrame:self.mouseLocation]) {
+            SELinkText *link = [self linkAtPoint:self.mouseLocation];
+            if (link) {
+                [self didClickOnLink:link];
+            }
         }
     }
     
