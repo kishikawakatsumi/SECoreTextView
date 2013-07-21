@@ -966,7 +966,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         if ([self containsPointInTextFrame:self.mouseLocation]) {
             SELinkText *link = [self linkAtPoint:self.mouseLocation];
             if (link) {
-                [self didClickOnLink:link];
+                [self clickedOnLink:link];
                 
                 [self.textLayout clearSelection];
                 [self hideEditingMenu];
