@@ -1117,7 +1117,34 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     [self clearSelection];
     [self setNeedsDisplay:YES];
+    
     return YES;
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    if (menuItem.action == @selector(copy:)) {
+        return self.selectedRange.length > 0;
+    }
+    if (menuItem.action == @selector(cut:) ||
+        menuItem.action == @selector(paste:) ||
+        menuItem.action == @selector(delete:)) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (BOOL)performKeyEquivalent:(NSEvent *)theEvent
+{
+    if (self.textLayout.textSelection) {
+        if ((theEvent.modifierFlags & NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask && [theEvent.characters isEqualToString:@"c"]) {
+            [self copy:nil];
+            return YES;
+        }
+    }
+    
+    return [super performKeyEquivalent:theEvent];
 }
 
 #endif
@@ -1139,15 +1166,19 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
 }
 
-- (void)copy:(id)sender
+- (IBAction)copy:(id)sender
 {
 #if TARGET_OS_IPHONE
-    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    pasteboard.string = self.selectedText;
+    if (self.selectedText.length > 0) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = self.selectedText;
+    }
 #else
-    NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
-    [pasteboard clearContents];
-    [pasteboard writeObjects:[NSArray arrayWithObject:self.selectedAttributedText]];
+    if (self.selectedAttributedText.length > 0) {
+        NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];
+        [pasteboard clearContents];
+        [pasteboard writeObjects:@[self.selectedText]];
+    }
 #endif
 }
 
