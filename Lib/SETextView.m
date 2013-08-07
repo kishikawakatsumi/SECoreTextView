@@ -855,9 +855,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
         gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         self.touchPhase = SETouchPhaseMoved;
-        CGPoint shiftedMouseLocation = self.mouseLocation;
         
-        [self.textLayout setSelectionWithPoint:shiftedMouseLocation];
+        [self.textLayout setSelectionWithPoint:self.mouseLocation];
         
         [self moveMagnifierCaretToPoint:self.mouseLocation];
     } if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
@@ -1050,7 +1049,10 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     self.mouseLocation = [self mouseLocationOnEvent:theEvent];
     
-    if ([self containsPointInTextFrame:self.mouseLocation]) {
+    if (theEvent.clickCount == 2) {
+        self.touchPhase = SETouchPhaseMoved;
+        [self.textLayout setSelectionWithPoint:self.mouseLocation];
+    } else if ([self containsPointInTextFrame:self.mouseLocation]) {
         self.touchPhase = SETouchPhaseBegan;
         [self.textLayout setSelectionStartWithPoint:self.mouseLocation];
     }
@@ -1108,6 +1110,50 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [self setNeedsDisplay:YES];
 }
 
+- (NSMenu *)menuForEvent:(NSEvent *)event
+{
+    if (self.textLayout.textSelection) {
+        NSMenu *menu = [[NSMenu alloc] initWithTitle:@""];
+        [menu addItemWithTitle:NSLocalizedString(@"Cut", nil) action:@selector(cut:) keyEquivalent:@""];
+        [menu addItemWithTitle:NSLocalizedString(@"Copy", nil) action:@selector(copy:) keyEquivalent:@""];
+        [menu addItemWithTitle:NSLocalizedString(@"Paste", nil) action:@selector(paste:) keyEquivalent:@""];
+        [menu addItem:[NSMenuItem separatorItem]];
+        [menu addItemWithTitle:NSLocalizedString(@"Select All", nil) action:@selector(selectAll:) keyEquivalent:@""];
+        
+        return [[[NSTextView alloc] init] menuForEvent:event];
+    }
+    
+    return nil;
+}
+
+- (void)quickLookWithEvent:(NSEvent *)event
+{
+    if (!self.textLayout.textSelection) {
+        self.mouseLocation = [self mouseLocationOnEvent:event];
+        [self.textLayout setSelectionWithPoint:self.mouseLocation];
+    }
+    
+    CGRect rect = [self rectOfFirstLineInSelectionRect];
+    [self showDefinitionForAttributedString:self.selectedAttributedText atPoint:rect.origin];
+}
+
+- (CGRect)rectOfFirstLineInSelectionRect
+{
+    SETextSelection *textSelection = self.textLayout.textSelection;
+    if (!textSelection) {
+        return CGRectZero;
+    }
+    
+    for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+        CGRect selectionRect = [lineLayout rectOfStringWithRange:textSelection.selectedRange];
+        if (!CGRectIsEmpty(selectionRect)) {
+            return selectionRect;
+        }
+    }
+    
+    return CGRectZero;
+}
+
 - (BOOL)acceptsFirstResponder
 {
     return YES;
@@ -1138,9 +1184,15 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (BOOL)performKeyEquivalent:(NSEvent *)theEvent
 {
     if (self.textLayout.textSelection) {
-        if ((theEvent.modifierFlags & NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask && [theEvent.characters isEqualToString:@"c"]) {
-            [self copy:nil];
-            return YES;
+        if ((theEvent.modifierFlags & NSDeviceIndependentModifierFlagsMask) == NSCommandKeyMask) {
+            if ([theEvent.characters isEqualToString:@"c"]) {
+                [self copy:nil];
+                return YES;
+            }
+            if ([theEvent.characters isEqualToString:@"a"]) {
+                [self selectAll:nil];
+                return YES;
+            }
         }
     }
     

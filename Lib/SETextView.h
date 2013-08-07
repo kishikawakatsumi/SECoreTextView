@@ -52,7 +52,7 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 
 @property (assign, nonatomic, readonly) NSRange selectedRange;
 @property (strong, nonatomic, readonly) NSString *selectedText;
-@property (strong, nonatomic, readonly) NSString *selectedAttributedText;
+@property (strong, nonatomic, readonly) NSAttributedString *selectedAttributedText;
 
 @property (assign, nonatomic) NSTimeInterval minimumLongPressDuration;
 
