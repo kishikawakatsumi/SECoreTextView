@@ -32,6 +32,7 @@
 
 - (void)setSelectionStartWithPoint:(CGPoint)point;
 - (void)setSelectionEndWithPoint:(CGPoint)point;
+- (void)setSelectionEndWithNearestPoint:(CGPoint)point;
 - (void)setSelectionStartWithFirstPoint:(CGPoint)firstPoint;
 
 - (void)setSelectionWithPoint:(CGPoint)point;

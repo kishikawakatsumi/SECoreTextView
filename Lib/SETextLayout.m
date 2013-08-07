@@ -217,11 +217,43 @@
     return kCFNotFound;
 }
 
+- (CFIndex)stringIndexForNearestPosition:(CGPoint)point
+{
+    CFIndex lineNumber = 0;
+    for (SELineLayout *lineLayout in self.lineLayouts) {
+        if ([lineLayout containsPoint:point]) {
+            CFIndex index = [lineLayout stringIndexForPosition:point];
+            
+            if (index != kCFNotFound) {
+                return index;
+            }
+        }
+        
+        if (lineNumber == 0 && point.y > CGRectGetMaxY(lineLayout.rect)) {
+            return 0;
+        }
+        
+        if (lineNumber == self.lineLayouts.count - 1 && point.y < CGRectGetMinY(lineLayout.rect) - lineLayout.metrics.leading) {
+            return [lineLayout stringIndexForPosition:CGPointMake(CGRectGetMaxX(lineLayout.rect), CGRectGetMaxY(lineLayout.rect))];
+        }
+        
+        if (point.y < CGRectGetMaxY(lineLayout.rect) && point.y > CGRectGetMinY(lineLayout.rect) - lineLayout.metrics.leading) {
+            return [lineLayout stringIndexForPosition:CGPointMake(CGRectGetMaxX(lineLayout.rect), CGRectGetMaxY(lineLayout.rect))];
+        }
+        
+        lineNumber++;
+    }
+    
+    return kCFNotFound;
+}
+
 - (void)setSelectionStartWithPoint:(CGPoint)point;
 {
     CFIndex index = [self stringIndexForPosition:point];
     if (index != kCFNotFound) {
         self.textSelection = [[SETextSelection alloc] initWithIndex:index];
+    } else {
+        self.textSelection = nil;
     }
 }
 
@@ -231,6 +263,12 @@
     if (index != kCFNotFound) {
         [self.textSelection setSelectionEndAtIndex:index];
     }
+}
+
+- (void)setSelectionEndWithNearestPoint:(CGPoint)point;
+{
+    CFIndex index = [self stringIndexForNearestPosition:point];
+    [self.textSelection setSelectionEndAtIndex:index];
 }
 
 - (void)setSelectionStartWithFirstPoint:(CGPoint)firstPoint

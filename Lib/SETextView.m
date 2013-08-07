@@ -725,7 +725,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             [self longPressedOnLink:link];
             
 #if TARGET_OS_IPHONE
-            [self.textLayout clearSelection];
+            [self clearSelection];
             [self hideEditingMenu];
 #endif
             
@@ -956,7 +956,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         self.longPressing = NO;
     } else {
         if (![self containsPointInSelection:self.mouseLocation]) {
-            [self.textLayout clearSelection];
+            [self clearSelection];
             [self hideEditingMenu];
         } else {
             [self hideEditingMenu];
@@ -968,7 +968,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             if (link) {
                 [self clickedOnLink:link];
                 
-                [self.textLayout clearSelection];
+                [self clearSelection];
                 [self hideEditingMenu];
             }
         }
@@ -1033,8 +1033,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return YES;
 }
 
-#pragma mark - OS X mouse events
 #else
+#pragma mark - OS X mouse events
 
 - (CGPoint)mouseLocationOnEvent:(NSEvent *)theEvent
 {
@@ -1064,10 +1064,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     self.mouseLocation = [self mouseLocationOnEvent:theEvent];
     
-    if ([self containsPointInTextFrame:self.mouseLocation]) {
-        self.touchPhase = SETouchPhaseMoved;
-        [self.textLayout setSelectionEndWithPoint:self.mouseLocation];
-    }
+    self.touchPhase = SETouchPhaseMoved;
+    
+    [self.textLayout setSelectionEndWithNearestPoint:self.mouseLocation];
     
     [self notifySelectionChanged];
     
@@ -1111,6 +1110,13 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (BOOL)acceptsFirstResponder
 {
+    return YES;
+}
+
+- (BOOL)resignFirstResponder
+{
+    [self clearSelection];
+    [self setNeedsDisplay:YES];
     return YES;
 }
 
@@ -1163,7 +1169,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 //- (BOOL)resignFirstResponder
 //{
-//    [self.textLayout clearSelection];
+//    [self clearSelection];
 //    [self setNeedsDisplayInRect:self.bounds];
 //    
 //    return YES;
