@@ -33,6 +33,7 @@
 - (CFIndex)stringIndexForPosition:(CGPoint)point;
 - (CFIndex)stringIndexForNearestPosition:(CGPoint)point;
 - (CGRect)rectOfStringForIndex:(CFIndex)index;
+- (CGRect)rectOfStringForLastLine;
 
 - (void)setSelectionStartWithPoint:(CGPoint)point;
 - (void)setSelectionEndWithPoint:(CGPoint)point;

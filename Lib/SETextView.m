@@ -90,8 +90,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     [self setupTextSelectionControls];
     [self setupTextEditingControls];
-    
-    self.backgroundColor = [UIColor clearColor];
 #endif
 }
 
@@ -431,9 +429,15 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)finishSelecting
 {
 #if TARGET_OS_IPHONE
-    if (self.showsEditingMenuAutomatically) {
-        [self hideEditingMenu];
-        [self showEditingMenu];
+    if (self.editing) {
+        if (self.textLayout.markedTextRange.location == NSNotFound) {
+            [self showEditingMenu];
+        }
+    } else {
+        if (self.showsEditingMenuAutomatically) {
+            [self hideEditingMenu];
+            [self showEditingMenu];
+        }
     }
 #endif
     
@@ -444,15 +448,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)selectionChanged
 {
-    SETextLayout *textLayout = self.textLayout;
-    SETextSelection *textSelection = textLayout.textSelection;
-    if (self.isEditing && (!textSelection || textSelection.selectedRange.length == 0)) {
-        self.caretView.hidden = NO;
-        [self.caretView delayBlink];
-    } else {
-        self.caretView.hidden = YES;
-    }
-    
+    [self updateCaretPosition];
     [self notifySelectionChanged];
     [self setNeedsDisplayInRect:self.bounds];
 }
@@ -877,40 +873,45 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)hideTextSelectionView
 {
     [self.textSelectionView hideControls];
-    [self hideEditingMenu];
 }
 
-- (void)selectionChanged:(UILongPressGestureRecognizer *)gestureRecognizer
+- (void)selectionGestureStateChanged:(UILongPressGestureRecognizer *)gestureRecognizer
 {
-    [self.inputDelegate selectionWillChange:self];
-    
     self.mouseLocation = [gestureRecognizer locationInView:self];
     
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
         gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        
-        if (self.isEditable) {
-            if (!self.isEditing) {
-                [self beginEditing];
-            }
-        }
-        
         self.touchPhase = SETouchPhaseMoved;
         
-        [self.textLayout setSelectionWithPoint:self.mouseLocation];
-        
         [self moveMagnifierCaretToPoint:self.mouseLocation];
-    } if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
+        
+        if (self.isEditing) {
+            if (self.isEditing) {
+                [self updateCaretPositionToPoint:self.mouseLocation];
+            } else {
+                [self beginEditing];
+            }
+            
+            return;
+        } else {
+            [self.textLayout setSelectionWithPoint:self.mouseLocation];
+        }
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
           gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
           gestureRecognizer.state == UIGestureRecognizerStateFailed) {
         self.touchPhase = SETouchPhaseNone;
+        
         [self hideMagnifierCaret];
         
         [self finishSelecting];
     }
     
+    if (self.isEditing) {
+        [self updateCaretPositionToPoint:self.mouseLocation];
+        return;
+    }
+    
     [self selectionChanged];
-    [self.inputDelegate selectionDidChange:self];
 }
 
 - (void)grabberMoved:(UIPanGestureRecognizer *)gestureRecognizer
@@ -956,6 +957,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
     
     [self selectionChanged];
+    
     [self.inputDelegate selectionDidChange:self];
 }
 
@@ -997,6 +999,16 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     if (self.longPressing) {
         self.longPressing = NO;
     } else {
+        if (self.isEditable) {
+            if (self.isEditing) {
+                [self updateCaretPositionToPoint:self.mouseLocation];
+            } else {
+                [self beginEditing];
+            }
+            
+            return;
+        }
+        
         if (![self containsPointInSelection:self.mouseLocation]) {
             [self clearSelection];
             [self hideEditingMenu];
@@ -1015,12 +1027,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             }
         }
         
-        if (self.isEditable) {
-            if (!self.isEditing) {
-                [self beginEditing];
-            }
-            [self updateCaretPositionToPoint:self.mouseLocation];
-        }
     }
     
     [self setNeedsDisplay];
@@ -1037,27 +1043,31 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         }
         if (self.isEditable && shouldBeginEditing) {
             self.editing = YES;
-            [self becomeFirstResponder];
+            
+            if ([self becomeFirstResponder]) {
+                [self updateCaretPositionToPoint:self.mouseLocation];
+            }
         }
     }
 }
 
 - (void)updateCaretPosition
 {
-    [self.inputDelegate selectionWillChange:self];
+    SETextLayout *textLayout = self.textLayout;
+    SETextSelection *textSelection = textLayout.textSelection;
+    if (self.isEditing && (!textSelection || textSelection.selectedRange.length == 0)) {
+        self.caretView.hidden = NO;
+        [self.caretView delayBlink];
+    } else {
+        self.caretView.hidden = YES;
+    }
     
-    NSRange selectedRange = self.selectedRange;
-    self.caretView.frame = [self caretRectForPosition:[SETextPosition positionWithIndex:selectedRange.location + selectedRange.length]];
-    
-    [self selectionChanged];
-    
-    [self.inputDelegate selectionDidChange:self];
+    NSRange selectedRange = textSelection.selectedRange;
+    self.caretView.frame = [self caretRectForPosition:[SETextPosition positionWithIndex:NSMaxRange(selectedRange)]];
 }
 
 - (void)updateCaretPositionToPoint:(CGPoint)point
 {
-    [self.inputDelegate selectionWillChange:self];
-    
     if (!self.textLayout.textSelection) {
         self.textLayout.textSelection = [[SETextSelection alloc] init];
     }
@@ -1071,10 +1081,12 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         index = 0;
     }
     
-    NSRange selectedRange = NSMakeRange(index, 0);
-    self.caretView.frame = [self caretRectForPosition:[SETextPosition positionWithIndex:selectedRange.location + selectedRange.length]];
+    self.caretView.frame = [self caretRectForPosition:[SETextPosition positionWithIndex:index]];
     
-    self.textLayout.textSelection.selectedRange = selectedRange;
+    [self.inputDelegate selectionWillChange:self];
+    
+    self.textLayout.markedTextRange = NSMakeRange(NSNotFound, 0);
+    self.textLayout.textSelection.selectedRange = NSMakeRange(index, 0);
     [self selectionChanged];
     
     [self.inputDelegate selectionDidChange:self];
@@ -1088,8 +1100,14 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     UIMenuController *menuController = [UIMenuController sharedMenuController];
     menuController.arrowDirection = UIMenuControllerArrowDefault;
-    [menuController setTargetRect:[self editingMenuRectForSelection] inView:self];
     
+    CGRect targetRect;
+    if (self.selectedRange.length == 0) {
+        targetRect = [self caretRectForPosition:[SETextPosition positionWithIndex:self.selectedRange.location]];
+    } else {
+        targetRect = [self editingMenuRectForSelection];
+    }
+    [menuController setTargetRect:targetRect inView:self];
     [menuController setMenuVisible:YES animated:YES];
 }
 
@@ -1134,7 +1152,17 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    return action == @selector(copy:) || (action == @selector(selectAll:) && self.selectedText.length < self.text.length);
+    if (action == @selector(copy:) && self.selectedText.length > 0) {
+        return YES;
+    }
+    if (action == @selector(select:) && self.text.length > 0 && self.selectedText.length == 0) {
+        return YES;
+    }
+    if (action == @selector(selectAll:) && self.text.length > 0 && self.selectedText.length < self.text.length) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (BOOL)canBecomeFirstResponder
@@ -1265,16 +1293,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return YES;
 }
 
-- (BOOL)resignFirstResponder
-{
-    [self clearSelection];
-    self.editing = NO;
-    
-    [self setNeedsDisplayInRect:self.bounds];
-    
-    return YES;
-}
-
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
     if (menuItem.action == @selector(copy:)) {
@@ -1326,7 +1344,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
 }
 
-- (IBAction)copy:(id)sender
+- (void)copy:(id)sender
 {
 #if TARGET_OS_IPHONE
     if (self.selectedText.length > 0) {
@@ -1342,13 +1360,22 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 #endif
 }
 
+- (void)select:(id)sender
+{
+    [self.textLayout setSelectionWithPoint:self.mouseLocation];
+    
+    [self selectionChanged];
+    [self finishSelecting];
+    
+    [self setNeedsDisplayInRect:self.bounds];
+}
+
 - (void)selectAll:(id)sender
 {
     [self.textLayout selectAll];
     
-#if TARGET_OS_IPHONE
+    [self selectionChanged];
     [self finishSelecting];
-#endif
     
     [self setNeedsDisplayInRect:self.bounds];
 }
@@ -1358,18 +1385,31 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return YES;
 }
 
+- (BOOL)resignFirstResponder
+{
+    [self clearSelection];
+    self.editing = NO;
+    
+    [self selectionChanged];
+    [self finishSelecting];
+    
+    [self setNeedsDisplayInRect:self.bounds];
+    
+    return YES;
+}
+
 #if TARGET_OS_IPHONE
 #pragma mark UITextInput methods
 
 - (NSString *)textInRange:(UITextRange *)range
 {
-    NSLog(@"%s", __func__);
     SETextRange *r = (SETextRange *)range;
     if (r.range.location == NSNotFound) {
         return nil;
     }
+    
     NSString *text = [self.text substringWithRange:r.range];
-    NSLog(@"%@ %@", r, text);
+    
     return text;
 }
 
@@ -1382,8 +1422,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     if (r.range.location + r.range.length <= selectedRange.location) {
         selectedRange.location -= r.range.length - text.length;
     } else {
-        // Need to also deal with overlapping ranges.  Not addressed
-		// in this simplified sample.
+        // Need to also deal with overlapping ranges.
     }
     
     NSMutableString *editingText = self.editingText;
@@ -1397,17 +1436,17 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (UITextRange *)selectedTextRange
 {
-    if (!self.textLayout.textSelection) {
+    SETextSelection *textSelection = self.textLayout.textSelection;
+    if (!textSelection) {
         return nil;
     }
-    SETextRange *textRange = [SETextRange rangeWithNSRange:self.textLayout.textSelection.selectedRange];
-    NSLog(@"selectedTextRange: %@", textRange);
+    
+    SETextRange *textRange = [SETextRange rangeWithNSRange:textSelection.selectedRange];
     return textRange;
 }
 
 - (void)setSelectedTextRange:(UITextRange *)selectedTextRange
 {
-    NSLog(@"%s", __func__);
     SETextRange *textRange = (SETextRange *)selectedTextRange;
     self.textLayout.textSelection.selectedRange = textRange.range;
     
@@ -1416,18 +1455,27 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (UITextRange *)markedTextRange
 {
-    NSLog(@"%s", __func__);
     if (self.textLayout.markedTextRange.location == NSNotFound) {
         return nil;
     }
+    
     return [SETextRange rangeWithNSRange:self.textLayout.markedTextRange];
+}
+
+- (void)setMarkedTextStyle:(NSDictionary *)markedTextStyle
+{
+    NSLog(@"%s", __func__);
+}
+
+- (NSDictionary *)markedTextStyle
+{
+    NSLog(@"%s", __func__);
+    return nil;
 }
 
 - (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
 {
-    NSLog(@"%s", __func__);
-    NSLog(@"%@ %@", markedText, NSStringFromRange(selectedRange));
-    if (markedText.length == 0 && selectedRange.length == 0) {
+    if (markedText.length == 0 && NSMaxRange(selectedRange) == 0) {
         return;
     }
     
@@ -1460,14 +1508,12 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.textLayout.textSelection.selectedRange = selectedNSRange;
     
     [self updateLayout];
-    [self updateCaretPosition];
+    [self selectionChanged];
 }
 
 - (void)unmarkText
 {
-    NSLog(@"%s", __func__);
     NSRange markedTextRange = self.textLayout.markedTextRange;
-    NSLog(@"%@", self.text);
     
     if (markedTextRange.location == NSNotFound) {
         return;
@@ -1476,23 +1522,19 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     markedTextRange.location = NSNotFound;
     self.textLayout.markedTextRange = markedTextRange;
     
-//    [self updateLayout];
-//    [self updateCaretPosition];
+    [self updateLayout];
+    [self selectionChanged];
 }
 
 - (UITextPosition *)beginningOfDocument
 {
-    NSLog(@"%s", __func__);
     SETextPosition *position = [SETextPosition positionWithIndex:0];
-    NSLog(@"%@", position);
     return position;
 }
 
 - (UITextPosition *)endOfDocument
 {
-    NSLog(@"%s", __func__);
     SETextPosition *position = [SETextPosition positionWithIndex:self.text.length];
-    NSLog(@"%@", position);
     return position;
 }
 
@@ -1501,10 +1543,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     NSLog(@"%s", __func__);
     SETextPosition *from = (SETextPosition *)fromPosition;
     SETextPosition *to = (SETextPosition *)toPosition;
-    NSLog(@"%@ %@", from, to);
-    NSLog(@"%d", abs(to.index - from.index));
-    NSRange range = NSMakeRange(from.index, abs(to.index - from.index));
-    NSLog(@"%@", NSStringFromRange(range));
+    NSRange range = NSMakeRange(MIN(from.index, to.index), ABS(to.index - from.index));
+    
     return [SETextRange rangeWithNSRange:range];
 }
 
@@ -1569,16 +1609,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     NSLog(@"%s", __func__);
     SETextPosition *f = (SETextPosition *)from;
     SETextPosition *t = (SETextPosition *)toPosition;
-    NSLog(@"%@ %@", f, t);
-    if (f.index == NSUIntegerMax || t.index == NSUIntegerMax) {
-        return 0;
-    }
     return t.index - f.index;
 }
 
 - (id<UITextInputTokenizer>)tokenizer
 {
-    NSLog(@"%s", __func__);
     if (!_tokenizer) {
         _tokenizer = [[UITextInputStringTokenizer alloc] initWithTextInput:self];
     }
@@ -1589,7 +1624,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 /* Layout questions. */
 - (UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction
 {
-    NSLog(@"%s", __func__);
     SETextRange *r = (SETextRange *)range;
     NSInteger pos = r.range.location;
     
@@ -1609,7 +1643,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
 {
-    NSLog(@"%s", __func__);
     SETextPosition *pos = (SETextPosition *)position;
     NSRange result = NSMakeRange(pos.index, 1);
     
@@ -1643,7 +1676,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 /* Geometry used to provide, for example, a correction rect. */
 - (CGRect)firstRectForRange:(UITextRange *)range
 {
-    NSLog(@"%s", __func__);
     SETextRange *r = (SETextRange *)range;
     
     for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
@@ -1662,17 +1694,25 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (CGRect)caretRectForPosition:(UITextPosition *)position
 {
-    NSLog(@"%s", __func__);
     SETextPosition *pos = (SETextPosition *)position;
+    NSUInteger index = pos.index;
     
-    if (self.text.length == 0) {
-        CGPoint origin = CGPointMake(CGRectGetMinX(self.bounds), CGRectGetMinY(self.bounds) - self.font.leading);
-        return CGRectMake(origin.x, origin.y + fabs(self.font.descender) + fabs(self.font.ascender), CGRectGetWidth(self.caretView.bounds), self.font.ascender + fabs(self.font.descender));
+    NSString *text = self.text;
+    
+    if (text.length == 0) {
+        CGPoint origin = CGPointMake(CGRectGetMinX(self.bounds), CGRectGetMinY(self.bounds));
+        return CGRectMake(origin.x, origin.y, CGRectGetWidth(self.caretView.bounds), self.font.leading);
+    }
+    
+    if (index == text.length && [[text substringWithRange:NSMakeRange(index - 1, 1)] isEqualToString:@"\n"]) {
+        CGRect rect = [self.textLayout rectOfStringForLastLine];
+        rect.origin.y = CGRectGetMaxY(rect);
+        rect.size.width = CGRectGetWidth(self.caretView.bounds);
+        return rect;
     }
     
     CGRect rect;
-    NSUInteger index = pos.index;
-    if (index < self.text.length && [[self.text substringWithRange:NSMakeRange(index - 1, 1)] isEqualToString:@"\n"]) {
+    if (index > 0 && [[self.text substringWithRange:NSMakeRange(index - 1, 1)] isEqualToString:@"\n"]) {
         rect = [self.textLayout rectOfStringForIndex:index + 1];
     } else {
         rect = [self.textLayout rectOfStringForIndex:index];
@@ -1703,13 +1743,19 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (UITextPosition *)closestPositionToPoint:(CGPoint)point
 {
     CFIndex index = [self.textLayout stringIndexForNearestPosition:point];
+    if (index == kCFNotFound) {
+        return nil;
+    }
     return [SETextPosition positionWithIndex:index];
 }
 
 - (UITextPosition *)closestPositionToPoint:(CGPoint)point withinRange:(UITextRange *)range
 {
-    NSLog(@"%s", __func__);
     CFIndex index = [self stringIndexAtPoint:point];
+    if (index == kCFNotFound) {
+        return nil;
+    }
+    
     SETextRange *r = (SETextRange *)range;
     if (index >= r.range.location && index <= r.range.location + r.range.length) {
         return [SETextPosition positionWithIndex:index];
@@ -1720,8 +1766,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (UITextRange *)characterRangeAtPoint:(CGPoint)point
 {
-    NSLog(@"%s", __func__);
     CFIndex index = [self stringIndexAtPoint:point];
+    if (index == kCFNotFound) {
+        return nil;
+    }
+    
     CFIndex length = 1;
     
     if (index < 0) {
@@ -1742,11 +1791,23 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return YES;
 }
 
-- (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
-{
-    NSLog(@"%s", __func__);
-    return @{UITextInputTextFontKey: self.font};
-}
+//- (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+//{
+//    NSLog(@"%s", __func__);
+//    return @{UITextInputTextFontKey: self.font};
+//}
+
+//- (UITextPosition *)positionWithinRange:(UITextRange *)range atCharacterOffset:(NSInteger)offset
+//{
+//    // Not supported.
+//    return nil;
+//}
+//
+//- (NSInteger)characterOffsetOfPosition:(UITextPosition *)position withinRange:(UITextRange *)range
+//{
+//    // Not supported.
+//    return 0;
+//}
 
 #pragma mark -
 #pragma mark UIKeyInput methods
@@ -1790,7 +1851,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.textLayout.textSelection.selectedRange = selectedNSRange;
     
     [self updateLayout];
-    [self updateCaretPosition];
+    [self selectionChanged];
 }
 
 - (void)deleteBackward
@@ -1827,7 +1888,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.textLayout.textSelection.selectedRange = selectedNSRange;
     
     [self updateLayout];
-    [self updateCaretPosition];
+    [self selectionChanged];
 }
 #endif
 

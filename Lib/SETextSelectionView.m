@@ -19,6 +19,9 @@ static const CGFloat SESelectionGrabberWidth = 32.0f;
 
 @property (nonatomic) SETextLayout *textLayout;
 
+- (void)selectionGestureStateChanged:(UILongPressGestureRecognizer *)gestureRecognizer;
+- (void)grabberMoved:(UIPanGestureRecognizer *)gestureRecognizer;
+
 @end
 
 @interface SETextSelectionView ()
@@ -35,7 +38,7 @@ static const CGFloat SESelectionGrabberWidth = 32.0f;
         
         self.textView = textView;
         
-        self.selectionGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self.textView action:@selector(selectionChanged:)];
+        self.selectionGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self.textView action:@selector(selectionGestureStateChanged:)];
         [self addGestureRecognizer:self.selectionGestureRecognizer];
         
         self.startGrabber = [[SESelectionGrabber alloc] init];
@@ -93,12 +96,17 @@ static const CGFloat SESelectionGrabberWidth = 32.0f;
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    return action == @selector(copy:) || (action == @selector(selectAll:) && self.textView.selectedText.length < self.textView.text.length);
+    return [self.textView canPerformAction:action withSender:sender];
 }
 
 - (void)copy:(id)sender
 {
     [self.textView copy:sender];
+}
+
+- (void)select:(id)sender
+{
+    [self.textView select:sender];
 }
 
 - (void)selectAll:(id)sender

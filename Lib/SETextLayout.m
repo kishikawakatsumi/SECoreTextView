@@ -304,6 +304,21 @@
     return rect;
 }
 
+- (CGRect)rectOfStringForLastLine
+{
+    SELineLayout *lineLayout = self.lineLayouts.lastObject;
+    NSRange stringRange = lineLayout.stringRange;
+    
+    CTLineRef line = lineLayout.line;
+    CGFloat offset = CTLineGetOffsetForStringIndex(line, stringRange.location, NULL);
+    
+    CGRect rect = CGRectZero;
+    rect = lineLayout.rect;
+    rect.origin.x += offset;
+    
+    return rect;
+}
+
 - (void)setSelectionStartWithPoint:(CGPoint)point;
 {
     CFIndex index = [self stringIndexForPosition:point];
