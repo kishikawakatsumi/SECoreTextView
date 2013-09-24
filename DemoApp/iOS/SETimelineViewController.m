@@ -71,7 +71,8 @@ static const CGFloat FONT_SIZE = 14.0f;
     
     CGRect frameRect = [SETextView frameRectWithAttributtedString:attributedString
                                                    constraintSize:CGSizeMake(tableView.bounds.size.width - 72.0f, CGFLOAT_MAX)
-                                                      lineSpacing:LINE_SPACING];
+                                                      lineSpacing:LINE_SPACING
+                                                             font:[UIFont systemFontOfSize:FONT_SIZE]];
     
     return MAX(tableView.rowHeight, frameRect.size.height + 26.0f);
 }
@@ -101,7 +102,7 @@ static const CGFloat FONT_SIZE = 14.0f;
     
     cell.tweetTextView.attributedText = [[SETwitterHelper sharedInstance] attributedStringWithTweet:tweet];
     cell.tweetTextView.lineSpacing = LINE_SPACING;
-//    cell.tweetTextView.font = [UIFont systemFontOfSize:FONT_SIZE];
+    cell.tweetTextView.font = [UIFont systemFontOfSize:FONT_SIZE];
     cell.tweetTextView.delegate = self;
     
     return cell;
