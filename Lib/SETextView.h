@@ -59,6 +59,9 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @property (nonatomic, getter = isEditable) BOOL editable;
 @property (nonatomic, getter = isEditing) BOOL editing;
 
+@property (readwrite) UIView *inputView;
+@property (readwrite) UIView *inputAccessoryView;
+
 - (id)initWithFrame:(CGRect)frame;
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString

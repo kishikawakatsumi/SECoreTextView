@@ -1415,7 +1415,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)replaceRange:(UITextRange *)range withText:(NSString *)text
 {
-    NSLog(@"%s", __func__);
     SETextRange *r = (SETextRange *)range;
     
     NSRange selectedRange = self.selectedRange;
@@ -1462,16 +1461,16 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return [SETextRange rangeWithNSRange:self.textLayout.markedTextRange];
 }
 
-- (void)setMarkedTextStyle:(NSDictionary *)markedTextStyle
-{
-    NSLog(@"%s", __func__);
-}
-
-- (NSDictionary *)markedTextStyle
-{
-    NSLog(@"%s", __func__);
-    return nil;
-}
+//- (void)setMarkedTextStyle:(NSDictionary *)markedTextStyle
+//{
+//    NSLog(@"%s", __func__);
+//}
+//
+//- (NSDictionary *)markedTextStyle
+//{
+//    NSLog(@"%s", __func__);
+//    return nil;
+//}
 
 - (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
 {
@@ -1540,17 +1539,22 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
 {
-    NSLog(@"%s", __func__);
     SETextPosition *from = (SETextPosition *)fromPosition;
     SETextPosition *to = (SETextPosition *)toPosition;
-    NSRange range = NSMakeRange(MIN(from.index, to.index), ABS(to.index - from.index));
+    if (to.index < from.index) {
+        SETextPosition *temp = from;
+        from = to;
+        to = temp;
+    }
     
-    return [SETextRange rangeWithNSRange:range];
+    NSUInteger location = MIN(from.index, to.index);
+    NSUInteger length = ABS(to.index - from.index);
+    
+    return [SETextRange rangeWithNSRange:NSMakeRange(location, length)];
 }
 
 - (UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset
 {
-    NSLog(@"%s", __func__);
     SETextPosition *pos = (SETextPosition *)position;
     NSInteger end = pos.index + offset;
     if (end > self.text.length || end < 0) {
@@ -1562,7 +1566,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset
 {
-    NSLog(@"%s", __func__);
     SETextPosition *pos = (SETextPosition *)position;
     NSInteger newPos = pos.index;
     
@@ -1591,7 +1594,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (NSComparisonResult)comparePosition:(UITextPosition *)position toPosition:(UITextPosition *)other
 {
-    NSLog(@"%s", __func__);
     SETextPosition *pos = (SETextPosition *)position;
     SETextPosition *o = (SETextPosition *)other;
     
@@ -1606,7 +1608,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition
 {
-    NSLog(@"%s", __func__);
     SETextPosition *f = (SETextPosition *)from;
     SETextPosition *t = (SETextPosition *)toPosition;
     return t.index - f.index;
@@ -1663,13 +1664,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 /* Writing direction */
 - (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
 {
-    NSLog(@"%s", __func__);
     return UITextWritingDirectionLeftToRight;
 }
 
 - (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection forRange:(UITextRange *)range
 {
-    NSLog(@"%s", __func__);
     // Not supported.
 }
 
@@ -1734,7 +1733,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (NSArray *)selectionRectsForRange:(UITextRange *)range
 {
-    NSLog(@"%s", __func__);
     // Not implemented yet.
     return nil;
 }
@@ -1786,8 +1784,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (BOOL)shouldChangeTextInRange:(UITextRange *)range replacementText:(NSString *)text
 {
-    NSLog(@"%s", __func__);
-    NSLog(@"%@ %@", NSStringFromRange(((SETextRange *)range).range), text);
     return YES;
 }
 
@@ -1814,13 +1810,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (BOOL)hasText
 {
-    NSLog(@"%s", __func__);
     return self.text.length > 0;
 }
 
 - (void)insertText:(NSString *)text
 {
-    NSLog(@"%s", __func__);
     NSRange selectedNSRange = self.textLayout.textSelection.selectedRange;
     SETextRange *markedTextRange = (SETextRange *)self.markedTextRange;
     NSRange markedTextNSRange;
@@ -1856,7 +1850,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)deleteBackward
 {
-    NSLog(@"%s", __func__);
     NSRange selectedNSRange = self.textLayout.textSelection.selectedRange;
     SETextRange *markedTextRange = (SETextRange *)self.markedTextRange;
     NSRange markedTextNSRange;
