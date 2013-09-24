@@ -56,9 +56,9 @@ static const CGFloat FONT_SIZE = 16.0f;
     
     NSMutableAttributedString *attributedText = [[[SETwitterHelper sharedInstance] attributedStringWithTweet:self.tweet] mutableCopy];
     
-    UIFont *font = [UIFont systemFontOfSize:FONT_SIZE];
-    id tweetfont = (__bridge id)(CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL));
-    [attributedText addAttributes:@{(id)kCTFontAttributeName: tweetfont} range:NSMakeRange(0, attributedText.length)];
+//    UIFont *font = [UIFont systemFontOfSize:FONT_SIZE];
+//    id tweetfont = (__bridge id)(CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL));
+//    [attributedText addAttributes:@{(id)kCTFontAttributeName: tweetfont} range:NSMakeRange(0, attributedText.length)];
     
     self.tweetTextView.attributedText = attributedText;
     self.tweetTextView.lineSpacing = LINE_SPACING;

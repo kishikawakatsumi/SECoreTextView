@@ -47,6 +47,8 @@
     NSFont *font = [NSFont systemFontOfSize:13.0f];
     id tweetfont = (__bridge id)(CTFontCreateWithName((__bridge CFStringRef)(font.fontName), font.pointSize, NULL));
     
+    id linkFont = (__bridge id)(CTFontCreateWithName((__bridge CFStringRef)(font.fontName), 18.0f, NULL));
+    
     NSColor *tweetColor = [NSColor blackColor];
     NSColor *hashTagColor = [NSColor grayColor];
     NSColor *linkColor = [NSColor blueColor];
@@ -91,7 +93,7 @@
         NSString *replace = url[@"display_url"];
         
         [attributedString replaceCharactersInRange:NSMakeRange(first, last - first) withString:replace];
-        [attributedString addAttributes:@{NSLinkAttributeName: url[@"expanded_url"], (id)kCTForegroundColorAttributeName: (id)linkColor.CGColor}
+        [attributedString addAttributes:@{NSLinkAttributeName: url[@"expanded_url"], (id)kCTForegroundColorAttributeName: (id)linkColor.CGColor, (id)kCTFontAttributeName: linkFont}
                                   range:NSMakeRange(first, replace.length)];
     }
     

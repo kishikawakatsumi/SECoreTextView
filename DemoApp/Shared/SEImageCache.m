@@ -46,6 +46,10 @@
 
 - (NSImage *)imageForURL:(NSURL *)imageURL defaultImage:(NSImage *)defaultImage completionBlock:(SEImageDownloadCompletionBlock)block
 {
+    if (!imageURL) {
+        return defaultImage;
+    }
+    
     NSString *key = [SEImageCache MD5HexDigest:imageURL.absoluteString];
     NSImage *cachedImage = [self.cache objectForKey:key];
     if (cachedImage) {

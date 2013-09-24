@@ -32,7 +32,6 @@
     return NSMakeRange(stringRange.location, stringRange.length);
 }
 
-
 - (BOOL)containsPoint:(CGPoint)point
 {
     return CGRectContainsPoint(self.rect, point);
@@ -47,11 +46,10 @@
 - (CGRect)rectOfStringWithRange:(NSRange)range
 {
     CGRect rect = CGRectZero;
-    CTLineRef line = self.line;
-    CFRange stringRange = CTLineGetStringRange(line);
-    NSRange intersectionRange = NSIntersectionRange(range, NSMakeRange(stringRange.location, stringRange.length));
+    NSRange intersectionRange = NSIntersectionRange(self.stringRange, range);
     
     if (intersectionRange.length > 0) {
+        CTLineRef line = self.line;
         CGFloat startOffset = CTLineGetOffsetForStringIndex(line, intersectionRange.location, NULL);
         CGFloat endOffset = CTLineGetOffsetForStringIndex(line, NSMaxRange(intersectionRange), NULL);
         

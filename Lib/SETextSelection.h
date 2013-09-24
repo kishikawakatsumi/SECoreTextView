@@ -10,7 +10,7 @@
 
 @interface SETextSelection : NSObject
 
-@property (assign, nonatomic, readonly) NSRange selectedRange;
+@property (nonatomic) NSRange selectedRange;
 
 - (id)initWithIndex:(NSInteger)index;
 - (void)setSelectionEndAtIndex:(NSInteger)index;
