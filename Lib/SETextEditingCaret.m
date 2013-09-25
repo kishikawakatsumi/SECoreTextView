@@ -33,6 +33,11 @@ static const NSTimeInterval SETextEditingCaretBlinkAnimationDuration = 0.1;
     return self;
 }
 
+- (void)dealloc
+{
+    [_blinkTimer invalidate];
+}
+
 - (void)blink
 {
     [UIView animateWithDuration:SETextEditingCaretBlinkAnimationDuration delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
@@ -40,25 +45,6 @@ static const NSTimeInterval SETextEditingCaretBlinkAnimationDuration = 0.1;
     } completion:^(BOOL finished) {
         
     }];
-}
-
-- (void)didMoveToSuperview
-{
-    self.alpha = 1.0f;
-    
-    if (self.superview) {
-        self.blinkTimer = [NSTimer timerWithTimeInterval:SETextEditingCaretBlinkRate target:self selector:@selector(blink) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:self.blinkTimer forMode:NSRunLoopCommonModes];
-        [self delayBlink];
-    } else {
-        [self.blinkTimer invalidate];
-        self.blinkTimer = nil;
-    }
-}
-
-- (void)dealloc
-{
-    [_blinkTimer invalidate];
 }
 
 - (void)delayBlink

@@ -968,9 +968,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             [self moveMagnifierRangedToPoint:endGrabber.center];
         }
         
-        if (self.isEditing) {
-            [self hideEditingMenu];
-        }
+        [self hideEditingMenu];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
                gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
                gestureRecognizer.state == UIGestureRecognizerStateFailed) {
@@ -1149,7 +1147,10 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     } else {
         targetRect = [self editingMenuRectForSelection];
     }
-    [menuController setTargetRect:targetRect inView:self];
+    
+    UIView *firstResponderView = self.isFirstResponder ? self : self.textSelectionView;
+    
+    [menuController setTargetRect:targetRect inView:firstResponderView];
     [menuController setMenuVisible:YES animated:YES];
 }
 
@@ -1157,10 +1158,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     UIMenuController *menuController = [UIMenuController sharedMenuController];
     [menuController setMenuVisible:NO animated:YES];
-    
-    if (self.textSelectionView.isFirstResponder) {
-        [self.textSelectionView resignFirstResponder];
-    }
 }
 
 - (CGRect)editingMenuRectForSelection
@@ -1439,9 +1436,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     [self clearSelection];
     self.editing = NO;
-    
-    [self selectionChanged];
-    [self finishSelecting];
     
     [self setNeedsDisplayInRect:self.bounds];
     
