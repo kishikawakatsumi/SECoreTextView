@@ -7,6 +7,7 @@
 //
 
 #import "SETextAttachment.h"
+#import "SECompatibility.h"
 
 static void RunDelegateDeallocateCallback(void *refCon)
 {
@@ -63,7 +64,7 @@ static CGFloat RunDelegateGetWidthCallback(void *refCon)
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%@, %@, size: %@, range: %@", [super description], self.object, NSStringFromCGSize(self.size), NSStringFromRange(self.range)];
+    return [NSString stringWithFormat:@"%@, %@, size: %@, range: %@", [super description], self.object, NSStringFromSize(self.size), NSStringFromRange(self.range)];
 }
 
 @end

@@ -31,13 +31,13 @@
 - (void)drawInContext:(CGContextRef)context;
 
 - (CFIndex)stringIndexForPosition:(CGPoint)point;
-- (CFIndex)stringIndexForNearestPosition:(CGPoint)point;
+- (CFIndex)stringIndexForClosestPosition:(CGPoint)point;
 - (CGRect)rectOfStringForIndex:(CFIndex)index;
 - (CGRect)rectOfStringForLastLine;
 
 - (void)setSelectionStartWithPoint:(CGPoint)point;
 - (void)setSelectionEndWithPoint:(CGPoint)point;
-- (void)setSelectionEndWithNearestPoint:(CGPoint)point;
+- (void)setSelectionEndWithClosestPoint:(CGPoint)point;
 - (void)setSelectionStartWithFirstPoint:(CGPoint)firstPoint;
 
 - (void)setSelectionWithPoint:(CGPoint)point;

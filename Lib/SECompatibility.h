@@ -22,6 +22,7 @@ typedef UIEdgeInsets NSEdgeInsets;
 #define NSEdgeInsetsMake UIEdgeInsetsMake
 #define NSRectFill UIRectFill
 #define NSStringFromRect NSStringFromCGRect
+#define NSStringFromSize NSStringFromCGSize
 #define NSTextInputClient UITextInput
 
 extern NSString * const NSLinkAttributeName;
@@ -40,6 +41,7 @@ typedef NSEdgeInsets UIEdgeInsets;
 #define UIEdgeInsetsMake NSEdgeInsetsMake
 #define UIRectFill NSRectFill
 #define NSStringFromCGRect NSStringFromRect
+#define NSStringFromCGSize NSStringFromSize
 #define UITextInput NSTextInputClient
 
 @interface NSColor (Compatibility)

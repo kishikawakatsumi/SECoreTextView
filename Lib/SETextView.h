@@ -23,7 +23,11 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 
 @class SELinkText;
 
+#if TARGET_OS_IPHONE
 @interface SETextView : NSView <NSTextInputClient>
+#else
+@interface SETextView : NSView
+#endif
 
 @property (nonatomic, weak) IBOutlet id<SETextViewDelegate> delegate;
 

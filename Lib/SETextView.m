@@ -289,7 +289,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (CGRect)caretRect
 {
+#if TARGET_OS_IPHONE
     return self.caretView.frame;
+#else
+    return CGRectNull;
+#endif
 }
 
 #pragma mark -
@@ -460,7 +464,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)selectionChanged
 {
+#if TARGET_OS_IPHONE
     [self updateCaretPosition];
+#endif
     [self notifySelectionChanged];
     [self setNeedsDisplayInRect:self.bounds];
 }
@@ -552,7 +558,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         }
         
         CTRunDelegateRef runDelegate = (__bridge CTRunDelegateRef)value;
-        SETextAttachment *attachment = CTRunDelegateGetRefCon(runDelegate);
+        SETextAttachment *attachment = (__bridge SETextAttachment *)CTRunDelegateGetRefCon(runDelegate);
         if (!attachment) {
             return;
         }
@@ -630,9 +636,15 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         }
         
         if (previousLineOffset > 0.0f) {
+#if TARGET_OS_IPHONE
             CGFloat delta = CGRectGetMinY(selectionRect) - previousLineOffset;
             selectionRect.origin.y -= delta;
             selectionRect.size.height += delta;
+#else
+            CGFloat delta = CGRectGetMaxY(selectionRect) - previousLineOffset;
+            selectionRect.origin.y -= delta;
+            selectionRect.size.height += delta;
+#endif
         }
         
         selectionRect = CGRectIntegral(selectionRect);
@@ -646,13 +658,20 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             endRect = selectionRect;
         }
         
+#if TARGET_OS_IPHONE
         previousLineOffset = CGRectGetMaxY(selectionRect);
+#else
+        previousLineOffset = CGRectGetMinY(selectionRect);
+//        NSLog(@"%f %f", CGRectGetMaxY(selectionRect), CGRectGetMinY(selectionRect));
+#endif
         
         lineNumber++;
     }
     
+#if TARGET_OS_IPHONE
     self.textSelectionView.startFrame = startRect;
     self.textSelectionView.endFrame = endRect;
+#endif
 }
 
 - (void)highlightMarkedText
@@ -1267,7 +1286,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     self.touchPhase = SETouchPhaseMoved;
     
-    [self.textLayout setSelectionEndWithNearestPoint:self.mouseLocation];
+    [self.textLayout setSelectionEndWithClosestPoint:self.mouseLocation];
     
     [self selectionChanged];
 }
@@ -1438,9 +1457,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [self selectionChanged];
     [self finishSelecting];
     
+#if TARGET_OS_IPHONE
     if (self.isEditing) {
         [self showEditingMenu];
     }
+#endif
     
     [self setNeedsDisplayInRect:self.bounds];
 }
@@ -1452,9 +1473,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     [self selectionChanged];
     [self finishSelecting];
     
+#if TARGET_OS_IPHONE
     if (self.isEditing) {
         [self showEditingMenu];
     }
+#endif
     
     [self setNeedsDisplayInRect:self.bounds];
 }
@@ -1838,7 +1861,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 /* Hit testing. */
 - (UITextPosition *)closestPositionToPoint:(CGPoint)point
 {
-    CFIndex index = [self.textLayout stringIndexForNearestPosition:point];
+    CFIndex index = [self.textLayout stringIndexForClosestPosition:point];
     if (index == kCFNotFound) {
         return nil;
     }
@@ -2012,7 +2035,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     [self hideEditingMenu];
 }
-#endif
 
 #pragma mark -
 
@@ -2100,5 +2122,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         [attributdString replaceCharactersInRange:range withString:aString];
     }
 }
+#endif
 
 @end

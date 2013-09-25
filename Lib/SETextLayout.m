@@ -246,7 +246,7 @@
     return kCFNotFound;
 }
 
-- (CFIndex)stringIndexForNearestPosition:(CGPoint)point
+- (CFIndex)stringIndexForClosestPosition:(CGPoint)point
 {
     CFIndex lineNumber = 0;
     for (SELineLayout *lineLayout in self.lineLayouts) {
@@ -345,21 +345,21 @@
 
 - (void)setSelectionEndWithPoint:(CGPoint)point;
 {
-    CFIndex index = [self stringIndexForNearestPosition:point];
+    CFIndex index = [self stringIndexForClosestPosition:point];
     if (index != kCFNotFound) {
         [self.textSelection setSelectionEndAtIndex:index];
     }
 }
 
-- (void)setSelectionEndWithNearestPoint:(CGPoint)point;
+- (void)setSelectionEndWithClosestPoint:(CGPoint)point;
 {
-    CFIndex index = [self stringIndexForNearestPosition:point];
+    CFIndex index = [self stringIndexForClosestPosition:point];
     [self.textSelection setSelectionEndAtIndex:index];
 }
 
 - (void)setSelectionStartWithFirstPoint:(CGPoint)firstPoint
 {
-    CFIndex start = [self stringIndexForNearestPosition:firstPoint];
+    CFIndex start = [self stringIndexForClosestPosition:firstPoint];
     CFIndex end = NSMaxRange(self.textSelection.selectedRange);
     
     if (start != kCFNotFound) {

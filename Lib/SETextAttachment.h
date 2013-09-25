@@ -31,6 +31,8 @@ typedef struct {
 typedef const struct __CTRunDelegate * CTRunDelegateRef;
 CTRunDelegateRef CTRunDelegateCreate(const CTRunDelegateCallbacks* callbacks,
                                      void* refCon );
+void* CTRunDelegateGetRefCon(
+                             CTRunDelegateRef runDelegate );
 #endif
 
 @interface SETextAttachment : NSObject
