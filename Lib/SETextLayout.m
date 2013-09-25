@@ -102,7 +102,7 @@
                                                                     NULL,
                                                                     CGSizeMake(frameRect.size.width, CGFLOAT_MAX),
                                                                     NULL);
-    frameSize.height += 4.0f; // Workaround
+    frameSize.height += [[UIFont systemFontOfSize:[UIFont labelFontSize]] leading]; // Workaround
 	frameRect.origin.y = CGRectGetMaxY(frameRect) - frameSize.height;
     frameRect.size = frameSize;
 	
