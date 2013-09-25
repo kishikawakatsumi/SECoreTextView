@@ -92,7 +92,7 @@
     
     [UIView animateWithDuration:0.15
                           delay:0.0
-                        options:0
+                        options:kNilOptions
                      animations:^
      {
          self.frame = frame;
@@ -116,7 +116,7 @@
     
     [UIView animateWithDuration:0.15
                           delay:0.0
-                        options:0
+                        options:kNilOptions
                      animations:^
      {
          self.bounds = bounds;

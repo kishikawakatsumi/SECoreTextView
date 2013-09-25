@@ -76,6 +76,8 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 
 - (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index;
 - (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range;
+- (void)insertAttributedText:(NSAttributedString *)attributedText;
+- (void)insertObject:(id)object size:(CGSize)size;
 
 - (void)clearSelection;
 

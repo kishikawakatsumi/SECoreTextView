@@ -41,6 +41,9 @@ CTRunDelegateRef CTRunDelegateCreate(const CTRunDelegateCallbacks* callbacks,
 
 @property (nonatomic, readonly) CTRunDelegateCallbacks callbacks;
 
+@property (nonatomic) NSAttributedString *originalAttributedString;
+@property (nonatomic) NSString *replacedString;
+
 - (id)initWithObject:(id)object size:(CGSize)size range:(NSRange)range;
 
 @end

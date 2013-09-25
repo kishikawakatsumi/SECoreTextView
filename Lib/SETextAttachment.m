@@ -32,7 +32,7 @@ static CGFloat RunDelegateGetWidthCallback(void *refCon)
 
 @implementation SETextAttachment
 
-- (id)initWithObject:(id)object size:(CGSize)size range:(NSRange)range;
+- (id)initWithObject:(id)object size:(CGSize)size range:(NSRange)range
 {
     self = [super init];
     if (self) {
@@ -53,6 +53,17 @@ static CGFloat RunDelegateGetWidthCallback(void *refCon)
     callbacks.getWidth = RunDelegateGetWidthCallback;
     
     return callbacks;
+}
+
+- (void)setReplacedString:(NSString *)replacedString
+{
+    _replacedString = replacedString;
+    _range = NSMakeRange(_range.location, replacedString.length);
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@, %@, size: %@, range: %@", [super description], self.object, NSStringFromCGSize(self.size), NSStringFromRange(self.range)];
 }
 
 @end
