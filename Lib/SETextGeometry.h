@@ -10,8 +10,8 @@
 
 @interface SETextGeometry : NSObject
 
-@property (assign, nonatomic, readonly) CGRect rect;
-@property (assign, nonatomic, readonly) NSInteger lineNumber;
+@property (nonatomic, readonly) CGRect rect;
+@property (nonatomic, readonly) NSInteger lineNumber;
 
 - (id)initWithRect:(CGRect)rect lineNumber:(NSInteger)lineNumber;
 

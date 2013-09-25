@@ -23,38 +23,44 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 
 @class SELinkText;
 
-@interface SETextView : NSView
+@interface SETextView : NSView <NSTextInputClient>
 
-@property (weak, nonatomic) IBOutlet id<SETextViewDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id<SETextViewDelegate> delegate;
 
-@property (copy, nonatomic) NSString *text;
-@property (copy, nonatomic) NSAttributedString *attributedText;
+@property (nonatomic, copy) NSString *text;
+@property (nonatomic, copy) NSAttributedString *attributedText;
 
-@property (strong, nonatomic) NSFont *font;
-@property (strong, nonatomic) NSColor *textColor;
-@property (strong, nonatomic) NSColor *highlightedTextColor;
-@property (assign, nonatomic) NSTextAlignment textAlignment;
-@property (assign, nonatomic) CGFloat lineSpacing;
-@property (assign, nonatomic) CGFloat lineHeight;
-@property (assign, nonatomic) CGFloat paragraphSpacing;
+@property (nonatomic) NSFont *font;
+@property (nonatomic) NSColor *textColor;
+@property (nonatomic) NSColor *highlightedTextColor;
+@property (nonatomic) NSTextAlignment textAlignment;
+@property (nonatomic) CGFloat lineSpacing;
+@property (nonatomic) CGFloat lineHeight;
+@property (nonatomic) CGFloat paragraphSpacing;
 
-@property (strong, nonatomic) NSColor *selectedTextBackgroundColor;
-@property (strong, nonatomic) NSColor *linkHighlightColor;
-@property (strong, nonatomic) NSColor *linkRolloverEffectColor;
+@property (nonatomic) NSColor *selectedTextBackgroundColor;
+@property (nonatomic) NSColor *linkHighlightColor;
+@property (nonatomic) NSColor *linkRolloverEffectColor;
 
-@property (assign, nonatomic, readonly) CGRect layoutFrame;
+@property (nonatomic, readonly) CGRect layoutFrame;
 
-@property (assign, nonatomic, getter = isHighlighted) BOOL highlighted;
-@property (assign, nonatomic, getter = isSelectable) BOOL selectable;
+@property (nonatomic, getter = isHighlighted) BOOL highlighted;
+@property (nonatomic, getter = isSelectable) BOOL selectable;
 #if TARGET_OS_IPHONE
-@property (assign, nonatomic) BOOL showsEditingMenuAutomatically;
+@property (nonatomic) BOOL showsEditingMenuAutomatically;
 #endif
 
-@property (assign, nonatomic, readonly) NSRange selectedRange;
-@property (strong, nonatomic, readonly) NSString *selectedText;
-@property (strong, nonatomic, readonly) NSAttributedString *selectedAttributedText;
+@property (nonatomic, readonly) NSRange selectedRange;
+@property (nonatomic, readonly) NSString *selectedText;
+@property (nonatomic, readonly) NSAttributedString *selectedAttributedText;
 
-@property (assign, nonatomic) NSTimeInterval minimumLongPressDuration;
+@property (nonatomic) NSTimeInterval minimumLongPressDuration;
+
+@property (nonatomic, getter = isEditable) BOOL editable;
+@property (nonatomic, getter = isEditing) BOOL editing;
+
+@property (readwrite) UIView *inputView;
+@property (readwrite) UIView *inputAccessoryView;
 
 - (id)initWithFrame:(CGRect)frame;
 
@@ -70,6 +76,8 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 
 - (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index;
 - (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range;
+- (void)insertAttributedText:(NSAttributedString *)attributedText;
+- (void)insertObject:(id)object size:(CGSize)size;
 
 - (void)clearSelection;
 
@@ -80,7 +88,13 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @optional
 - (BOOL)textView:(SETextView *)textView clickedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
 - (BOOL)textView:(SETextView *)textView longPressedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
+
 - (void)textViewDidChangeSelection:(SETextView *)textView;
 - (void)textViewDidEndSelecting:(SETextView *)textView;
+
+- (BOOL)textViewShouldBeginEditing:(SETextView *)textView;
+- (void)textViewDidBeginEditing:(SETextView *)textView;
+- (BOOL)textViewShouldEndEditing:(SETextView *)textView;
+- (void)textViewDidEndEditing:(SETextView *)textView;
 
 @end

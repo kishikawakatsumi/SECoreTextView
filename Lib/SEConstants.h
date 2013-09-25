@@ -13,6 +13,7 @@
 
 + (NSColor *)selectedTextBackgroundColor;
 + (NSColor *)linkColor;
-+ (NSColor *)selectionGrabberColor;
++ (NSColor *)selectionCaretColor;
++ (NSColor *)caretColor;
 
 @end

@@ -59,7 +59,14 @@
 - (void)setTouchPoint:(CGPoint)point
 {
 	_touchPoint = point;
-    self.center = CGPointMake(point.x, point.y - CGRectGetHeight(self.bounds));
+    CGFloat x = point.x;
+    CGFloat y = point.y;
+    if (y - CGRectGetHeight(self.bounds) < CGRectGetMinY(self.magnifyToView.frame)) {
+        y = CGRectGetMinY(self.magnifyToView.frame) + CGRectGetHeight(self.bounds);
+    } else {
+        y -= CGRectGetHeight(self.bounds);
+    }
+    self.center = CGPointMake(x, y);
 }
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point
@@ -85,7 +92,7 @@
     
     [UIView animateWithDuration:0.15
                           delay:0.0
-                        options:0
+                        options:kNilOptions
                      animations:^
      {
          self.frame = frame;
@@ -109,7 +116,7 @@
     
     [UIView animateWithDuration:0.15
                           delay:0.0
-                        options:0
+                        options:kNilOptions
                      animations:^
      {
          self.bounds = bounds;

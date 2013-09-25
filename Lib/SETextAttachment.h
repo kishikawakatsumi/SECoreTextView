@@ -15,10 +15,10 @@ enum {
 	kCTRunDelegateCurrentVersion = kCTRunDelegateVersion1
 };
 
-typedef void (*CTRunDelegateDeallocateCallback) ( void* refCon );
-typedef CGFloat (*CTRunDelegateGetAscentCallback) ( void* refCon );
-typedef CGFloat (*CTRunDelegateGetDescentCallback) ( void* refCon );
-typedef CGFloat (*CTRunDelegateGetWidthCallback) ( void* refCon );
+typedef void (*CTRunDelegateDeallocateCallback) (void *refCon);
+typedef CGFloat (*CTRunDelegateGetAscentCallback) (void *refCon);
+typedef CGFloat (*CTRunDelegateGetDescentCallback) (void *refCon);
+typedef CGFloat (*CTRunDelegateGetWidthCallback) (void *refCon);
 
 typedef struct {
 	CFIndex							version;
@@ -35,11 +35,14 @@ CTRunDelegateRef CTRunDelegateCreate(const CTRunDelegateCallbacks* callbacks,
 
 @interface SETextAttachment : NSObject
 
-@property (strong, nonatomic, readonly) id object;
-@property (assign, nonatomic, readonly) CGSize size;
-@property (assign, nonatomic, readonly) NSRange range;
+@property (nonatomic, readonly) id object;
+@property (nonatomic, readonly) CGSize size;
+@property (nonatomic, readonly) NSRange range;
 
-@property (assign, nonatomic, readonly) CTRunDelegateCallbacks callbacks;
+@property (nonatomic, readonly) CTRunDelegateCallbacks callbacks;
+
+@property (nonatomic) NSAttributedString *originalAttributedString;
+@property (nonatomic) NSString *replacedString;
 
 - (id)initWithObject:(id)object size:(CGSize)size range:(NSRange)range;
 

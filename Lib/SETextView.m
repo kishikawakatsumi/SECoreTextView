@@ -7,10 +7,13 @@
 //
 
 #import "SETextView.h"
+#import "SETextInput.h"
 #import "SETextLayout.h"
 #import "SELineLayout.h"
 #import "SETextAttachment.h"
 #import "SETextSelection.h"
+#import "SETextSelectionView.h"
+#import "SETextEditingCaret.h"
 #import "SETextMagnifierCaret.h"
 #import "SETextMagnifierRanged.h"
 #import "SESelectionGrabber.h"
@@ -18,7 +21,7 @@
 #import "SETextGeometry.h"
 #import "SEConstants.h"
 
-typedef NS_ENUM(NSUInteger, SETouchPhase) {
+typedef NS_ENUM (NSUInteger, SETouchPhase) {
     SETouchPhaseNone       = 0,
     SETouchPhaseBegan      = 1 << 0,
     SETouchPhaseMoved      = 1 << 1,
@@ -33,32 +36,38 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 @interface SETextView ()
 
-@property (strong, nonatomic) SETextLayout *textLayout;
+@property (nonatomic) SETextLayout *textLayout;
 
-@property (strong, nonatomic) NSMutableArray *attachments;
+@property (nonatomic) NSMutableArray *attachments;
 
-@property (assign, nonatomic) SETouchPhase touchPhase;
-@property (assign, nonatomic) CGPoint clickPoint;
-@property (assign, nonatomic) CGPoint mouseLocation;
+@property (nonatomic) SETouchPhase touchPhase;
+@property (nonatomic) CGPoint clickPoint;
+@property (nonatomic) CGPoint mouseLocation;
 
-@property (copy, nonatomic) NSAttributedString *attributedTextCopy;
+@property (nonatomic, readonly) NSMutableAttributedString *editingAttributedText;
+@property (nonatomic, copy) NSAttributedString *originalAttributedTextWhenHighlighting;
 
 @property (nonatomic, weak) NSTimer *longPressTimer;
-@property (nonatomic, assign, getter = isLongPressing) BOOL longPressing;
+@property (nonatomic, getter = isLongPressing) BOOL longPressing;
 
 #if TARGET_OS_IPHONE
-@property (strong, nonatomic) UILongPressGestureRecognizer *selectionGestureRecognizer;
-@property (strong, nonatomic) SETextMagnifierCaret *magnifierCaret;
-@property (strong, nonatomic) SETextMagnifierRanged *magnifierRanged;
-@property (strong, nonatomic) UIPanGestureRecognizer *firstGrabberGestureRecognizer;
-@property (strong, nonatomic) UIPanGestureRecognizer *secondGrabberGestureRecognizer;
-@property (strong, nonatomic) SESelectionGrabber *firstGrabber;
-@property (strong, nonatomic) SESelectionGrabber *secondGrabber;
+@property (nonatomic) UITextInputStringTokenizer *tokenizer;
+
+@property (nonatomic) SETextMagnifierCaret *magnifierCaret;
+@property (nonatomic) SETextMagnifierRanged *magnifierRanged;
+
+@property (nonatomic) SETextSelectionView *textSelectionView;
+@property (nonatomic) SETextEditingCaret *caretView;
 #endif
 
 @end
 
 @implementation SETextView
+
+#if TARGET_OS_IPHONE
+@synthesize inputDelegate;
+@synthesize markedTextStyle;
+#endif
 
 - (void)commonInit
 {
@@ -72,43 +81,33 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.linkHighlightColor = [SEConstants selectedTextBackgroundColor];
     self.linkRolloverEffectColor = [SEConstants linkColor];
     
+    self.minimumLongPressDuration = 0.5;
+    
 #if TARGET_OS_IPHONE
     self.showsEditingMenuAutomatically = YES;
     
     self.magnifierCaret = [[SETextMagnifierCaret alloc] init];
     self.magnifierRanged = [[SETextMagnifierRanged alloc] init];
     
-    [self setupSelectionGestureRecognizers];
-    
-    [self becomeFirstResponder];
+    [self setupTextSelectionControls];
+    [self setupTextEditingControls];
 #endif
-    
-    self.minimumLongPressDuration = 0.5;
 }
 
 #if TARGET_OS_IPHONE
-- (void)setupSelectionGestureRecognizers
+- (void)setupTextSelectionControls
 {
-    self.selectionGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                    action:@selector(selectionChanged:)];
-    self.selectionGestureRecognizer.enabled = NO;
-    [self addGestureRecognizer:self.selectionGestureRecognizer];
-    
-    self.firstGrabber = [[SESelectionGrabber alloc] init];
-    self.firstGrabber.dotMetric = SESelectionGrabberDotMetricTop;
-    [self addSubview:self.firstGrabber];
-    
-    self.secondGrabber = [[SESelectionGrabber alloc] init];
-    self.secondGrabber.dotMetric = SESelectionGrabberDotMetricBottom;
-    [self addSubview:self.secondGrabber];
-    
-    self.firstGrabberGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                 action:@selector(grabberMoved:)];
-    [self.firstGrabber addGestureRecognizer:self.firstGrabberGestureRecognizer];
-    
-    self.secondGrabberGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                  action:@selector(grabberMoved:)];
-    [self.secondGrabber addGestureRecognizer:self.secondGrabberGestureRecognizer];
+    CGRect frame = self.bounds;
+    self.textSelectionView = [[SETextSelectionView alloc] initWithFrame:frame textView:self];
+    self.textSelectionView.userInteractionEnabled = NO;
+    self.textSelectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addSubview:self.textSelectionView];
+}
+
+- (void)setupTextEditingControls
+{
+    self.caretView = [[SETextEditingCaret alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 2.0f, 0.0f)];
+    [self addSubview:self.caretView];
 }
 #endif
 
@@ -228,10 +227,16 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     _selectable = selectable;
 #if TARGET_OS_IPHONE
-    self.selectionGestureRecognizer.enabled = self.selectable;
-    self.firstGrabberGestureRecognizer.enabled = self.selectable;
-    self.secondGrabberGestureRecognizer.enabled = self.selectable;
+    self.textSelectionView.userInteractionEnabled = self.isSelectable;
 #endif
+}
+
+- (void)setEditable:(BOOL)editable
+{
+    _editable = editable;
+    if (self.isEditable) {
+        self.selectable = YES;
+    }
 }
 
 - (void)setText:(NSString *)text
@@ -272,6 +277,16 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return [self.attributedText attributedSubstringFromRange:self.selectedRange];
 }
 
+- (NSMutableString *)editingText
+{
+    return self.text ? self.text.mutableCopy : [[NSMutableString alloc] init];
+}
+
+- (NSMutableAttributedString *)editingAttributedText
+{
+    return self.attributedText ? self.attributedText.mutableCopy : [[NSMutableAttributedString alloc] init];
+}
+
 #pragma mark -
 
 - (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index
@@ -281,8 +296,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range
 {
-    NSRange raplaceRange = NSMakeRange(range.location, OBJECT_REPLACEMENT_CHARACTER.length);
-    SETextAttachment *attachment = [[SETextAttachment alloc] initWithObject:object size:size range:raplaceRange];
+    SETextAttachment *attachment = [[SETextAttachment alloc] initWithObject:object size:size range:range];
     [self.attachments addObject:attachment];
 }
 
@@ -334,23 +348,29 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (void)setTextAttachmentAttributes
 {
+    NSString *replacementString = OBJECT_REPLACEMENT_CHARACTER;
+    
     for (SETextAttachment *attachment in self.attachments) {
-        NSRange range = attachment.range;
-        
-        NSMutableAttributedString *attributedString = [self.attributedText mutableCopy];
-        if (range.length > 0) {
-            [attributedString replaceCharactersInRange:range withString:OBJECT_REPLACEMENT_CHARACTER];
-        } else {
-            NSAttributedString *replacement = [[NSAttributedString alloc] initWithString:OBJECT_REPLACEMENT_CHARACTER];
-            [attributedString insertAttributedString:replacement atIndex:range.location];
+        NSMutableAttributedString *editingAttributedText = self.editingAttributedText;
+        if (!attachment.replacedString) {
+            if (attachment.range.length > 0) {
+                NSAttributedString *originalAttributedString = [editingAttributedText attributedSubstringFromRange:attachment.range];
+                attachment.originalAttributedString = originalAttributedString;
+                
+                [editingAttributedText replaceCharactersInRange:attachment.range withString:replacementString];
+                attachment.replacedString = replacementString;
+            } else {
+                [editingAttributedText insertAttributedString:[[NSAttributedString alloc] initWithString:replacementString] atIndex:attachment.range.location];
+                attachment.replacedString = replacementString;
+            }
+            
+            CTRunDelegateCallbacks callbacks = attachment.callbacks;
+            CTRunDelegateRef runDelegate = CTRunDelegateCreate(&callbacks, (__bridge void *)attachment);
+            [editingAttributedText addAttributes:@{(id)kCTRunDelegateAttributeName: (__bridge id)runDelegate} range:attachment.range];
+            CFRelease(runDelegate);
+            
+            self.attributedText = editingAttributedText;
         }
-        
-        CTRunDelegateCallbacks callbacks = attachment.callbacks;
-        CTRunDelegateRef delegateRef = CTRunDelegateCreate(&callbacks, (__bridge void *)attachment);
-        [attributedString addAttributes:@{(id)kCTRunDelegateAttributeName: (__bridge id)delegateRef} range:attachment.range];
-        CFRelease(delegateRef);
-        
-        self.attributedText = attributedString;
     }
 }
 
@@ -365,7 +385,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     } else {
         textAlignment = (CTTextAlignment)self.textAlignment;
     }
-    //    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
+//    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
 #else
     CTTextAlignment textAlignment = self.textAlignment;
 #endif
@@ -400,6 +420,16 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.attributedText = attributedString;
 }
 
+- (void)updateLayout
+{
+    [self setAdditionalAttributes];
+    
+    self.textLayout.bounds = self.bounds;
+    self.textLayout.attributedString = self.attributedText;
+    
+    [self.textLayout update];
+}
+
 #pragma mark -
 
 - (void)clearSelection
@@ -410,15 +440,24 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)finishSelecting
 {
 #if TARGET_OS_IPHONE
-    if (self.showsEditingMenuAutomatically) {
-        [self hideEditingMenu];
-        [self showEditingMenu];
+    if (!self.editing) {
+        if (self.showsEditingMenuAutomatically) {
+            [self hideEditingMenu];
+            [self showEditingMenu];
+        }
     }
 #endif
     
     if ([self respondsToSelector:@selector(textViewDidEndSelecting:)]) {
         [self.delegate textViewDidEndSelecting:self];
     }
+}
+
+- (void)selectionChanged
+{
+    [self updateCaretPosition];
+    [self notifySelectionChanged];
+    [self setNeedsDisplayInRect:self.bounds];
 }
 
 - (void)notifySelectionChanged
@@ -444,95 +483,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 #pragma mark -
 
-- (void)drawTextAttachmentsInContext:(CGContextRef)context
-{
-    for (SETextAttachment *attachment in self.attachments) {
-        for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
-            CGRect rect = [lineLayout rectOfStringWithRange:attachment.range];
-            if (!CGRectIsEmpty(rect)) {
-                if ([attachment.object isKindOfClass:[NSView class]]) {
-                    UIView *view = attachment.object;
-                    view.frame = rect;
-                    if (!view.superview) {
-                        [self addSubview:view];
-                    }
-                } else if ([attachment.object isKindOfClass:[NSImage class]]) {
-                    NSImage *image = attachment.object;
-#if TARGET_OS_IPHONE
-                    [image drawInRect:rect];
-#else
-                    [image drawInRect:rect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0f];
-#endif
-                } else if ([attachment.object isKindOfClass:NSClassFromString(@"NSBlock")]) {
-                    SETextAttachmentDrawingBlock draw = attachment.object;
-                    CGContextSaveGState(context);
-                    draw(rect, context);
-                    CGContextRestoreGState(context);
-                }
-            }
-        }
-    }
-}
-
-- (void)highlightSelection
-{
-    SETextSelection *textSelection = self.textLayout.textSelection;
-    if (!textSelection) {
-        return;
-    }
-    
-#if TARGET_OS_IPHONE
-    CGRect topRect = CGRectNull;
-    CGRect bottomRect = CGRectNull;
-#endif
-    
-    for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
-        CGRect selectionRect = [lineLayout rectOfStringWithRange:textSelection.selectedRange];
-        if (!CGRectIsEmpty(selectionRect)) {
-            [self.selectedTextBackgroundColor set];
-            
-            CGFloat lineSpacing = self.lineSpacing;
-            selectionRect.origin.y -= lineSpacing;
-            selectionRect.size.height += lineSpacing;
-            
-            NSRectFill(selectionRect);
-            
-#if TARGET_OS_IPHONE
-            if (CGRectIsNull(topRect)) {
-                topRect = selectionRect;
-            }
-            bottomRect = selectionRect;
-#endif
-        }
-    }
-    
-#if TARGET_OS_IPHONE
-    if (!(self.touchPhase & SETouchPhaseTouching)) {
-        [[SEConstants selectionGrabberColor] set];
-        NSRectFill(CGRectMake(CGRectGetMinX(topRect) - 2.0f,
-                              topRect.origin.y,
-                              2.0f,
-                              topRect.size.height));
-        NSRectFill(CGRectMake(CGRectGetMaxX(bottomRect),
-                              bottomRect.origin.y,
-                              2.0f,
-                              bottomRect.size.height));
-    }
-#endif
-}
-
 - (CFIndex)stringIndexAtPoint:(CGPoint)point
 {
-    for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
-        if ([lineLayout containsPoint:point]) {
-            CFIndex index = [lineLayout stringIndexForPosition:point];
-            if (index != kCFNotFound) {
-                return index;
-            }
-        }
-    }
-    
-    return kCFNotFound;
+    return [self.textLayout stringIndexForPosition:point];
 }
 
 - (BOOL)containsPointInSelection:(CGPoint)point
@@ -567,6 +520,138 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             block(link, &flag);
             if (flag) {
                 break;
+            }
+        }
+    }
+}
+
+- (void)drawTextAttachmentsInContext:(CGContextRef)context
+{
+    NSMutableArray *attachmentsToLeave = [[NSMutableArray alloc] init];
+    
+    [self.attributedText enumerateAttribute:(id)kCTRunDelegateAttributeName inRange:NSMakeRange(0, self.text.length) options:kNilOptions usingBlock:^(id value, NSRange range, BOOL *stop) {
+        if (!value) {
+            return;
+        }
+        
+        CTRunDelegateRef runDelegate = (__bridge CTRunDelegateRef)value;
+        SETextAttachment *attachment = CTRunDelegateGetRefCon(runDelegate);
+        if (!attachment) {
+            return;
+        }
+        
+        [attachmentsToLeave addObject:attachment];
+        
+        for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+            CGRect rect = [lineLayout rectOfStringWithRange:range];
+            if (!CGRectIsEmpty(rect)) {
+                if ([attachment.object isKindOfClass:[NSView class]]) {
+                    UIView *view = attachment.object;
+                    view.frame = rect;
+                    if (!view.superview) {
+                        [self addSubview:view];
+                    }
+                } else if ([attachment.object isKindOfClass:[NSImage class]]) {
+                    NSImage *image = attachment.object;
+#if TARGET_OS_IPHONE
+                    [image drawInRect:rect];
+#else
+                    [image drawInRect:rect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0f];
+#endif
+                } else if ([attachment.object isKindOfClass:NSClassFromString(@"NSBlock")]) {
+                    SETextAttachmentDrawingBlock draw = attachment.object;
+                    CGContextSaveGState(context);
+                    draw(rect, context);
+                    CGContextRestoreGState(context);
+                }
+            }
+        }
+    }];
+    
+    self.attachments = attachmentsToLeave;
+}
+
+- (void)highlightSelection
+{
+    SETextSelection *textSelection = self.textLayout.textSelection;
+    NSRange selectedRange = textSelection.selectedRange;
+    if (!textSelection || selectedRange.location == NSNotFound) {
+        return;
+    }
+    
+    NSInteger lineNumber = 0;
+    CGRect startRect = CGRectZero;
+    CGRect endRect = CGRectZero;
+    
+    CGFloat lineSpacing = self.lineSpacing;
+    CGFloat previousLineOffset = 0.0f;
+    
+    for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+        NSRange stringRange = lineLayout.stringRange;
+        
+        NSRange intersectionRange = NSIntersectionRange(selectedRange, stringRange);
+        if (intersectionRange.location == NSNotFound) {
+            continue;
+        }
+        
+        CGRect selectionRect = [lineLayout rectOfStringWithRange:selectedRange];
+        if (CGRectIsEmpty(selectionRect)) {
+            continue;
+        }
+        
+        [self.selectedTextBackgroundColor set];
+        
+        selectionRect.origin.y -= lineSpacing;
+        selectionRect.size.height += lineSpacing;
+        if (selectionRect.origin.y < 0.0f) {
+            selectionRect.size.height += selectionRect.origin.y;
+            selectionRect.origin.y = 0.0f;
+        }
+        
+        if (NSMaxRange(selectedRange) != NSMaxRange(stringRange) && NSMaxRange(intersectionRange) == NSMaxRange(stringRange)) {
+            selectionRect.size.width = CGRectGetWidth(self.bounds) - CGRectGetMinX(selectionRect);
+        }
+        
+        if (previousLineOffset > 0.0f) {
+            CGFloat delta = CGRectGetMinY(selectionRect) - previousLineOffset;
+            selectionRect.origin.y -= delta;
+            selectionRect.size.height += delta;
+        }
+        
+        selectionRect = CGRectIntegral(selectionRect);
+        
+        UIRectFill(selectionRect);
+        
+        if (lineNumber == 0) {
+            startRect = selectionRect;
+            endRect = selectionRect;
+        } else {
+            endRect = selectionRect;
+        }
+        
+        previousLineOffset = CGRectGetMaxY(selectionRect);
+        
+        lineNumber++;
+    }
+    
+    self.textSelectionView.startFrame = startRect;
+    self.textSelectionView.endFrame = endRect;
+}
+
+- (void)highlightMarkedText
+{
+    NSRange markedTextRange = self.textLayout.markedTextRange;
+    if (markedTextRange.location != NSNotFound && markedTextRange.length > 0) {
+        for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+            CGRect markedRect = [lineLayout rectOfStringWithRange:markedTextRange];
+            if (!CGRectIsEmpty(markedRect)) {
+                [self.selectedTextBackgroundColor set];
+                
+                CGFloat lineSpacing = self.lineSpacing;
+                markedRect.origin.y -= lineSpacing;
+                markedRect.size.height += lineSpacing;
+                
+                NSRectFill(markedRect);
             }
         }
     }
@@ -666,15 +751,13 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 #else
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
 #endif
-	
-    [self setAdditionalAttributes];
-    
-    self.textLayout.bounds = self.bounds;
-    self.textLayout.attributedString = self.attributedText;
-    
-    [self.textLayout update];
+    [self updateLayout];
     
     [self highlightSelection];
+    
+    if (self.isEditing) {
+        [self highlightMarkedText];
+    }
     
     [self highlightClickedLink];
     
@@ -739,7 +822,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    if (self.selectable) {
+    if (self.isHidden || self.userInteractionEnabled == NO || self.alpha < 0.01f) {
+        return [super hitTest:point withEvent:event];
+    }
+    
+    if (self.selectable || self.editable) {
         return [super hitTest:point withEvent:event];
     }
     
@@ -780,75 +867,38 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)resetSelectionGrabber
 {
     if (!self.selectable) {
-        self.firstGrabberGestureRecognizer.enabled = NO;
-        self.secondGrabberGestureRecognizer.enabled = NO;
-        [self hideSelectionGrabbers];
+        [self hideTextSelectionView];
         return;
     }
     
     if (self.touchPhase & SETouchPhaseTouching) {
-        [self hideSelectionGrabbers];
+        [self hideTextSelectionView];
         return;
     }
     
-    SETextSelection *textSelection = self.textLayout.textSelection;
-    if (!textSelection) {
-        [self hideSelectionGrabbers];
+    SETextLayout *textLayout = self.textLayout;
+    SETextSelection *textSelection = textLayout.textSelection;
+    if (!textSelection || textSelection.selectedRange.length == 0) {
+        [self hideTextSelectionView];
         return;
     }
     
-    NSInteger counter = 0;
-    CGRect startRect = CGRectZero;
-    CGRect endRect = CGRectZero;
+    [self.textSelectionView update];
     
-    for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
-        CGRect selectionRect = [lineLayout rectOfStringWithRange:textSelection.selectedRange];
-        if (!CGRectIsEmpty(selectionRect)) {
-            CGFloat lineSpacing = self.lineSpacing;
-            selectionRect.origin.y -= lineSpacing;
-            selectionRect.size.height += lineSpacing;
-            
-            if (counter == 0) {
-                startRect = selectionRect;
-                endRect = selectionRect;
-            } else {
-                endRect = selectionRect;
-            }
-            
-            counter++;
-        }
-    }
-    
-    CGRect startFrame = startRect;
-    startFrame.origin = CGPointMake(startFrame.origin.x - ceilf(CGRectGetHeight(endRect) / 2),
-                                    startFrame.origin.y);
-    startFrame.size.width = CGRectGetHeight(startRect);
-    startFrame.size.height = CGRectGetHeight(startRect) + self.lineSpacing;
-    self.firstGrabber.frame = startFrame;
-    
-    CGRect endFrame = endRect;
-    endFrame.origin = CGPointMake(CGRectGetMaxX(endRect) - ceilf(CGRectGetHeight(endRect) / 2),
-                                  CGRectGetMinY(endRect));
-    endFrame.size.width = CGRectGetHeight(endRect);
-    endFrame.size.height = CGRectGetHeight(endRect) + self.lineSpacing;
-    self.secondGrabber.frame = endFrame;
-    
-    [self showSelectionGrabbers];
+    [self showTextSelectionView];
 }
 
-- (void)showSelectionGrabbers
+- (void)showTextSelectionView
 {
-    self.firstGrabber.hidden = NO;
-    self.secondGrabber.hidden = NO;
+    [self.textSelectionView showControls];
 }
 
-- (void)hideSelectionGrabbers
+- (void)hideTextSelectionView
 {
-    self.firstGrabber.hidden = YES;
-    self.secondGrabber.hidden = YES;
+    [self.textSelectionView hideControls];
 }
 
-- (void)selectionChanged:(UILongPressGestureRecognizer *)gestureRecognizer
+- (void)selectionGestureStateChanged:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     self.mouseLocation = [gestureRecognizer locationInView:self];
     
@@ -856,52 +906,78 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         self.touchPhase = SETouchPhaseMoved;
         
-        [self.textLayout setSelectionWithPoint:self.mouseLocation];
-        
         [self moveMagnifierCaretToPoint:self.mouseLocation];
-    } if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
+        
+        if (self.isEditable) {
+            if (self.isEditing) {
+                [self updateCaretPositionToPoint:self.mouseLocation];
+            } else {
+                [self beginEditing];
+            }
+            
+            return;
+        } else {
+            [self.textLayout setSelectionWithPoint:self.mouseLocation];
+        }
+    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
           gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
           gestureRecognizer.state == UIGestureRecognizerStateFailed) {
         self.touchPhase = SETouchPhaseNone;
+        
         [self hideMagnifierCaret];
         
         [self finishSelecting];
+        
+        if (self.isEditing && self.textLayout.markedTextRange.location == NSNotFound) {
+            [self showEditingMenu];
+        }
     }
     
-    [self notifySelectionChanged];
+    if (self.isEditing) {
+        [self updateCaretPositionToPoint:self.mouseLocation];
+        return;
+    }
     
-    [self setNeedsDisplay];
+    [self selectionChanged];
 }
 
 - (void)grabberMoved:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    [self.inputDelegate selectionWillChange:self];
+    
     SETextSelection *textSelection = self.textLayout.textSelection;
     if (!self.selectable || !textSelection) {
         return;
     }
     
     self.touchPhase = SETouchPhaseNone;
-    
     self.mouseLocation = [gestureRecognizer locationInView:self];
+    
+    SESelectionGrabber *startGrabber = self.textSelectionView.startGrabber;
+    SESelectionGrabber *endGrabber = self.textSelectionView.endGrabber;
     
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
         gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        if (gestureRecognizer == self.firstGrabberGestureRecognizer) {
-            self.firstGrabber.dragging = YES;
+        if (gestureRecognizer == self.textSelectionView.startGrabberGestureRecognizer) {
+            self.textSelectionView.startGrabber.dragging = YES;
             
             [self.textLayout setSelectionStartWithFirstPoint:self.mouseLocation];
-            [self moveMagnifierRangedToPoint:self.firstGrabber.center];
+            [self moveMagnifierRangedToPoint:startGrabber.center];
         } else {
             [self.textLayout setSelectionEndWithPoint:self.mouseLocation];
-            [self moveMagnifierRangedToPoint:self.secondGrabber.center];
+            [self moveMagnifierRangedToPoint:endGrabber.center];
+        }
+        
+        if (self.isEditing) {
+            [self hideEditingMenu];
         }
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded ||
                gestureRecognizer.state == UIGestureRecognizerStateCancelled ||
                gestureRecognizer.state == UIGestureRecognizerStateFailed) {
-        if (gestureRecognizer == self.firstGrabberGestureRecognizer) {
-            self.firstGrabber.dragging = NO;
+        if (gestureRecognizer == self.textSelectionView.startGrabberGestureRecognizer) {
+            startGrabber.dragging = NO;
         } else {
-            self.secondGrabber.dragging = NO;
+            endGrabber.dragging = NO;
         }
         
         [self hideMagnifierRanged];
@@ -909,11 +985,15 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         if (self.textLayout.textSelection) {
             [self finishSelecting];
         }
+        
+        if (self.isEditing && self.selectedRange.length > 0) {
+            [self showEditingMenu];
+        }
     }
     
-    [self notifySelectionChanged];
+    [self selectionChanged];
     
-    [self setNeedsDisplay];
+    [self.inputDelegate selectionDidChange:self];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -931,8 +1011,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     [self stopLongPressTimer];
     
-    if (self.selectionGestureRecognizer.state == UIGestureRecognizerStateBegan ||
-        self.selectionGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+    if (self.textSelectionView.selectionGestureRecognizer.state == UIGestureRecognizerStateBegan ||
+        self.textSelectionView.selectionGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         self.touchPhase = SETouchPhaseMoved;
     } else {
         self.touchPhase = SETouchPhaseCancelled;
@@ -954,12 +1034,29 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     if (self.longPressing) {
         self.longPressing = NO;
     } else {
-        if (![self containsPointInSelection:self.mouseLocation]) {
-            [self clearSelection];
-            [self hideEditingMenu];
-        } else {
+        if (self.isEditable) {
+            if (self.isEditing) {
+                if ([self containsPointInSelection:self.mouseLocation]) {
+                    [self hideEditingMenu];
+                    [self showEditingMenu];
+                } else {
+                    [self hideEditingMenu];
+                    [self updateCaretPositionToPoint:self.mouseLocation];
+                }
+            } else {
+                [self beginEditing];
+            }
+            
+            [self setNeedsDisplay];
+            return;
+        }
+        
+        if ([self containsPointInSelection:self.mouseLocation]) {
             [self hideEditingMenu];
             [self showEditingMenu];
+        } else {
+            [self clearSelection];
+            [self hideEditingMenu];
         }
         
         if ([self containsPointInTextFrame:self.mouseLocation]) {
@@ -971,6 +1068,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
                 [self hideEditingMenu];
             }
         }
+        
     }
     
     [self setNeedsDisplay];
@@ -978,12 +1076,80 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 #pragma mark -
 
+- (void)beginEditing
+{
+    if (!self.editing && !self.isFirstResponder) {
+        BOOL shouldBeginEditing = YES;
+        if ([self.delegate respondsToSelector:@selector(textViewShouldBeginEditing:)]) {
+            shouldBeginEditing = [self.delegate textViewShouldBeginEditing:self];
+        }
+        if (self.isEditable && shouldBeginEditing) {
+            self.editing = YES;
+            
+            if ([self becomeFirstResponder]) {
+                [self updateCaretPositionToPoint:self.mouseLocation];
+            }
+        }
+    }
+}
+
+- (void)updateCaretPosition
+{
+    SETextLayout *textLayout = self.textLayout;
+    SETextSelection *textSelection = textLayout.textSelection;
+    if (self.isEditing && (!textSelection || textSelection.selectedRange.length == 0)) {
+        self.caretView.hidden = NO;
+        [self.caretView delayBlink];
+    } else {
+        self.caretView.hidden = YES;
+    }
+    
+    NSRange selectedRange = textSelection.selectedRange;
+    self.caretView.frame = [self caretRectForPosition:[SETextPosition positionWithIndex:NSMaxRange(selectedRange)]];
+}
+
+- (void)updateCaretPositionToPoint:(CGPoint)point
+{
+    if (!self.textLayout.textSelection) {
+        self.textLayout.textSelection = [[SETextSelection alloc] init];
+    }
+    
+    SETextPosition *position = (SETextPosition *)[self closestPositionToPoint:point];
+    NSUInteger index = position.index;
+    if (index == NSNotFound) {
+        index = self.text.length;
+    }
+    if (self.text.length == 0) {
+        index = 0;
+    }
+    
+    self.caretView.frame = [self caretRectForPosition:[SETextPosition positionWithIndex:index]];
+    
+    [self.inputDelegate selectionWillChange:self];
+    
+    self.textLayout.markedTextRange = NSMakeRange(NSNotFound, 0);
+    self.textLayout.textSelection.selectedRange = NSMakeRange(index, 0);
+    [self selectionChanged];
+    
+    [self.inputDelegate selectionDidChange:self];
+}
+
 - (void)showEditingMenu
 {
+    if (!self.isFirstResponder && !self.textSelectionView.isFirstResponder) {
+        [self.textSelectionView becomeFirstResponder];
+    }
+    
     UIMenuController *menuController = [UIMenuController sharedMenuController];
     menuController.arrowDirection = UIMenuControllerArrowDefault;
-    [menuController setTargetRect:[self editingMenuRectForSelection] inView:self];
     
+    CGRect targetRect;
+    if (self.selectedRange.length == 0) {
+        targetRect = [self caretRectForPosition:[SETextPosition positionWithIndex:self.selectedRange.location]];
+    } else {
+        targetRect = [self editingMenuRectForSelection];
+    }
+    [menuController setTargetRect:targetRect inView:self];
     [menuController setMenuVisible:YES animated:YES];
 }
 
@@ -991,6 +1157,10 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     UIMenuController *menuController = [UIMenuController sharedMenuController];
     [menuController setMenuVisible:NO animated:YES];
+    
+    if (self.textSelectionView.isFirstResponder) {
+        [self.textSelectionView resignFirstResponder];
+    }
 }
 
 - (CGRect)editingMenuRectForSelection
@@ -1024,7 +1194,17 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    return action == @selector(copy:) || (action == @selector(selectAll:) && self.selectedText.length < self.text.length);
+    if (action == @selector(copy:) && self.selectedText.length > 0) {
+        return YES;
+    }
+    if (action == @selector(select:) && self.text.length > 0 && self.selectedText.length == 0) {
+        return YES;
+    }
+    if (action == @selector(selectAll:) && self.text.length > 0 && self.selectedText.length < self.text.length) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (BOOL)canBecomeFirstResponder
@@ -1057,9 +1237,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         [self.textLayout setSelectionStartWithPoint:self.mouseLocation];
     }
     
-    [self notifySelectionChanged];
-    
-    [self setNeedsDisplay:YES];
+    [self selectionChanged];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent
@@ -1070,9 +1248,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     
     [self.textLayout setSelectionEndWithNearestPoint:self.mouseLocation];
     
-    [self notifySelectionChanged];
-    
-    [self setNeedsDisplay:YES];
+    [self selectionChanged];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent
@@ -1159,14 +1335,6 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return YES;
 }
 
-- (BOOL)resignFirstResponder
-{
-    [self clearSelection];
-    [self setNeedsDisplay:YES];
-    
-    return YES;
-}
-
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
     if (menuItem.action == @selector(copy:)) {
@@ -1205,20 +1373,20 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (void)setHighlighted:(BOOL)highlighted
 {
     _highlighted = highlighted;
-    if (!self.attributedTextCopy) {
-        self.attributedTextCopy = self.attributedText;
+    if (!self.originalAttributedTextWhenHighlighting) {
+        self.originalAttributedTextWhenHighlighting = self.attributedText;
     }
     
     if (self.highlighted) {
         CGColorRef color = self.highlighted ? self.highlightedTextColor.CGColor : self.textColor.CGColor;
         [self setAttributes:@{(id)kCTForegroundColorAttributeName: (__bridge id)color}];
     } else {
-        self.attributedText = self.attributedTextCopy;
-        self.attributedTextCopy = nil;
+        self.attributedText = self.originalAttributedTextWhenHighlighting;
+        self.originalAttributedTextWhenHighlighting = nil;
     }
 }
 
-- (IBAction)copy:(id)sender
+- (void)copy:(id)sender
 {
 #if TARGET_OS_IPHONE
     if (self.selectedText.length > 0) {
@@ -1234,13 +1402,30 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 #endif
 }
 
+- (void)select:(id)sender
+{
+    [self.textLayout setSelectionWithPoint:self.mouseLocation];
+    
+    [self selectionChanged];
+    [self finishSelecting];
+    
+    if (self.isEditing) {
+        [self showEditingMenu];
+    }
+    
+    [self setNeedsDisplayInRect:self.bounds];
+}
+
 - (void)selectAll:(id)sender
 {
     [self.textLayout selectAll];
     
-#if TARGET_OS_IPHONE
+    [self selectionChanged];
     [self finishSelecting];
-#endif
+    
+    if (self.isEditing) {
+        [self showEditingMenu];
+    }
     
     [self setNeedsDisplayInRect:self.bounds];
 }
@@ -1250,12 +1435,615 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return YES;
 }
 
-//- (BOOL)resignFirstResponder
+- (BOOL)resignFirstResponder
+{
+    [self clearSelection];
+    self.editing = NO;
+    
+    [self selectionChanged];
+    [self finishSelecting];
+    
+    [self setNeedsDisplayInRect:self.bounds];
+    
+    return YES;
+}
+
+#if TARGET_OS_IPHONE
+#pragma mark UITextInput methods
+
+- (NSString *)textInRange:(UITextRange *)range
+{
+    SETextRange *r = (SETextRange *)range;
+    if (r.range.location == NSNotFound) {
+        return nil;
+    }
+    
+    NSString *text = [self.text substringWithRange:r.range];
+    
+    return text;
+}
+
+- (void)replaceRange:(UITextRange *)range withText:(NSString *)text
+{
+    SETextRange *r = (SETextRange *)range;
+    
+    NSRange selectedRange = self.selectedRange;
+    if (r.range.location + r.range.length <= selectedRange.location) {
+        selectedRange.location -= r.range.length - text.length;
+    } else {
+        // Need to also deal with overlapping ranges.
+    }
+    
+    NSMutableString *editingText = self.editingText;
+    [editingText replaceCharactersInRange:r.range withString:text];
+    
+    self.text = editingText.copy;
+    self.textLayout.textSelection.selectedRange = selectedRange;
+    
+    [self selectionChanged];
+}
+
+- (UITextRange *)selectedTextRange
+{
+    SETextSelection *textSelection = self.textLayout.textSelection;
+    if (!textSelection) {
+        return nil;
+    }
+    
+    SETextRange *textRange = [SETextRange rangeWithNSRange:textSelection.selectedRange];
+    return textRange;
+}
+
+- (void)setSelectedTextRange:(UITextRange *)selectedTextRange
+{
+    SETextRange *textRange = (SETextRange *)selectedTextRange;
+    self.textLayout.textSelection.selectedRange = textRange.range;
+    
+    [self selectionChanged];
+}
+
+- (UITextRange *)markedTextRange
+{
+    if (self.textLayout.markedTextRange.location == NSNotFound) {
+        return nil;
+    }
+    
+    return [SETextRange rangeWithNSRange:self.textLayout.markedTextRange];
+}
+
+//- (void)setMarkedTextStyle:(NSDictionary *)markedTextStyle
 //{
-//    [self clearSelection];
-//    [self setNeedsDisplayInRect:self.bounds];
-//    
-//    return YES;
+//    NSLog(@"%s", __func__);
 //}
+//
+//- (NSDictionary *)markedTextStyle
+//{
+//    NSLog(@"%s", __func__);
+//    return nil;
+//}
+
+- (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
+{
+    if (markedText.length == 0 && NSMaxRange(selectedRange) == 0) {
+        return;
+    }
+    
+    NSRange selectedNSRange = self.selectedRange;
+    NSRange markedTextRange = self.textLayout.markedTextRange;
+    
+    NSMutableAttributedString *editingAttributedText = self.editingAttributedText;
+    NSRange replaceRange;
+    
+    if (markedTextRange.location != NSNotFound) {
+        if (!markedText) {
+            markedText = @"";
+        }
+        
+        replaceRange = markedTextRange;
+        
+        markedTextRange.length = markedText.length;
+    } else if (selectedNSRange.length > 0) {
+        replaceRange = selectedNSRange;
+        
+        markedTextRange.location = selectedNSRange.location;
+        markedTextRange.length = markedText.length;
+    } else {
+        replaceRange = selectedNSRange;
+        
+        markedTextRange.location = selectedNSRange.location;
+        markedTextRange.length = markedText.length;
+    }
+	
+    [self replaceCharactersInRange:replaceRange withString:markedText forAttributedString:editingAttributedText];
+    
+    selectedNSRange = NSMakeRange(markedTextRange.location + selectedRange.location, selectedRange.length);
+    
+    self.attributedText = editingAttributedText.copy;
+    self.textLayout.markedTextRange = markedTextRange;
+    self.textLayout.textSelection.selectedRange = selectedNSRange;
+    
+    [self updateLayout];
+    [self selectionChanged];
+}
+
+- (void)unmarkText
+{
+    NSRange markedTextRange = self.textLayout.markedTextRange;
+    
+    if (markedTextRange.location == NSNotFound) {
+        return;
+    }
+    
+    markedTextRange.location = NSNotFound;
+    self.textLayout.markedTextRange = markedTextRange;
+    
+    [self updateLayout];
+    [self selectionChanged];
+}
+
+- (UITextPosition *)beginningOfDocument
+{
+    SETextPosition *position = [SETextPosition positionWithIndex:0];
+    return position;
+}
+
+- (UITextPosition *)endOfDocument
+{
+    SETextPosition *position = [SETextPosition positionWithIndex:self.text.length];
+    return position;
+}
+
+- (UITextRange *)textRangeFromPosition:(UITextPosition *)fromPosition toPosition:(UITextPosition *)toPosition
+{
+    SETextPosition *from = (SETextPosition *)fromPosition;
+    SETextPosition *to = (SETextPosition *)toPosition;
+    if (to.index < from.index) {
+        SETextPosition *temp = from;
+        from = to;
+        to = temp;
+    }
+    
+    NSUInteger location = MIN(from.index, to.index);
+    NSUInteger length = ABS(to.index - from.index);
+    
+    return [SETextRange rangeWithNSRange:NSMakeRange(location, length)];
+}
+
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position offset:(NSInteger)offset
+{
+    SETextPosition *pos = (SETextPosition *)position;
+    NSInteger end = pos.index + offset;
+    if (end > self.text.length || end < 0) {
+        return nil;
+    }
+    
+    return [SETextPosition positionWithIndex:end];
+}
+
+- (UITextPosition *)positionFromPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction offset:(NSInteger)offset
+{
+    SETextPosition *pos = (SETextPosition *)position;
+    NSInteger newPos = pos.index;
+    
+    switch (direction) {
+        case UITextLayoutDirectionRight:
+            newPos += offset;
+            break;
+        case UITextLayoutDirectionLeft:
+            newPos -= offset;
+            break;
+        case UITextLayoutDirectionUp:
+        case UITextLayoutDirectionDown:
+            break;
+    }
+	
+    if (newPos < 0) {
+        newPos = 0;
+    }
+    
+    if (newPos > _text.length) {
+        newPos = _text.length;
+    }
+    
+    return [SETextPosition positionWithIndex:newPos];
+}
+
+- (NSComparisonResult)comparePosition:(UITextPosition *)position toPosition:(UITextPosition *)other
+{
+    SETextPosition *pos = (SETextPosition *)position;
+    SETextPosition *o = (SETextPosition *)other;
+    
+    if (pos.index == o.index) {
+        return NSOrderedSame;
+    } if (pos.index < o.index) {
+        return NSOrderedAscending;
+    } else {
+        return NSOrderedDescending;
+    }
+}
+
+- (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition
+{
+    SETextPosition *f = (SETextPosition *)from;
+    SETextPosition *t = (SETextPosition *)toPosition;
+    return t.index - f.index;
+}
+
+- (id<UITextInputTokenizer>)tokenizer
+{
+    if (!_tokenizer) {
+        _tokenizer = [[UITextInputStringTokenizer alloc] initWithTextInput:self];
+    }
+    
+    return _tokenizer;
+}
+
+/* Layout questions. */
+- (UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction
+{
+    SETextRange *r = (SETextRange *)range;
+    NSInteger pos = r.range.location;
+    
+    switch (direction) {
+        case UITextLayoutDirectionUp:
+        case UITextLayoutDirectionLeft:
+            pos = r.range.location;
+            break;
+        case UITextLayoutDirectionRight:
+        case UITextLayoutDirectionDown:
+            pos = r.range.location + r.range.length;
+            break;
+    }
+    
+    return [SETextPosition positionWithIndex:pos];
+}
+
+- (UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
+{
+    SETextPosition *pos = (SETextPosition *)position;
+    NSRange result = NSMakeRange(pos.index, 1);
+    
+    switch (direction) {
+        case UITextLayoutDirectionUp:
+        case UITextLayoutDirectionLeft:
+            result = NSMakeRange(pos.index - 1, 1);
+            break;
+        case UITextLayoutDirectionRight:
+        case UITextLayoutDirectionDown:
+            result = NSMakeRange(pos.index, 1);
+            break;
+    }
+    
+    return [SETextRange rangeWithNSRange:result];
+}
+
+/* Writing direction */
+- (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+{
+    return UITextWritingDirectionLeftToRight;
+}
+
+- (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection forRange:(UITextRange *)range
+{
+    // Not supported.
+}
+
+/* Geometry used to provide, for example, a correction rect. */
+- (CGRect)firstRectForRange:(UITextRange *)range
+{
+    SETextRange *r = (SETextRange *)range;
+    
+    for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+        CGRect rect = [lineLayout rectOfStringWithRange:r.range];
+        if (!CGRectIsEmpty(rect)) {
+            CGFloat lineSpacing = self.lineSpacing;
+            rect.origin.y -= lineSpacing;
+            rect.size.height += lineSpacing;
+            
+            return rect;
+        }
+    }
+    
+    return CGRectNull;
+}
+
+- (CGRect)caretRectForPosition:(UITextPosition *)position
+{
+    SETextPosition *pos = (SETextPosition *)position;
+    NSUInteger index = pos.index;
+    
+    NSString *text = self.text;
+    
+    if (text.length == 0) {
+        CGPoint origin = CGPointMake(CGRectGetMinX(self.bounds), CGRectGetMinY(self.bounds));
+        UIFont *font = self.font ? self.font : [UIFont systemFontOfSize:[UIFont labelFontSize]];
+        return CGRectMake(origin.x, origin.y, CGRectGetWidth(self.caretView.bounds), font.leading);
+    }
+    
+    if (index == text.length && [[text substringWithRange:NSMakeRange(index - 1, 1)] isEqualToString:@"\n"]) {
+        CGRect rect = [self.textLayout rectOfStringForLastLine];
+        rect.origin.y = CGRectGetMaxY(rect);
+        rect.size.width = CGRectGetWidth(self.caretView.bounds);
+        return rect;
+    }
+    
+    CGRect rect;
+    if (index > 0 && [[self.text substringWithRange:NSMakeRange(index - 1, 1)] isEqualToString:@"\n"]) {
+        rect = [self.textLayout rectOfStringForIndex:index + 1];
+    } else {
+        rect = [self.textLayout rectOfStringForIndex:index];
+        rect.origin.x += CGRectGetWidth(rect);
+    }
+    
+    CGFloat lineSpacing = self.lineSpacing;
+    rect.origin.x -= CGRectGetWidth(self.caretView.bounds);
+    rect.origin.y -= lineSpacing;
+    rect.size.width = CGRectGetWidth(self.caretView.bounds);
+    rect.size.height += lineSpacing;
+    
+    if (CGRectGetMinX(rect) < 0.0f) {
+        rect.origin.x = 0.0f;
+    }
+    
+    return rect;
+}
+
+- (NSArray *)selectionRectsForRange:(UITextRange *)range
+{
+    // Not implemented yet.
+    return nil;
+}
+
+/* Hit testing. */
+- (UITextPosition *)closestPositionToPoint:(CGPoint)point
+{
+    CFIndex index = [self.textLayout stringIndexForNearestPosition:point];
+    if (index == kCFNotFound) {
+        return nil;
+    }
+    return [SETextPosition positionWithIndex:index];
+}
+
+- (UITextPosition *)closestPositionToPoint:(CGPoint)point withinRange:(UITextRange *)range
+{
+    CFIndex index = [self stringIndexAtPoint:point];
+    if (index == kCFNotFound) {
+        return nil;
+    }
+    
+    SETextRange *r = (SETextRange *)range;
+    if (index >= r.range.location && index <= r.range.location + r.range.length) {
+        return [SETextPosition positionWithIndex:index];
+    }
+    
+    return nil;
+}
+
+- (UITextRange *)characterRangeAtPoint:(CGPoint)point
+{
+    CFIndex index = [self stringIndexAtPoint:point];
+    if (index == kCFNotFound) {
+        return nil;
+    }
+    
+    CFIndex length = 1;
+    
+    if (index < 0) {
+        index = 0;
+    }
+    if (index > self.text.length) {
+        index = self.text.length;
+        length = 0;
+    }
+    
+    return [SETextRange rangeWithNSRange:NSMakeRange(index, length)];
+}
+
+- (BOOL)shouldChangeTextInRange:(UITextRange *)range replacementText:(NSString *)text
+{
+    return YES;
+}
+
+//- (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+//{
+//    NSLog(@"%s", __func__);
+//    return @{UITextInputTextFontKey: self.font};
+//}
+
+//- (UITextPosition *)positionWithinRange:(UITextRange *)range atCharacterOffset:(NSInteger)offset
+//{
+//    // Not supported.
+//    return nil;
+//}
+//
+//- (NSInteger)characterOffsetOfPosition:(UITextPosition *)position withinRange:(UITextRange *)range
+//{
+//    // Not supported.
+//    return 0;
+//}
+
+#pragma mark -
+#pragma mark UIKeyInput methods
+
+- (BOOL)hasText
+{
+    return self.text.length > 0;
+}
+
+- (void)insertText:(NSString *)text
+{
+    NSRange selectedNSRange = self.textLayout.textSelection.selectedRange;
+    SETextRange *markedTextRange = (SETextRange *)self.markedTextRange;
+    NSRange markedTextNSRange;
+    if (markedTextRange) {
+        markedTextNSRange = markedTextRange.range;
+    } else {
+        markedTextNSRange = NSMakeRange(NSNotFound, 0);
+    }
+    
+    NSMutableAttributedString *editingAttributedText = self.editingAttributedText;
+    NSRange replaceRange;
+    
+    if (markedTextRange && markedTextNSRange.location != NSNotFound) {
+        replaceRange = markedTextNSRange;
+        
+        selectedNSRange.location = markedTextNSRange.location + text.length;
+        selectedNSRange.length = 0;
+        
+        markedTextNSRange = NSMakeRange(NSNotFound, 0);
+    } else if (selectedNSRange.length > 0) {
+        replaceRange = selectedNSRange;
+        
+        selectedNSRange.length = 0;
+        selectedNSRange.location += text.length;
+    } else {
+        replaceRange = selectedNSRange;
+        selectedNSRange.location += text.length;
+    }
+    
+    [self replaceCharactersInRange:replaceRange withString:text forAttributedString:editingAttributedText];
+    
+    self.attributedText = editingAttributedText.copy;
+    self.textLayout.markedTextRange = markedTextNSRange;
+    self.textLayout.textSelection.selectedRange = selectedNSRange;
+    
+    [self updateLayout];
+    [self selectionChanged];
+    
+    [self hideEditingMenu];
+}
+
+- (void)deleteBackward
+{
+    if (self.text.length > 0) {
+        NSRange selectedNSRange = self.textLayout.textSelection.selectedRange;
+        SETextRange *markedTextRange = (SETextRange *)self.markedTextRange;
+        NSRange markedTextNSRange;
+        if (markedTextRange) {
+            markedTextNSRange = markedTextRange.range;
+        } else {
+            markedTextNSRange = NSMakeRange(NSNotFound, 0);
+        }
+        
+        NSMutableAttributedString *editingAttributedText = self.editingAttributedText;
+        NSRange deleteRange;
+        
+        if (markedTextRange && markedTextNSRange.location != NSNotFound) {
+            deleteRange = markedTextNSRange;
+            
+            selectedNSRange.location = markedTextNSRange.location;
+            selectedNSRange.length = 0;
+            
+            markedTextNSRange = NSMakeRange(NSNotFound, 0);
+        } else if (selectedNSRange.length > 0) {
+            deleteRange = selectedNSRange;
+            selectedNSRange.length = 0;
+        } else if (selectedNSRange.location > 0) {
+            selectedNSRange.location--;
+            selectedNSRange.length = 1;
+            
+            deleteRange = selectedNSRange;
+            
+            selectedNSRange.length = 0;
+        }
+        
+        [editingAttributedText deleteCharactersInRange:deleteRange];
+        
+        self.attributedText = editingAttributedText.copy;
+        self.textLayout.markedTextRange = markedTextNSRange;
+        self.textLayout.textSelection.selectedRange = selectedNSRange;
+    }
+    
+    [self updateLayout];
+    [self selectionChanged];
+    
+    [self hideEditingMenu];
+}
+#endif
+
+#pragma mark -
+
+- (void)insertAttributedText:(NSAttributedString *)attributedText
+{
+    NSRange selectedNSRange = self.textLayout.textSelection.selectedRange;
+    SETextRange *markedTextRange = (SETextRange *)self.markedTextRange;
+    NSRange markedTextNSRange;
+    if (markedTextRange) {
+        markedTextNSRange = markedTextRange.range;
+    } else {
+        markedTextNSRange = NSMakeRange(NSNotFound, 0);
+    }
+    
+    NSMutableAttributedString *editingAttributedText = self.editingAttributedText;
+    NSRange replaceRange;
+    
+    if (markedTextRange && markedTextNSRange.location != NSNotFound) {
+        replaceRange = markedTextNSRange;
+        
+        selectedNSRange.location = markedTextNSRange.location + attributedText.length;
+        selectedNSRange.length = 0;
+        
+        markedTextNSRange = NSMakeRange(NSNotFound, 0);
+    } else if (selectedNSRange.length > 0) {
+        replaceRange = selectedNSRange;
+        
+        selectedNSRange.length = 0;
+        selectedNSRange.location += attributedText.length;
+    } else {
+        replaceRange = selectedNSRange;
+        selectedNSRange.location += attributedText.length;
+    }
+    
+    [editingAttributedText replaceCharactersInRange:replaceRange withAttributedString:attributedText];
+    
+    self.attributedText = editingAttributedText.copy;
+    self.textLayout.markedTextRange = markedTextNSRange;
+    self.textLayout.textSelection.selectedRange = selectedNSRange;
+    
+    [self updateLayout];
+    [self selectionChanged];
+    
+    [self hideEditingMenu];
+}
+
+- (void)insertObject:(id)object size:(CGSize)size;
+{
+    NSRange selectedNSRange = self.textLayout.textSelection.selectedRange;
+    SETextRange *markedTextRange = (SETextRange *)self.markedTextRange;
+    NSRange markedTextNSRange;
+    if (markedTextRange) {
+        markedTextNSRange = markedTextRange.range;
+    } else {
+        markedTextNSRange = NSMakeRange(NSNotFound, 0);
+    }
+    
+    SETextAttachment *attachment = nil;
+    NSUInteger location = 0;
+    if (markedTextRange && markedTextNSRange.location != NSNotFound) {
+        location = markedTextNSRange.location;
+    } else {
+        location = selectedNSRange.location;
+    }
+    
+    NSString *replacementCharacter = OBJECT_REPLACEMENT_CHARACTER;
+    attachment = [[SETextAttachment alloc] initWithObject:object size:size range:NSMakeRange(location, replacementCharacter.length)];
+    [self.attachments addObject:attachment];
+    
+    [self insertText:replacementCharacter];
+}
+
+- (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)aString forAttributedString:(NSMutableAttributedString *)attributdString
+{
+    id attribute = nil;
+    NSUInteger location = range.location;
+    if (location > 0) {
+        attribute = [attributdString attribute:(id)kCTRunDelegateAttributeName atIndex:location - 1 effectiveRange:nil];
+    }
+    if (attribute) {
+        [attributdString replaceCharactersInRange:range withAttributedString:[[NSAttributedString alloc] initWithString:aString]];
+    } else {
+        [attributdString replaceCharactersInRange:range withString:aString];
+    }
+}
 
 @end

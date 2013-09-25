@@ -12,10 +12,10 @@
 
 @interface SELinkText : NSObject
 
-@property (strong, nonatomic, readonly) NSString *text;
-@property (strong, nonatomic, readonly) id object;
-@property (assign, nonatomic, readonly) NSRange range;
-@property (strong, nonatomic, readonly) NSArray *geometries;
+@property (nonatomic, readonly) NSString *text;
+@property (nonatomic, readonly) id object;
+@property (nonatomic, readonly) NSRange range;
+@property (nonatomic, readonly) NSArray *geometries;
 
 - (id)initWithText:(NSString *)text object:(id)object range:(NSRange)range;
 - (void)addLinkGeometry:(SETextGeometry *)geometry;

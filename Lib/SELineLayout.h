@@ -21,18 +21,20 @@ typedef struct {
 
 @interface SELineLayout : NSObject
 
-@property (assign, nonatomic, readonly) CTLineRef line;
-@property (assign, nonatomic, readonly) NSInteger index;
-@property (assign, nonatomic, readonly) CGRect rect;
-@property (assign, nonatomic, readonly) SELineMetrics metrics;
+@property (nonatomic, readonly) CTLineRef line;
+@property (nonatomic, readonly) NSInteger index;
+@property (nonatomic, readonly) CGRect rect;
+@property (nonatomic, readonly) SELineMetrics metrics;
 
-@property (assign, nonatomic, readonly) NSRange stringRange;
+@property (nonatomic, readonly) NSRange stringRange;
 
-@property (strong, nonatomic, readonly) NSArray *links;
-@property (assign, nonatomic, readonly) BOOL containsLink;
-@property (assign, nonatomic, readonly) NSUInteger numberOfLinks;
+@property (nonatomic, readonly) NSArray *links;
+@property (nonatomic, readonly) BOOL containsLink;
+@property (nonatomic, readonly) NSUInteger numberOfLinks;
 
 - (id)initWithLine:(CTLineRef)line index:(NSInteger)index rect:(CGRect)rect metrics:(SELineMetrics)metrics;
+
+- (NSRange)stringRange;
 
 - (BOOL)containsPoint:(CGPoint)point;
 - (CFIndex)stringIndexForPosition:(CGPoint)point;

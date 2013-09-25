@@ -22,6 +22,7 @@
     if (self) {
         _initialIndex = index;
     }
+    
     return self;
 }
 
