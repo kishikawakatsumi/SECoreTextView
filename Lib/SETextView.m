@@ -287,6 +287,11 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     return self.attributedText ? self.attributedText.mutableCopy : [[NSMutableAttributedString alloc] init];
 }
 
+- (CGRect)caretRect
+{
+    return self.caretView.frame;
+}
+
 #pragma mark -
 
 - (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index
@@ -1094,7 +1099,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             shouldBeginEditing = [self.delegate textViewShouldBeginEditing:self];
         }
         if (self.isEditable && shouldBeginEditing) {
-            self.editing = YES;
+            _editing = YES;
             
             if ([self becomeFirstResponder]) {
                 [self updateCaretPositionToPoint:self.mouseLocation];
@@ -1456,7 +1461,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 - (BOOL)resignFirstResponder
 {
     [self clearSelection];
-    self.editing = NO;
+    _editing = NO;
     
     [self setNeedsDisplayInRect:self.bounds];
     
@@ -1474,6 +1479,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 {
     SETextRange *r = (SETextRange *)range;
     if (r.range.location == NSNotFound) {
+        return nil;
+    }
+    if (self.text.length < NSMaxRange(r.range)) {
         return nil;
     }
     
@@ -1781,7 +1789,8 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         return CGRectMake(origin.x, origin.y, CGRectGetWidth(self.caretView.bounds), font.leading);
     }
     
-    if (index == text.length && [[text substringWithRange:NSMakeRange(index - 1, 1)] isEqualToString:@"\n"]) {
+    NSString *lastCharacter = [text substringWithRange:NSMakeRange(index - 1, 1)];
+    if (index == text.length && [lastCharacter isEqualToString:@"\n"]) {
         CGRect rect = [self.textLayout rectOfStringForLastLine];
         rect.origin.y = CGRectGetMaxY(rect);
         rect.size.width = CGRectGetWidth(self.caretView.bounds);
@@ -1789,7 +1798,7 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
     
     CGRect rect;
-    if (index > 0 && [[self.text substringWithRange:NSMakeRange(index - 1, 1)] isEqualToString:@"\n"]) {
+    if (index > 0 && [lastCharacter isEqualToString:@"\n"]) {
         rect = [self.textLayout rectOfStringForIndex:index + 1];
     } else {
         rect = [self.textLayout rectOfStringForIndex:index];

@@ -28,6 +28,9 @@ static const NSTimeInterval SETextEditingCaretBlinkAnimationDuration = 0.1;
     if (self) {
         self.backgroundColor = [SEConstants caretColor];
         self.userInteractionEnabled = NO;
+        
+        self.blinkTimer = [NSTimer timerWithTimeInterval:SETextEditingCaretBlinkRate target:self selector:@selector(blink) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:self.blinkTimer forMode:NSRunLoopCommonModes];
     }
     
     return self;

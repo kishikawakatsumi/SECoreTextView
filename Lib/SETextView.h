@@ -57,7 +57,8 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @property (nonatomic) NSTimeInterval minimumLongPressDuration;
 
 @property (nonatomic, getter = isEditable) BOOL editable;
-@property (nonatomic, getter = isEditing) BOOL editing;
+@property (nonatomic, readonly, getter = isEditing) BOOL editing;
+@property (nonatomic, readonly) CGRect caretRect;
 
 @property (readwrite) UIView *inputView;
 @property (readwrite) UIView *inputAccessoryView;
