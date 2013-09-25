@@ -102,20 +102,7 @@
                                                                     NULL,
                                                                     CGSizeMake(frameRect.size.width, CGFLOAT_MAX),
                                                                     NULL);
-    NSUInteger length = _attributedString.length;
-    if (length > 0) {
-        NSAttributedString *lastCharacter = [[_attributedString attributedSubstringFromRange:NSMakeRange(length - 1, 1)] copy];
-        if ([lastCharacter.string isEqualToString:@"\n"]) {
-            id attribute = [lastCharacter attribute:NSFontAttributeName atIndex:0 effectiveRange:NULL];
-            if (attribute && [attribute isKindOfClass:[UIFont class]]) {
-                UIFont *font = attribute;
-                frameSize.height += font.leading;
-            } else {
-                UIFont *defaultFont = [UIFont systemFontOfSize:[UIFont labelFontSize]];
-                frameSize.height += defaultFont.leading;
-            }
-        }
-    }
+    frameSize.height += 4.0f; // Workaround
 	frameRect.origin.y = CGRectGetMaxY(frameRect) - frameSize.height;
     frameRect.size = frameSize;
 	
