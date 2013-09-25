@@ -86,15 +86,22 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @protocol SETextViewDelegate <NSObject>
 
 @optional
-- (BOOL)textView:(SETextView *)textView clickedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
-- (BOOL)textView:(SETextView *)textView longPressedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
+- (BOOL)textViewShouldBeginEditing:(SETextView *)textView;
+- (BOOL)textViewShouldEndEditing:(SETextView *)textView;
+
+- (void)textViewDidBeginEditing:(SETextView *)textView;
+- (void)textViewDidEndEditing:(SETextView *)textView;
+
+- (BOOL)textView:(SETextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+- (void)textViewDidChange:(SETextView *)textView;
 
 - (void)textViewDidChangeSelection:(SETextView *)textView;
 - (void)textViewDidEndSelecting:(SETextView *)textView;
 
-- (BOOL)textViewShouldBeginEditing:(SETextView *)textView;
-- (void)textViewDidBeginEditing:(SETextView *)textView;
-- (BOOL)textViewShouldEndEditing:(SETextView *)textView;
-- (void)textViewDidEndEditing:(SETextView *)textView;
+//- (BOOL)textView:(SETextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange;
+//- (BOOL)textView:(SETextView *)textView shouldInteractWithTextAttachment:(NSTextAttachment *)textAttachment inRange:(NSRange)characterRange;
+
+- (BOOL)textView:(SETextView *)textView clickedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
+- (BOOL)textView:(SETextView *)textView longPressedOnLink:(SELinkText *)link atIndex:(NSUInteger)charIndex;
 
 @end

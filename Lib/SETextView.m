@@ -467,6 +467,18 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
 }
 
+- (void)textChanged
+{
+    [self notifyTextChanged];
+}
+
+- (void)notifyTextChanged
+{
+    if ([self.delegate respondsToSelector:@selector(textViewDidChange:)]) {
+        [self.delegate textViewDidChange:self];
+    }
+}
+
 - (void)clickedOnLink:(SELinkText *)link
 {
     if ([self.delegate respondsToSelector:@selector(textView:clickedOnLink:atIndex:)]) {
@@ -1086,6 +1098,10 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
             
             if ([self becomeFirstResponder]) {
                 [self updateCaretPositionToPoint:self.mouseLocation];
+                
+                if ([self.delegate respondsToSelector:@selector(textViewDidBeginEditing:)]) {
+                    [self.delegate textViewDidBeginEditing:self];
+                }
             }
         }
     }
@@ -1429,7 +1445,12 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (BOOL)canResignFirstResponder
 {
-    return YES;
+    BOOL shouldEndEditing = YES;
+    if ([self.delegate respondsToSelector:@selector(textViewShouldEndEditing:)]) {
+        shouldEndEditing = [self.delegate textViewShouldEndEditing:self];
+    }
+    
+    return shouldEndEditing;
 }
 
 - (BOOL)resignFirstResponder
@@ -1438,6 +1459,10 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.editing = NO;
     
     [self setNeedsDisplayInRect:self.bounds];
+    
+    if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]) {
+        [self.delegate textViewDidEndEditing:self];
+    }
     
     return YES;
 }
@@ -1557,7 +1582,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.textLayout.textSelection.selectedRange = selectedNSRange;
     
     [self updateLayout];
+    
     [self selectionChanged];
+    [self textChanged];
 }
 
 - (void)unmarkText
@@ -1835,7 +1862,13 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
 
 - (BOOL)shouldChangeTextInRange:(UITextRange *)range replacementText:(NSString *)text
 {
-    return YES;
+    BOOL shouldChangeTextInRange = YES;
+    SETextRange *r = (SETextRange *)range;
+    if ([self.delegate respondsToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
+        shouldChangeTextInRange = [self.delegate textView:self shouldChangeTextInRange:r.range replacementText:text];
+    }
+    
+    return shouldChangeTextInRange;
 }
 
 //- (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
@@ -1902,9 +1935,13 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.textLayout.textSelection.selectedRange = selectedNSRange;
     
     [self updateLayout];
+    
     [self selectionChanged];
+    [self textChanged];
     
     [self hideEditingMenu];
+    
+    
 }
 
 - (void)deleteBackward
@@ -1949,7 +1986,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     }
     
     [self updateLayout];
+    
     [self selectionChanged];
+    [self textChanged];
     
     [self hideEditingMenu];
 }
@@ -1995,7 +2034,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     self.textLayout.textSelection.selectedRange = selectedNSRange;
     
     [self updateLayout];
+    
     [self selectionChanged];
+    [self textChanged];
     
     [self hideEditingMenu];
 }
