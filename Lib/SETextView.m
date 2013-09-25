@@ -1215,6 +1215,9 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
     if (action == @selector(copy:) && self.selectedText.length > 0) {
         return YES;
     }
+    if (action == @selector(paste:) && self.isEditing) {
+        return YES;
+    }
     if (action == @selector(select:) && self.text.length > 0 && self.selectedText.length == 0) {
         return YES;
     }
@@ -1417,6 +1420,14 @@ NSString * const OBJECT_REPLACEMENT_CHARACTER = @"\uFFFC";
         [pasteboard clearContents];
         [pasteboard writeObjects:@[self.selectedText]];
     }
+#endif
+}
+
+- (void)paste:(id)sender
+{
+#if TARGET_OS_IPHONE
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [self insertText:pasteboard.string];
 #endif
 }
 
