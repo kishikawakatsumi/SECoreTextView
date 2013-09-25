@@ -107,7 +107,7 @@
         NSAttributedString *lastCharacter = [[_attributedString attributedSubstringFromRange:NSMakeRange(length - 1, 1)] copy];
         if ([lastCharacter.string isEqualToString:@"\n"]) {
             id attribute = [lastCharacter attribute:NSFontAttributeName atIndex:0 effectiveRange:NULL];
-            if (attribute) {
+            if (attribute && [attribute isKindOfClass:[UIFont class]]) {
                 UIFont *font = attribute;
                 frameSize.height += font.leading;
             } else {
