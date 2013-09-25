@@ -14,21 +14,26 @@
 
 @interface SETextLayout : NSObject
 
-@property (copy, nonatomic) NSAttributedString *attributedString;
+@property (nonatomic, copy) NSAttributedString *attributedString;
 
-@property (assign, nonatomic) CGRect bounds;
+@property (nonatomic) CGRect bounds;
 
-@property (assign, nonatomic, readonly) CGRect frameRect;
-@property (strong, nonatomic, readonly) NSArray *lineLayouts;
+@property (nonatomic, readonly) CGRect frameRect;
+@property (nonatomic, readonly) NSArray *lineLayouts;
 
-@property (strong, nonatomic) SETextSelection *textSelection;
-@property (strong, nonatomic, readonly) NSArray *links;
+@property (nonatomic) SETextSelection *textSelection;
+@property (nonatomic, readonly) NSArray *links;
+
+@property (nonatomic) NSRange markedTextRange;
 
 - (id)initWithAttributedString:(NSAttributedString *)attributedString;
 - (void)update;
 - (void)drawInContext:(CGContextRef)context;
 
 - (CFIndex)stringIndexForPosition:(CGPoint)point;
+- (CFIndex)stringIndexForNearestPosition:(CGPoint)point;
+- (CGRect)rectOfStringForIndex:(CFIndex)index;
+- (CGRect)rectOfStringForLastLine;
 
 - (void)setSelectionStartWithPoint:(CGPoint)point;
 - (void)setSelectionEndWithPoint:(CGPoint)point;

@@ -8,11 +8,38 @@
 
 #if TARGET_OS_IPHONE
 #import "SESelectionGrabber.h"
+#import "SEConstants.h"
+
+@interface SESelectionGrabberDot : UIView
+
+@property (nonatomic) UIBezierPath *path;
+
+@end
+
+@implementation SESelectionGrabberDot
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        self.path = [UIBezierPath bezierPathWithOvalInRect:self.bounds];
+    }
+    return self;
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    [[SEConstants selectionCaretColor] set];
+    [self.path fill];
+}
+
+@end
 
 @interface SESelectionGrabber ()
 
-@property (strong, nonatomic) UIImage *dotImage;
-@property (strong, nonatomic) UIImageView *dotImageView;
+@property (nonatomic) UIView *caretView;
+@property (nonatomic) UIView *dotView;
 
 @end
 
@@ -23,33 +50,34 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        self.dotImage = [UIImage imageNamed:@"SECoreTextView.bundle/kb-drag-dot"];
         
-        self.dotImageView = [[UIImageView alloc] initWithImage:self.dotImage];
+        self.caretView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 2.0f, 0.0f)];
+        self.caretView.backgroundColor = [SEConstants selectionCaretColor];
+        [self addSubview:self.caretView];
         
-        [self addSubview:self.dotImageView];
+        self.dotView = [[SESelectionGrabberDot alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 10.0f, 10.0f)];
+        [self addSubview:self.dotView];
     }
+    
     return self;
 }
 
-- (void)setFrame:(CGRect)frame
+- (void)layoutSubviews
 {
-    [super setFrame:frame];
+    [super layoutSubviews];
     
-    CGRect dotImageFrame = self.dotImageView.bounds;
+    CGRect caretFrame = self.caretView.frame;
+    caretFrame.origin.x = (CGRectGetWidth(self.bounds) - CGRectGetWidth(caretFrame)) / 2;
+    caretFrame.size.height = CGRectGetHeight(self.bounds);
+    self.caretView.frame = caretFrame;
+    
+    CGRect dotFrame = self.dotView.frame;
     if (self.dotMetric == SESelectionGrabberDotMetricTop) {
-        dotImageFrame.origin = CGPointMake(ceilf((CGRectGetWidth(self.bounds) - self.dotSize.width) / 2 - 2.0f),
-                                           -12.0f);
+        dotFrame.origin = CGPointMake((CGRectGetWidth(self.bounds) - CGRectGetWidth(dotFrame)) / 2, -CGRectGetHeight(dotFrame));
     } else {
-        dotImageFrame.origin = CGPointMake(ceilf((CGRectGetWidth(self.bounds) - self.dotSize.width) / 2 + 2.0f),
-                                           CGRectGetHeight(self.bounds) - 6.0f);
+        dotFrame.origin = CGPointMake((CGRectGetWidth(self.bounds) - CGRectGetWidth(dotFrame)) / 2, CGRectGetHeight(self.bounds));
     }
-    self.dotImageView.frame = dotImageFrame;
-}
-
-- (CGSize)dotSize
-{
-    return CGSizeMake(14.0f, 12.0f);
+    self.dotView.frame = dotFrame;
 }
 
 @end

@@ -16,8 +16,8 @@ typedef NS_ENUM(NSUInteger, SESelectionGrabberDotMetric) {
 
 @interface SESelectionGrabber : UIView
 
-@property (assign, nonatomic) BOOL dragging;
-@property (assign, nonatomic) SESelectionGrabberDotMetric dotMetric;
+@property (nonatomic) BOOL dragging;
+@property (nonatomic) SESelectionGrabberDotMetric dotMetric;
 
 @end
 #endif

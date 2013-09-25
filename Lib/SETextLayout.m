@@ -21,13 +21,29 @@
 
 @implementation SETextLayout
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
 - (id)initWithAttributedString:(NSAttributedString *)attributedString
 {
     self = [super init];
     if (self) {
+        [self commonInit];
         self.attributedString = [attributedString copy];
     }
+    
     return self;
+}
+
+- (void)commonInit
+{
+    self.markedTextRange = NSMakeRange(NSNotFound, 0);
 }
 
 - (void)dealloc
@@ -145,17 +161,16 @@
         metrics.trailingWhitespaceWidth = CTLineGetTrailingWhitespaceWidth(line);
         
         CGRect lineRect = CGRectMake(origin.x,
-                                     ceilf(origin.y - descent),
+                                     origin.y - descent,
                                      width,
-                                     ceilf(ascent + descent));
+                                     ascent + descent);
         lineRect.origin.x += _frameRect.origin.x;
         
 #if TARGET_OS_IPHONE
-        lineRect.origin.y = _frameRect.size.height - CGRectGetMaxY(lineRect);
+        lineRect.origin.y = CGRectGetHeight(_frameRect) - CGRectGetMaxY(lineRect);
 #else
         lineRect.origin.y += _frameRect.origin.y;
 #endif
-        
         SELineLayout *lineLayout = [[SELineLayout alloc] initWithLine:line index:index rect:lineRect metrics:metrics];
         
         for (SELinkText *link in self.links) {
@@ -223,12 +238,24 @@
     for (SELineLayout *lineLayout in self.lineLayouts) {
         if ([lineLayout containsPoint:point]) {
             CFIndex index = [lineLayout stringIndexForPosition:point];
-            
             if (index != kCFNotFound) {
                 return index;
             }
         }
         
+#if TARGET_OS_IPHONE
+        if (lineNumber == 0 && point.y < CGRectGetMinY(lineLayout.rect)) {
+            return 0;
+        }
+        
+        if (lineNumber == self.lineLayouts.count - 1 && point.y > CGRectGetMaxY(lineLayout.rect) - lineLayout.metrics.leading) {
+            return [lineLayout stringIndexForPosition:CGPointMake(CGRectGetMaxX(lineLayout.rect), CGRectGetMinY(lineLayout.rect))];
+        }
+        
+        if (point.y > CGRectGetMinY(lineLayout.rect) && point.y < CGRectGetMaxY(lineLayout.rect) - lineLayout.metrics.leading) {
+            return [lineLayout stringIndexForPosition:CGPointMake(CGRectGetMaxX(lineLayout.rect), CGRectGetMinY(lineLayout.rect))];
+        }
+#else
         if (lineNumber == 0 && point.y > CGRectGetMaxY(lineLayout.rect)) {
             return 0;
         }
@@ -240,11 +267,56 @@
         if (point.y < CGRectGetMaxY(lineLayout.rect) && point.y > CGRectGetMinY(lineLayout.rect) - lineLayout.metrics.leading) {
             return [lineLayout stringIndexForPosition:CGPointMake(CGRectGetMaxX(lineLayout.rect), CGRectGetMaxY(lineLayout.rect))];
         }
+#endif
         
         lineNumber++;
     }
     
     return kCFNotFound;
+}
+
+- (CGRect)rectOfStringForIndex:(CFIndex)index;
+{
+    CGRect rect = CGRectZero;
+    
+    if (index != kCFNotFound) {
+        for (SELineLayout *lineLayout in self.lineLayouts) {
+            NSRange stringRange = lineLayout.stringRange;
+            
+            if (index >= stringRange.location && index <= stringRange.location + stringRange.length) {
+                CTLineRef line = lineLayout.line;
+                CGFloat offset = CTLineGetOffsetForStringIndex(line, index, NULL);
+                
+                CGFloat width = offset;
+                if (index > 1) {
+                    width = offset - CTLineGetOffsetForStringIndex(line, index - 1, NULL);
+                }
+                
+                rect = lineLayout.rect;
+                rect.origin.x += offset - width;
+                rect.size.width = width;
+                
+                break;
+            }
+        }
+    }
+    
+    return rect;
+}
+
+- (CGRect)rectOfStringForLastLine
+{
+    SELineLayout *lineLayout = self.lineLayouts.lastObject;
+    NSRange stringRange = lineLayout.stringRange;
+    
+    CTLineRef line = lineLayout.line;
+    CGFloat offset = CTLineGetOffsetForStringIndex(line, stringRange.location, NULL);
+    
+    CGRect rect = CGRectZero;
+    rect = lineLayout.rect;
+    rect.origin.x += offset;
+    
+    return rect;
 }
 
 - (void)setSelectionStartWithPoint:(CGPoint)point;
@@ -259,7 +331,7 @@
 
 - (void)setSelectionEndWithPoint:(CGPoint)point;
 {
-    CFIndex index = [self stringIndexForPosition:point];
+    CFIndex index = [self stringIndexForNearestPosition:point];
     if (index != kCFNotFound) {
         [self.textSelection setSelectionEndAtIndex:index];
     }
@@ -273,7 +345,7 @@
 
 - (void)setSelectionStartWithFirstPoint:(CGPoint)firstPoint
 {
-    CFIndex start = [self stringIndexForPosition:firstPoint];
+    CFIndex start = [self stringIndexForNearestPosition:firstPoint];
     CFIndex end = NSMaxRange(self.textSelection.selectedRange);
     
     if (start != kCFNotFound) {

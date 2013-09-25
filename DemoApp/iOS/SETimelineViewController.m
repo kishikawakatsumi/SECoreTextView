@@ -33,14 +33,15 @@ static const CGFloat FONT_SIZE = 14.0f;
     
     ACAccountStore *accountStore = [[ACAccountStore alloc]init];
     ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
-    [accountStore requestAccessToAccountsWithType:accountType withCompletionHandler:^(BOOL granted, NSError *error)
-     {
+    [accountStore requestAccessToAccountsWithType:accountType withCompletionHandler:^(BOOL granted, NSError *error) {
          if (granted) {
              NSArray *accounts = [accountStore accountsWithAccountType:accountType];
              
              if (accounts.count > 0) {
                  ACAccount *account = accounts[0];
                  [self getHomeTimlineWithAccount:account];
+             } else {
+                 [self showAlertOnError:[NSError errorWithDomain:@"SECoreTextViewErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"No Twitter account."}]];
              }
          }
      }];
@@ -183,8 +184,7 @@ static const CGFloat FONT_SIZE = 14.0f;
                                    requestMethod:TWRequestMethodGET];
         ((TWRequest *)request).account = account;
     }
-    [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error)
-     {
+    [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
          [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
          
          if (error) {
@@ -229,15 +229,14 @@ static const CGFloat FONT_SIZE = 14.0f;
 
 - (void)showAlertOnError:(NSError *)error
 {
-    dispatch_async(dispatch_get_main_queue(), ^
-                   {
-                       UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"SECoreTextView"
-                                                                           message:error.localizedDescription
-                                                                          delegate:self
-                                                                 cancelButtonTitle:nil
-                                                                 otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
-                       [alertView show];
-                   });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"SECoreTextView"
+                                                            message:error.localizedDescription
+                                                           delegate:self
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+        [alertView show];
+    });
 }
 
 @end
