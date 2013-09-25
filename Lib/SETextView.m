@@ -53,6 +53,8 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 @property (nonatomic, weak) NSTimer *longPressTimer;
 @property (nonatomic, getter = isLongPressing) BOOL longPressing;
 
+@property (nonatomic, readwrite) BOOL editing;
+
 #if TARGET_OS_IPHONE
 @property (nonatomic) UITextInputStringTokenizer *tokenizer;
 
@@ -240,6 +242,12 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     if (self.isEditable) {
         self.selectable = YES;
     }
+}
+
+- (void)setEditing:(BOOL)editing
+{
+    _editing = editing;
+    self.textLayout.editing = editing;
 }
 
 - (void)setText:(NSString *)text
@@ -1121,7 +1129,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
             shouldBeginEditing = [self.delegate textViewShouldBeginEditing:self];
         }
         if (self.isEditable && shouldBeginEditing) {
-            _editing = YES;
+            self.editing = YES;
             
             if ([self becomeFirstResponder]) {
                 [self updateCaretPositionToPoint:self.mouseLocation];
@@ -1498,7 +1506,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 - (BOOL)resignFirstResponder
 {
     [self clearSelection];
-    _editing = NO;
+    self.editing = NO;
     
     [self setNeedsDisplayInRect:self.bounds];
     

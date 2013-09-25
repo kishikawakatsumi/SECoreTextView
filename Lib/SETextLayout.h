@@ -25,6 +25,7 @@
 @property (nonatomic, readonly) NSArray *links;
 
 @property (nonatomic) NSRange markedTextRange;
+@property (nonatomic, getter = isEditing) BOOL editing;
 
 - (id)initWithAttributedString:(NSAttributedString *)attributedString;
 - (void)update;
