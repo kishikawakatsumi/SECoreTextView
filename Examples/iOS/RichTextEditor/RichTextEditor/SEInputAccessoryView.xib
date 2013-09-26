@@ -59,7 +59,7 @@
 						<float key="IBUIWidth">36</float>
 						<reference key="IBUIToolbar" ref="132234216"/>
 					</object>
-					<object class="IBUIBarButtonItem" id="924472127">
+					<object class="IBUIBarButtonItem" id="874445000">
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">photos.png</string>
@@ -68,26 +68,26 @@
 						<float key="IBUIWidth">36</float>
 						<reference key="IBUIToolbar" ref="132234216"/>
 					</object>
-					<object class="IBUIBarButtonItem" id="100451816">
+					<object class="IBUIBarButtonItem" id="592492783">
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<reference key="IBUIToolbar" ref="132234216"/>
 						<int key="IBUISystemItemIdentifier">5</int>
+					</object>
+					<object class="IBUIBarButtonItem" id="1063346930">
+						<bool key="IBUIEnabled">NO</bool>
+						<object class="NSCustomResource" key="IBUIImage">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">text.png</string>
+						</object>
+						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+						<float key="IBUIWidth">36</float>
+						<reference key="IBUIToolbar" ref="132234216"/>
 					</object>
 					<object class="IBUIBarButtonItem" id="549168185">
 						<bool key="IBUIEnabled">NO</bool>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">bold.png</string>
-						</object>
-						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<float key="IBUIWidth">36</float>
-						<reference key="IBUIToolbar" ref="132234216"/>
-					</object>
-					<object class="IBUIBarButtonItem" id="1063346930">
-						<bool key="IBUIEnabled">NO</bool>
-						<object class="NSCustomResource" key="IBUIImage">
-							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">italic.png</string>
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<float key="IBUIWidth">36</float>
@@ -110,7 +110,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">photoButton</string>
 						<reference key="source" ref="132234216"/>
-						<reference key="destination" ref="924472127"/>
+						<reference key="destination" ref="874445000"/>
 					</object>
 					<int key="connectionID">14</int>
 				</object>
@@ -132,11 +132,11 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">italicButton</string>
+						<string key="label">nomalButton</string>
 						<reference key="source" ref="132234216"/>
 						<reference key="destination" ref="1063346930"/>
 					</object>
-					<int key="connectionID">17</int>
+					<int key="connectionID">18</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -163,11 +163,11 @@
 						<reference key="object" ref="132234216"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="549168185"/>
-							<reference ref="1063346930"/>
 							<reference ref="46413075"/>
 							<reference ref="338289472"/>
-							<reference ref="924472127"/>
-							<reference ref="100451816"/>
+							<reference ref="874445000"/>
+							<reference ref="1063346930"/>
+							<reference ref="592492783"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -193,12 +193,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">10</int>
-						<reference key="object" ref="924472127"/>
+						<reference key="object" ref="874445000"/>
 						<reference key="parent" ref="132234216"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">12</int>
-						<reference key="object" ref="100451816"/>
+						<reference key="object" ref="592492783"/>
 						<reference key="parent" ref="132234216"/>
 					</object>
 				</array>
@@ -220,7 +220,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">17</int>
+			<int key="maxID">18</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
@@ -238,10 +238,10 @@
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="bold.png">{16, 20}</string>
-			<string key="italic.png">{16, 20}</string>
 			<string key="keyboard.png">{33, 21}</string>
 			<string key="photos.png">{22, 24}</string>
 			<string key="rubberstamp.png">{22, 20}</string>
+			<string key="text.png">{18, 20}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">3742</string>
 	</data>

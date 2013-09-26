@@ -30,7 +30,7 @@ static const CGFloat FONT_SIZE = 14.0f;
 {
     [super viewDidLoad];
     
-    ACAccountStore *accountStore = [[ACAccountStore alloc]init];
+    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
     ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
     [accountStore requestAccessToAccountsWithType:accountType withCompletionHandler:^(BOOL granted, NSError *error) {
          if (granted) {
@@ -42,6 +42,8 @@ static const CGFloat FONT_SIZE = 14.0f;
              } else {
                  [self showAlertOnError:[NSError errorWithDomain:@"SECoreTextViewErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"No Twitter account."}]];
              }
+         } else {
+             [self showAlertOnError:[NSError errorWithDomain:@"SECoreTextViewErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"Twitter account access denied."}]];
          }
      }];
 }

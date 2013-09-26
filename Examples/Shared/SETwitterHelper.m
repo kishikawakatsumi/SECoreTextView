@@ -45,7 +45,7 @@
     }
     
     NSFont *font = [NSFont systemFontOfSize:13.0f];
-    id tweetfont = (__bridge id)(CTFontCreateWithName((__bridge CFStringRef)(font.fontName), font.pointSize, NULL));
+    id tweetfont = (__bridge id)CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL);
     
     NSColor *tweetColor = [NSColor blackColor];
     NSColor *hashTagColor = [NSColor grayColor];

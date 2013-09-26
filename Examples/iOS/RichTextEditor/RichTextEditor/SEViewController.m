@@ -16,10 +16,14 @@ static const CGFloat defaultFontSize = 18.0f;
 
 @interface SEViewController () <SETextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *doneButton;
 @property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) IBOutlet SETextView *textView;
 @property (nonatomic) SEInputAccessoryView *inputAccessoryView;
 @property (nonatomic) SEStampInputView *imageInputView;
+
+@property (nonatomic) id normalFont;
+@property (nonatomic) id boldFont;
 
 @end
 
@@ -53,16 +57,45 @@ static const CGFloat defaultFontSize = 18.0f;
     self.inputAccessoryView.stampButton.action = @selector(showStampInputView:);
     self.inputAccessoryView.photoButton.target = self;
     self.inputAccessoryView.photoButton.action = @selector(showImagePicker:);
+    self.inputAccessoryView.nomalButton.target = self;
+    self.inputAccessoryView.nomalButton.action = @selector(nomal:);
     self.inputAccessoryView.boldButton.target = self;
     self.inputAccessoryView.boldButton.action = @selector(bold:);
-    self.inputAccessoryView.italicButton.target = self;
-    self.inputAccessoryView.italicButton.action = @selector(italic:);
     
     self.textView.inputAccessoryView = self.inputAccessoryView;
     self.textView.editable = YES;
     self.textView.lineSpacing = 8.0f;
-    self.textView.font = [UIFont systemFontOfSize:defaultFontSize];
-    self.textView.text = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"InitialText" ofType:@"txt"] encoding:NSUTF8StringEncoding error:nil];
+    NSString *initialText = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"InitialText" ofType:@"txt"] encoding:NSUTF8StringEncoding error:nil];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:initialText];
+    
+    UIColor *linkColor = [UIColor blueColor];
+    
+    NSFont *normalFont = [NSFont systemFontOfSize:defaultFontSize];
+    CTFontRef ctNormalFont = CTFontCreateWithName((__bridge CFStringRef)normalFont.fontName, normalFont.pointSize, NULL);
+    self.normalFont = (__bridge id)ctNormalFont;
+    CFRelease(ctNormalFont);
+    
+    NSFont *boldFont = [NSFont boldSystemFontOfSize:defaultFontSize];
+    CTFontRef ctBoldFont = CTFontCreateWithName((__bridge CFStringRef)boldFont.fontName, boldFont.pointSize, NULL);
+    self.boldFont = (__bridge id)ctBoldFont;
+    CFRelease(ctBoldFont);
+    
+    [attributedString addAttribute:(id)kCTFontAttributeName value:self.normalFont range:NSMakeRange(0, initialText.length)];
+    
+    NSRange firstRange = NSMakeRange(2, 7);
+    [attributedString addAttribute:(id)kCTFontAttributeName value:self.boldFont range:firstRange];
+    [attributedString addAttribute:(id)kCTUnderlineStyleAttributeName value:@YES range:firstRange];
+    [attributedString addAttribute:NSLinkAttributeName value:[NSURL URLWithString:@"http://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%BC%E3%83%8F%E3%83%88%E3%83%BC%E3%83%96"] range:firstRange];
+    [attributedString addAttribute:(id)kCTForegroundColorAttributeName value:(id)linkColor.CGColor range:firstRange];
+    
+    NSRange secondRange = NSMakeRange(45, 5);
+    [attributedString addAttribute:(id)kCTFontAttributeName value:self.normalFont range:secondRange];
+    [attributedString addAttribute:(id)kCTForegroundColorAttributeName value:(id)[[UIColor redColor] CGColor] range:secondRange];
+    
+    self.textView.attributedText = attributedString;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillLayoutSubviews
@@ -70,17 +103,32 @@ static const CGFloat defaultFontSize = 18.0f;
     [self updateLayout];
 }
 
+- (IBAction)done:(id)sender
+{
+    [self.textView resignFirstResponder];
+}
+
 #pragma mark -
+
+- (void)textViewDidBeginEditing:(SETextView *)textView
+{
+    self.doneButton.enabled = YES;
+}
+
+- (void)textViewDidEndEditing:(SETextView *)textView
+{
+    self.doneButton.enabled = NO;
+}
 
 - (void)textViewDidChangeSelection:(SETextView *)textView
 {
     NSRange selectedRange = textView.selectedRange;
     if (selectedRange.location != NSNotFound && selectedRange.length > 0) {
         self.inputAccessoryView.boldButton.enabled = YES;
-        self.inputAccessoryView.italicButton.enabled = YES;
+        self.inputAccessoryView.nomalButton.enabled = YES;
     } else {
         self.inputAccessoryView.boldButton.enabled = NO;
-        self.inputAccessoryView.italicButton.enabled = NO;
+        self.inputAccessoryView.nomalButton.enabled = NO;
     }
 }
 
@@ -89,9 +137,45 @@ static const CGFloat defaultFontSize = 18.0f;
     [self updateLayout];
 }
 
+#pragma mark -
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    self.scrollView.scrollEnabled = NO;
+    
+	CGRect keyboardBounds;
+    [notification.userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardBounds];
+	
+    keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
+    
+	CGRect containerFrame = self.scrollView.frame;
+    containerFrame.size.height = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(keyboardBounds);
+    
+	self.scrollView.frame = containerFrame;
+    
+    self.scrollView.scrollEnabled = YES;
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    self.scrollView.scrollEnabled = NO;
+    
+	CGRect keyboardBounds;
+    [notification.userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardBounds];
+	
+    keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
+    
+	CGRect containerFrame = self.scrollView.frame;
+    containerFrame.size.height = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(keyboardBounds);
+	
+	self.scrollView.frame = containerFrame;
+    
+    self.scrollView.scrollEnabled = YES;
+}
+
 - (void)updateLayout
 {
-    CGSize containerSize = self.scrollView.bounds.size;
+    CGSize containerSize = self.scrollView.frame.size;
     CGSize contentSize = [self.textView sizeThatFits:containerSize];
     
     CGRect frame = self.textView.frame;
@@ -134,6 +218,18 @@ static const CGFloat defaultFontSize = 18.0f;
     [self presentViewController:controller animated:YES completion:NULL];
 }
 
+- (IBAction)nomal:(id)sender
+{
+    NSRange selectedRange = self.textView.selectedRange;
+    if (selectedRange.location != NSNotFound && selectedRange.length > 0) {
+        self.textView.font = nil;
+        
+        NSMutableAttributedString *attributedString = self.textView.attributedText.mutableCopy;
+        [attributedString addAttribute:(id)kCTFontAttributeName value:self.normalFont range:selectedRange];
+        self.textView.attributedText = attributedString;
+    }
+}
+
 - (IBAction)bold:(id)sender
 {
     NSRange selectedRange = self.textView.selectedRange;
@@ -141,19 +237,7 @@ static const CGFloat defaultFontSize = 18.0f;
         self.textView.font = nil;
         
         NSMutableAttributedString *attributedString = self.textView.attributedText.mutableCopy;
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:defaultFontSize] range:selectedRange];
-        self.textView.attributedText = attributedString;
-    }
-}
-
-- (IBAction)italic:(id)sender
-{
-    NSRange selectedRange = self.textView.selectedRange;
-    if (selectedRange.location != NSNotFound && selectedRange.length > 0) {
-        self.textView.font = nil;
-        
-        NSMutableAttributedString *attributedString = self.textView.attributedText.mutableCopy;
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont italicSystemFontOfSize:defaultFontSize] range:selectedRange];
+        [attributedString addAttribute:(id)kCTFontAttributeName value:self.boldFont range:selectedRange];
         self.textView.attributedText = attributedString;
     }
 }

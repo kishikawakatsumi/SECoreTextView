@@ -16,6 +16,7 @@
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *smallerButton;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *largerButton;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *colorButton;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *nomalButton;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *boldButton;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *italicButton;
 

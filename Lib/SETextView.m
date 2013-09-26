@@ -1099,6 +1099,19 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
                     [self updateCaretPositionToPoint:self.mouseLocation];
                 }
             } else {
+                if ([self containsPointInTextFrame:self.mouseLocation]) {
+                    SELinkText *link = [self linkAtPoint:self.mouseLocation];
+                    if (link) {
+                        [self clickedOnLink:link];
+                        
+                        [self clearSelection];
+                        [self hideEditingMenu];
+                        
+                        [self setNeedsDisplay];
+                        return;
+                    }
+                }
+                
                 [self beginEditing];
             }
             
