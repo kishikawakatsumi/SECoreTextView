@@ -1,7 +1,7 @@
 SECoreTextView
 ==============
 
-SECoreTextView is multi-line rich text view library with clickable links, selectable text and twitter style demo apps.
+SECoreTextView is multi-line rich text view library with clickable links, selectable text and editing.
 
 ## Features
 ### Multi-Line Rich text
