@@ -44,6 +44,16 @@ static CGFloat RunDelegateGetWidthCallback(void *refCon)
     return self;
 }
 
+- (void)dealloc
+{
+    if ([_object isKindOfClass:[NSView class]]) {
+        NSView *view = _object;
+        if (view.superview) {
+            [view removeFromSuperview];
+        }
+    }
+}
+
 - (CTRunDelegateCallbacks)callbacks
 {
     CTRunDelegateCallbacks callbacks;

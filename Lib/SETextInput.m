@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 kishikawa katsumi. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE
 #import "SETextInput.h"
 
 @implementation SETextRange
@@ -58,3 +59,4 @@
 }
 
 @end
+#endif

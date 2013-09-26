@@ -1,0 +1,499 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1469DBF917F35F2300ADDA7E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DBF817F35F2300ADDA7E /* Cocoa.framework */; };
+		1469DC0317F35F2300ADDA7E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1469DC0117F35F2300ADDA7E /* InfoPlist.strings */; };
+		1469DC0517F35F2300ADDA7E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC0417F35F2300ADDA7E /* main.m */; };
+		1469DC0917F35F2300ADDA7E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 1469DC0717F35F2300ADDA7E /* Credits.rtf */; };
+		1469DC1617F35F4B00ADDA7E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DC1517F35F4B00ADDA7E /* CoreText.framework */; };
+		1469DC1817F35F5400ADDA7E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DC1717F35F5400ADDA7E /* Accounts.framework */; };
+		1469DC1A17F35F5B00ADDA7E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DC1917F35F5B00ADDA7E /* Social.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		1469DC3E17F3608400ADDA7E /* SETextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC1F17F3608400ADDA7E /* SETextView.m */; };
+		1469DC3F17F3608400ADDA7E /* SETextLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC2117F3608400ADDA7E /* SETextLayout.m */; };
+		1469DC4017F3608400ADDA7E /* SELineLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC2317F3608400ADDA7E /* SELineLayout.m */; };
+		1469DC4117F3608400ADDA7E /* SETextSelection.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC2517F3608400ADDA7E /* SETextSelection.m */; };
+		1469DC4217F3608400ADDA7E /* SELinkText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC2717F3608400ADDA7E /* SELinkText.m */; };
+		1469DC4317F3608400ADDA7E /* SETextGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC2917F3608400ADDA7E /* SETextGeometry.m */; };
+		1469DC4417F3608400ADDA7E /* SETextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC2B17F3608400ADDA7E /* SETextAttachment.m */; };
+		1469DC4517F3608400ADDA7E /* SETextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC2D17F3608400ADDA7E /* SETextInput.m */; };
+		1469DC4617F3608400ADDA7E /* SETextSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC2F17F3608400ADDA7E /* SETextSelectionView.m */; };
+		1469DC4717F3608400ADDA7E /* SESelectionGrabber.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC3117F3608400ADDA7E /* SESelectionGrabber.m */; };
+		1469DC4817F3608400ADDA7E /* SETextMagnifierCaret.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC3317F3608400ADDA7E /* SETextMagnifierCaret.m */; };
+		1469DC4917F3608400ADDA7E /* SETextMagnifierRanged.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC3517F3608400ADDA7E /* SETextMagnifierRanged.m */; };
+		1469DC4A17F3608400ADDA7E /* SETextEditingCaret.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC3717F3608400ADDA7E /* SETextEditingCaret.m */; };
+		1469DC4B17F3608400ADDA7E /* SEConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC3917F3608400ADDA7E /* SEConstants.m */; };
+		1469DC4C17F3608400ADDA7E /* SECompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC3B17F3608400ADDA7E /* SECompatibility.m */; };
+		1469DC4D17F3608400ADDA7E /* NSMutableAttributedString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC3D17F3608400ADDA7E /* NSMutableAttributedString+Helper.m */; };
+		1469DC5417F3609E00ADDA7E /* SEImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC4F17F3609E00ADDA7E /* SEImageCache.m */; };
+		1469DC5517F3609E00ADDA7E /* SETwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC5117F3609E00ADDA7E /* SETwitterHelper.m */; };
+		1469DC5617F3609E00ADDA7E /* default_user_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 1469DC5217F3609E00ADDA7E /* default_user_icon.png */; };
+		1469DC5717F3609E00ADDA7E /* default_user_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1469DC5317F3609E00ADDA7E /* default_user_icon@2x.png */; };
+		1469DC5D17F360C300ADDA7E /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC5A17F360C300ADDA7E /* TwitterText.m */; };
+		1469DC5E17F360C300ADDA7E /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC5C17F360C300ADDA7E /* TwitterTextEntity.m */; };
+		1469DC6517F3610700ADDA7E /* SEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC6017F3610700ADDA7E /* SEAppDelegate.m */; };
+		1469DC6617F3610700ADDA7E /* SETweetCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC6217F3610700ADDA7E /* SETweetCellView.m */; };
+		1469DC6717F3610700ADDA7E /* SEUserIconImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DC6417F3610700ADDA7E /* SEUserIconImageView.m */; };
+		1469DC6A17F3613900ADDA7E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1469DC6817F3613900ADDA7E /* MainMenu.xib */; };
+		1469DC7217F3633400ADDA7E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DC7117F3633400ADDA7E /* ApplicationServices.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1469DBF517F35F2300ADDA7E /* TwitterClient-Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TwitterClient-Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1469DBF817F35F2300ADDA7E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		1469DBFB17F35F2300ADDA7E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		1469DBFC17F35F2300ADDA7E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		1469DBFD17F35F2300ADDA7E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1469DC0017F35F2300ADDA7E /* TwitterClient-Mac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TwitterClient-Mac-Info.plist"; sourceTree = "<group>"; };
+		1469DC0217F35F2300ADDA7E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1469DC0417F35F2300ADDA7E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1469DC0617F35F2300ADDA7E /* TwitterClient-Mac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TwitterClient-Mac-Prefix.pch"; sourceTree = "<group>"; };
+		1469DC0817F35F2300ADDA7E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		1469DC1517F35F4B00ADDA7E /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		1469DC1717F35F5400ADDA7E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		1469DC1917F35F5B00ADDA7E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		1469DC1E17F3608400ADDA7E /* SETextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextView.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextView.h"; sourceTree = "<absolute>"; };
+		1469DC1F17F3608400ADDA7E /* SETextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextView.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextView.m"; sourceTree = "<absolute>"; };
+		1469DC2017F3608400ADDA7E /* SETextLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextLayout.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextLayout.h"; sourceTree = "<absolute>"; };
+		1469DC2117F3608400ADDA7E /* SETextLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextLayout.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextLayout.m"; sourceTree = "<absolute>"; };
+		1469DC2217F3608400ADDA7E /* SELineLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SELineLayout.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SELineLayout.h"; sourceTree = "<absolute>"; };
+		1469DC2317F3608400ADDA7E /* SELineLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SELineLayout.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SELineLayout.m"; sourceTree = "<absolute>"; };
+		1469DC2417F3608400ADDA7E /* SETextSelection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextSelection.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextSelection.h"; sourceTree = "<absolute>"; };
+		1469DC2517F3608400ADDA7E /* SETextSelection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextSelection.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextSelection.m"; sourceTree = "<absolute>"; };
+		1469DC2617F3608400ADDA7E /* SELinkText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SELinkText.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SELinkText.h"; sourceTree = "<absolute>"; };
+		1469DC2717F3608400ADDA7E /* SELinkText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SELinkText.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SELinkText.m"; sourceTree = "<absolute>"; };
+		1469DC2817F3608400ADDA7E /* SETextGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextGeometry.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextGeometry.h"; sourceTree = "<absolute>"; };
+		1469DC2917F3608400ADDA7E /* SETextGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextGeometry.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextGeometry.m"; sourceTree = "<absolute>"; };
+		1469DC2A17F3608400ADDA7E /* SETextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextAttachment.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextAttachment.h"; sourceTree = "<absolute>"; };
+		1469DC2B17F3608400ADDA7E /* SETextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextAttachment.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextAttachment.m"; sourceTree = "<absolute>"; };
+		1469DC2C17F3608400ADDA7E /* SETextInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextInput.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextInput.h"; sourceTree = "<absolute>"; };
+		1469DC2D17F3608400ADDA7E /* SETextInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextInput.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextInput.m"; sourceTree = "<absolute>"; };
+		1469DC2E17F3608400ADDA7E /* SETextSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextSelectionView.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextSelectionView.h"; sourceTree = "<absolute>"; };
+		1469DC2F17F3608400ADDA7E /* SETextSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextSelectionView.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextSelectionView.m"; sourceTree = "<absolute>"; };
+		1469DC3017F3608400ADDA7E /* SESelectionGrabber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SESelectionGrabber.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SESelectionGrabber.h"; sourceTree = "<absolute>"; };
+		1469DC3117F3608400ADDA7E /* SESelectionGrabber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SESelectionGrabber.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SESelectionGrabber.m"; sourceTree = "<absolute>"; };
+		1469DC3217F3608400ADDA7E /* SETextMagnifierCaret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextMagnifierCaret.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextMagnifierCaret.h"; sourceTree = "<absolute>"; };
+		1469DC3317F3608400ADDA7E /* SETextMagnifierCaret.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextMagnifierCaret.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextMagnifierCaret.m"; sourceTree = "<absolute>"; };
+		1469DC3417F3608400ADDA7E /* SETextMagnifierRanged.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextMagnifierRanged.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextMagnifierRanged.h"; sourceTree = "<absolute>"; };
+		1469DC3517F3608400ADDA7E /* SETextMagnifierRanged.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextMagnifierRanged.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextMagnifierRanged.m"; sourceTree = "<absolute>"; };
+		1469DC3617F3608400ADDA7E /* SETextEditingCaret.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextEditingCaret.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextEditingCaret.h"; sourceTree = "<absolute>"; };
+		1469DC3717F3608400ADDA7E /* SETextEditingCaret.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextEditingCaret.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SETextEditingCaret.m"; sourceTree = "<absolute>"; };
+		1469DC3817F3608400ADDA7E /* SEConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEConstants.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SEConstants.h"; sourceTree = "<absolute>"; };
+		1469DC3917F3608400ADDA7E /* SEConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEConstants.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SEConstants.m"; sourceTree = "<absolute>"; };
+		1469DC3A17F3608400ADDA7E /* SECompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SECompatibility.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SECompatibility.h"; sourceTree = "<absolute>"; };
+		1469DC3B17F3608400ADDA7E /* SECompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SECompatibility.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/SECompatibility.m"; sourceTree = "<absolute>"; };
+		1469DC3C17F3608400ADDA7E /* NSMutableAttributedString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableAttributedString+Helper.h"; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/NSMutableAttributedString+Helper.h"; sourceTree = "<absolute>"; };
+		1469DC3D17F3608400ADDA7E /* NSMutableAttributedString+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableAttributedString+Helper.m"; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Lib/NSMutableAttributedString+Helper.m"; sourceTree = "<absolute>"; };
+		1469DC4E17F3609E00ADDA7E /* SEImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEImageCache.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../Shared/SEImageCache.h"; sourceTree = "<absolute>"; };
+		1469DC4F17F3609E00ADDA7E /* SEImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEImageCache.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../Shared/SEImageCache.m"; sourceTree = "<absolute>"; };
+		1469DC5017F3609E00ADDA7E /* SETwitterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETwitterHelper.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../Shared/SETwitterHelper.h"; sourceTree = "<absolute>"; };
+		1469DC5117F3609E00ADDA7E /* SETwitterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETwitterHelper.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../Shared/SETwitterHelper.m"; sourceTree = "<absolute>"; };
+		1469DC5217F3609E00ADDA7E /* default_user_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = default_user_icon.png; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../Shared/default_user_icon.png"; sourceTree = "<absolute>"; };
+		1469DC5317F3609E00ADDA7E /* default_user_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "default_user_icon@2x.png"; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../Shared/default_user_icon@2x.png"; sourceTree = "<absolute>"; };
+		1469DC5917F360C300ADDA7E /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Vendor/twitter-text-objc/lib/TwitterText.h"; sourceTree = "<absolute>"; };
+		1469DC5A17F360C300ADDA7E /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Vendor/twitter-text-objc/lib/TwitterText.m"; sourceTree = "<absolute>"; };
+		1469DC5B17F360C300ADDA7E /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Vendor/twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = "<absolute>"; };
+		1469DC5C17F360C300ADDA7E /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "/Users/katsumi/Dropbox/Xcode Projects/SECoreTextView/Examples/iOS/TwitterClient-iOS/TwitterClient-iOS/../../../../Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = "<absolute>"; };
+		1469DC5F17F3610700ADDA7E /* SEAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEAppDelegate.h; sourceTree = "<group>"; };
+		1469DC6017F3610700ADDA7E /* SEAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEAppDelegate.m; sourceTree = "<group>"; };
+		1469DC6117F3610700ADDA7E /* SETweetCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SETweetCellView.h; sourceTree = "<group>"; };
+		1469DC6217F3610700ADDA7E /* SETweetCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SETweetCellView.m; sourceTree = "<group>"; };
+		1469DC6317F3610700ADDA7E /* SEUserIconImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEUserIconImageView.h; sourceTree = "<group>"; };
+		1469DC6417F3610700ADDA7E /* SEUserIconImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEUserIconImageView.m; sourceTree = "<group>"; };
+		1469DC6917F3613900ADDA7E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		1469DC7117F3633400ADDA7E /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1469DBF217F35F2300ADDA7E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1469DBF917F35F2300ADDA7E /* Cocoa.framework in Frameworks */,
+				1469DC7217F3633400ADDA7E /* ApplicationServices.framework in Frameworks */,
+				1469DC1617F35F4B00ADDA7E /* CoreText.framework in Frameworks */,
+				1469DC1817F35F5400ADDA7E /* Accounts.framework in Frameworks */,
+				1469DC1A17F35F5B00ADDA7E /* Social.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1469DBEC17F35F2300ADDA7E = {
+			isa = PBXGroup;
+			children = (
+				1469DBFE17F35F2300ADDA7E /* TwitterClient-Mac */,
+				1469DBF717F35F2300ADDA7E /* Frameworks */,
+				1469DBF617F35F2300ADDA7E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1469DBF617F35F2300ADDA7E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1469DBF517F35F2300ADDA7E /* TwitterClient-Mac.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1469DBF717F35F2300ADDA7E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1469DBF817F35F2300ADDA7E /* Cocoa.framework */,
+				1469DC7117F3633400ADDA7E /* ApplicationServices.framework */,
+				1469DC1517F35F4B00ADDA7E /* CoreText.framework */,
+				1469DC1717F35F5400ADDA7E /* Accounts.framework */,
+				1469DC1917F35F5B00ADDA7E /* Social.framework */,
+				1469DBFA17F35F2300ADDA7E /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1469DBFA17F35F2300ADDA7E /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1469DBFD17F35F2300ADDA7E /* Foundation.framework */,
+				1469DBFB17F35F2300ADDA7E /* AppKit.framework */,
+				1469DBFC17F35F2300ADDA7E /* CoreData.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		1469DBFE17F35F2300ADDA7E /* TwitterClient-Mac */ = {
+			isa = PBXGroup;
+			children = (
+				1469DC5F17F3610700ADDA7E /* SEAppDelegate.h */,
+				1469DC6017F3610700ADDA7E /* SEAppDelegate.m */,
+				1469DC6117F3610700ADDA7E /* SETweetCellView.h */,
+				1469DC6217F3610700ADDA7E /* SETweetCellView.m */,
+				1469DC6317F3610700ADDA7E /* SEUserIconImageView.h */,
+				1469DC6417F3610700ADDA7E /* SEUserIconImageView.m */,
+				1469DC6817F3613900ADDA7E /* MainMenu.xib */,
+				1469DC1B17F35FDB00ADDA7E /* Lib */,
+				1469DC1C17F35FE100ADDA7E /* Shared */,
+				1469DC1D17F35FE700ADDA7E /* Vendor */,
+				1469DBFF17F35F2300ADDA7E /* Supporting Files */,
+			);
+			path = "TwitterClient-Mac";
+			sourceTree = "<group>";
+		};
+		1469DBFF17F35F2300ADDA7E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1469DC0017F35F2300ADDA7E /* TwitterClient-Mac-Info.plist */,
+				1469DC0117F35F2300ADDA7E /* InfoPlist.strings */,
+				1469DC0417F35F2300ADDA7E /* main.m */,
+				1469DC0617F35F2300ADDA7E /* TwitterClient-Mac-Prefix.pch */,
+				1469DC0717F35F2300ADDA7E /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1469DC1B17F35FDB00ADDA7E /* Lib */ = {
+			isa = PBXGroup;
+			children = (
+				1469DC1E17F3608400ADDA7E /* SETextView.h */,
+				1469DC1F17F3608400ADDA7E /* SETextView.m */,
+				1469DC2017F3608400ADDA7E /* SETextLayout.h */,
+				1469DC2117F3608400ADDA7E /* SETextLayout.m */,
+				1469DC2217F3608400ADDA7E /* SELineLayout.h */,
+				1469DC2317F3608400ADDA7E /* SELineLayout.m */,
+				1469DC2417F3608400ADDA7E /* SETextSelection.h */,
+				1469DC2517F3608400ADDA7E /* SETextSelection.m */,
+				1469DC2617F3608400ADDA7E /* SELinkText.h */,
+				1469DC2717F3608400ADDA7E /* SELinkText.m */,
+				1469DC2817F3608400ADDA7E /* SETextGeometry.h */,
+				1469DC2917F3608400ADDA7E /* SETextGeometry.m */,
+				1469DC2A17F3608400ADDA7E /* SETextAttachment.h */,
+				1469DC2B17F3608400ADDA7E /* SETextAttachment.m */,
+				1469DC2C17F3608400ADDA7E /* SETextInput.h */,
+				1469DC2D17F3608400ADDA7E /* SETextInput.m */,
+				1469DC2E17F3608400ADDA7E /* SETextSelectionView.h */,
+				1469DC2F17F3608400ADDA7E /* SETextSelectionView.m */,
+				1469DC3017F3608400ADDA7E /* SESelectionGrabber.h */,
+				1469DC3117F3608400ADDA7E /* SESelectionGrabber.m */,
+				1469DC3217F3608400ADDA7E /* SETextMagnifierCaret.h */,
+				1469DC3317F3608400ADDA7E /* SETextMagnifierCaret.m */,
+				1469DC3417F3608400ADDA7E /* SETextMagnifierRanged.h */,
+				1469DC3517F3608400ADDA7E /* SETextMagnifierRanged.m */,
+				1469DC3617F3608400ADDA7E /* SETextEditingCaret.h */,
+				1469DC3717F3608400ADDA7E /* SETextEditingCaret.m */,
+				1469DC3817F3608400ADDA7E /* SEConstants.h */,
+				1469DC3917F3608400ADDA7E /* SEConstants.m */,
+				1469DC3A17F3608400ADDA7E /* SECompatibility.h */,
+				1469DC3B17F3608400ADDA7E /* SECompatibility.m */,
+				1469DC3C17F3608400ADDA7E /* NSMutableAttributedString+Helper.h */,
+				1469DC3D17F3608400ADDA7E /* NSMutableAttributedString+Helper.m */,
+			);
+			name = Lib;
+			sourceTree = "<group>";
+		};
+		1469DC1C17F35FE100ADDA7E /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				1469DC4E17F3609E00ADDA7E /* SEImageCache.h */,
+				1469DC4F17F3609E00ADDA7E /* SEImageCache.m */,
+				1469DC5017F3609E00ADDA7E /* SETwitterHelper.h */,
+				1469DC5117F3609E00ADDA7E /* SETwitterHelper.m */,
+				1469DC5217F3609E00ADDA7E /* default_user_icon.png */,
+				1469DC5317F3609E00ADDA7E /* default_user_icon@2x.png */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
+		1469DC1D17F35FE700ADDA7E /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				1469DC5817F360B100ADDA7E /* twitter-text-objc */,
+			);
+			name = Vendor;
+			sourceTree = "<group>";
+		};
+		1469DC5817F360B100ADDA7E /* twitter-text-objc */ = {
+			isa = PBXGroup;
+			children = (
+				1469DC5917F360C300ADDA7E /* TwitterText.h */,
+				1469DC5A17F360C300ADDA7E /* TwitterText.m */,
+				1469DC5B17F360C300ADDA7E /* TwitterTextEntity.h */,
+				1469DC5C17F360C300ADDA7E /* TwitterTextEntity.m */,
+			);
+			name = "twitter-text-objc";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1469DBF417F35F2300ADDA7E /* TwitterClient-Mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1469DC1217F35F2400ADDA7E /* Build configuration list for PBXNativeTarget "TwitterClient-Mac" */;
+			buildPhases = (
+				1469DBF117F35F2300ADDA7E /* Sources */,
+				1469DBF217F35F2300ADDA7E /* Frameworks */,
+				1469DBF317F35F2300ADDA7E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TwitterClient-Mac";
+			productName = "TwitterClient-Mac";
+			productReference = 1469DBF517F35F2300ADDA7E /* TwitterClient-Mac.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1469DBED17F35F2300ADDA7E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = SE;
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "kishikawa katsumi";
+			};
+			buildConfigurationList = 1469DBF017F35F2300ADDA7E /* Build configuration list for PBXProject "TwitterClient-Mac" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 1469DBEC17F35F2300ADDA7E;
+			productRefGroup = 1469DBF617F35F2300ADDA7E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1469DBF417F35F2300ADDA7E /* TwitterClient-Mac */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1469DBF317F35F2300ADDA7E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1469DC0317F35F2300ADDA7E /* InfoPlist.strings in Resources */,
+				1469DC0917F35F2300ADDA7E /* Credits.rtf in Resources */,
+				1469DC5617F3609E00ADDA7E /* default_user_icon.png in Resources */,
+				1469DC5717F3609E00ADDA7E /* default_user_icon@2x.png in Resources */,
+				1469DC6A17F3613900ADDA7E /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1469DBF117F35F2300ADDA7E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1469DC0517F35F2300ADDA7E /* main.m in Sources */,
+				1469DC3E17F3608400ADDA7E /* SETextView.m in Sources */,
+				1469DC3F17F3608400ADDA7E /* SETextLayout.m in Sources */,
+				1469DC4017F3608400ADDA7E /* SELineLayout.m in Sources */,
+				1469DC4117F3608400ADDA7E /* SETextSelection.m in Sources */,
+				1469DC4217F3608400ADDA7E /* SELinkText.m in Sources */,
+				1469DC4317F3608400ADDA7E /* SETextGeometry.m in Sources */,
+				1469DC4417F3608400ADDA7E /* SETextAttachment.m in Sources */,
+				1469DC4517F3608400ADDA7E /* SETextInput.m in Sources */,
+				1469DC4617F3608400ADDA7E /* SETextSelectionView.m in Sources */,
+				1469DC4717F3608400ADDA7E /* SESelectionGrabber.m in Sources */,
+				1469DC4817F3608400ADDA7E /* SETextMagnifierCaret.m in Sources */,
+				1469DC4917F3608400ADDA7E /* SETextMagnifierRanged.m in Sources */,
+				1469DC4A17F3608400ADDA7E /* SETextEditingCaret.m in Sources */,
+				1469DC4B17F3608400ADDA7E /* SEConstants.m in Sources */,
+				1469DC4C17F3608400ADDA7E /* SECompatibility.m in Sources */,
+				1469DC4D17F3608400ADDA7E /* NSMutableAttributedString+Helper.m in Sources */,
+				1469DC5417F3609E00ADDA7E /* SEImageCache.m in Sources */,
+				1469DC5517F3609E00ADDA7E /* SETwitterHelper.m in Sources */,
+				1469DC5D17F360C300ADDA7E /* TwitterText.m in Sources */,
+				1469DC5E17F360C300ADDA7E /* TwitterTextEntity.m in Sources */,
+				1469DC6517F3610700ADDA7E /* SEAppDelegate.m in Sources */,
+				1469DC6617F3610700ADDA7E /* SETweetCellView.m in Sources */,
+				1469DC6717F3610700ADDA7E /* SEUserIconImageView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1469DC0117F35F2300ADDA7E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1469DC0217F35F2300ADDA7E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1469DC0717F35F2300ADDA7E /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1469DC0817F35F2300ADDA7E /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		1469DC6817F3613900ADDA7E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1469DC6917F3613900ADDA7E /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1469DC1017F35F2400ADDA7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		1469DC1117F35F2400ADDA7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		1469DC1317F35F2400ADDA7E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TwitterClient-Mac/TwitterClient-Mac-Prefix.pch";
+				INFOPLIST_FILE = "TwitterClient-Mac/TwitterClient-Mac-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		1469DC1417F35F2400ADDA7E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "TwitterClient-Mac/TwitterClient-Mac-Prefix.pch";
+				INFOPLIST_FILE = "TwitterClient-Mac/TwitterClient-Mac-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1469DBF017F35F2300ADDA7E /* Build configuration list for PBXProject "TwitterClient-Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1469DC1017F35F2400ADDA7E /* Debug */,
+				1469DC1117F35F2400ADDA7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1469DC1217F35F2400ADDA7E /* Build configuration list for PBXNativeTarget "TwitterClient-Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1469DC1317F35F2400ADDA7E /* Debug */,
+				1469DC1417F35F2400ADDA7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1469DBED17F35F2300ADDA7E /* Project object */;
+}

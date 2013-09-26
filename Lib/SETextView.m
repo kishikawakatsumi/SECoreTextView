@@ -41,7 +41,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 @property (nonatomic) SETextLayout *textLayout;
 
-@property (nonatomic) NSMutableArray *attachments;
+@property (nonatomic) NSMutableSet *attachments;
 
 @property (nonatomic) SETouchPhase touchPhase;
 @property (nonatomic) CGPoint clickPoint;
@@ -79,7 +79,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     self.textLayout = [[SETextLayout alloc] init];
     self.textLayout.bounds = self.bounds;
     
-    self.attachments = [[NSMutableArray alloc] init];
+    self.attachments = [[NSMutableSet alloc] init];
     
     self.highlightedTextColor = [NSColor whiteColor];
     self.selectedTextBackgroundColor = [SEConstants selectedTextBackgroundColor];
@@ -248,6 +248,10 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 {
     _editing = editing;
     self.textLayout.editing = editing;
+    
+    if (!editing) {
+        self.caretView.hidden = YES;
+    }
 }
 
 - (void)setText:(NSString *)text
@@ -561,7 +565,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (void)drawTextAttachmentsInContext:(CGContextRef)context
 {
-    NSMutableArray *attachmentsToLeave = [[NSMutableArray alloc] init];
+    NSMutableSet *attachmentsToLeave = [[NSMutableSet alloc] init];
     
     [self.attributedText enumerateAttribute:(id)kCTRunDelegateAttributeName inRange:NSMakeRange(0, self.text.length) options:kNilOptions usingBlock:^(id value, NSRange range, BOOL *stop) {
         if (!value) {
@@ -579,20 +583,26 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
             CGRect rect = [lineLayout rectOfStringWithRange:range];
             if (!CGRectIsEmpty(rect)) {
-                if ([attachment.object isKindOfClass:[NSView class]]) {
-                    UIView *view = attachment.object;
+                id object = attachment.object;
+                CGSize size = attachment.size;
+                rect.origin.x += (CGRectGetWidth(rect) - size.width) / 2;
+                rect.origin.y += CGRectGetHeight(rect) - size.height;
+                rect.size = size;
+                rect = CGRectIntegral(rect);
+                if ([object isKindOfClass:[NSView class]]) {
+                    UIView *view = object;
                     view.frame = rect;
                     if (!view.superview) {
                         [self addSubview:view];
                     }
-                } else if ([attachment.object isKindOfClass:[NSImage class]]) {
-                    NSImage *image = attachment.object;
+                } else if ([object isKindOfClass:[NSImage class]]) {
+                    NSImage *image = object;
 #if TARGET_OS_IPHONE
                     [image drawInRect:rect];
 #else
                     [image drawInRect:rect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0f];
 #endif
-                } else if ([attachment.object isKindOfClass:NSClassFromString(@"NSBlock")]) {
+                } else if ([object isKindOfClass:NSClassFromString(@"NSBlock")]) {
                     SETextAttachmentDrawingBlock draw = attachment.object;
                     CGContextSaveGState(context);
                     draw(rect, context);
@@ -1123,7 +1133,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (void)beginEditing
 {
-    if (!self.editing && !self.isFirstResponder) {
+    if (!self.isEditing && !self.isFirstResponder) {
         BOOL shouldBeginEditing = YES;
         if ([self.delegate respondsToSelector:@selector(textViewShouldBeginEditing:)]) {
             shouldBeginEditing = [self.delegate textViewShouldBeginEditing:self];
@@ -1260,7 +1270,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (BOOL)canBecomeFirstResponder
 {
-    return YES;
+    return self.isEditable && self.isEditing;
 }
 
 #else
@@ -1505,8 +1515,19 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (BOOL)resignFirstResponder
 {
-    [self clearSelection];
-    self.editing = NO;
+    if (!self.isFirstResponder) {
+        return YES;
+    }
+    
+    if (self.isEditing) {
+        self.editing = NO;
+        
+        SETextSelection *textSelection = self.textLayout.textSelection;
+        NSRange selectedRange = textSelection.selectedRange;
+        textSelection.selectedRange = NSMakeRange(NSMaxRange(selectedRange), 0);
+    } else {
+        [self clearSelection];
+    }
     
     [self setNeedsDisplayInRect:self.bounds];
     
@@ -1514,7 +1535,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         [self.delegate textViewDidEndEditing:self];
     }
     
-    return YES;
+    return [super resignFirstResponder];
 }
 
 #if TARGET_OS_IPHONE

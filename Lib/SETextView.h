@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
 #import "SELinkText.h"
+#import "SETextAttachment.h"
 #import "SECompatibility.h"
 #import "NSMutableAttributedString+Helper.h"
 
@@ -24,7 +25,7 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @class SELinkText;
 
 #if TARGET_OS_IPHONE
-@interface SETextView : NSView <NSTextInputClient>
+@interface SETextView : UIView <UITextInput>
 #else
 @interface SETextView : NSView
 #endif
