@@ -23,7 +23,7 @@ SECoreTextView is multi-line rich text view library with clickable links, select
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/Screenshots/iOS_05.png" alt="iOS ScreenShot 5" width="225px" style="width: 225px;" />
 
 ### Editing (iOS only)
-<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/Screenshots/iOS_05.png" alt="iOS ScreenShot 5" width="225px" style="width: 225px;" />
+<img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/Screenshots/iOS_10.png" alt="iOS ScreenShot 5" width="225px" style="width: 225px;" />
 
 ### Both OS X / iOS supported
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/Screenshots/OSX_02.png" alt="OS X ScreenShot 2" width="320px" style="width: 320px;" />
