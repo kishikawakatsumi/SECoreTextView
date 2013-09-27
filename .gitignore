@@ -10,7 +10,8 @@ build/
 *.perspectivev3
 !default.perspectivev3
 *.xcworkspace
-!default.xcworkspace
+!SECoreTextView.xcworkspace
+*.xccheckout
 xcuserdata
 profile
 *.moved-aside

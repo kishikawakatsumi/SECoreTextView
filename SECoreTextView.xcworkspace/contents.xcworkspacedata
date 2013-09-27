@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "Examples">
+      <Group
+         location = "container:"
+         name = "iOS">
+         <FileRef
+            location = "group:Examples/iOS/TwitterClient-iOS/TwitterClient-iOS.xcodeproj">
+         </FileRef>
+         <FileRef
+            location = "group:Examples/iOS/RichTextEditor/RichTextEditor.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "Mac">
+         <FileRef
+            location = "group:Examples/Mac/TwitterClient-Mac/TwitterClient-Mac.xcodeproj">
+         </FileRef>
+      </Group>
+   </Group>
+</Workspace>
