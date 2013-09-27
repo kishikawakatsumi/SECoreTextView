@@ -37,7 +37,13 @@ SECoreTextView is multi-line rich text view library with clickable links, select
 **OS X 10.7(Lion) or later / iOS 5 or later**
 
 ## Installation
-`git clone git@github.com:kishikawakatsumi/SECoreTextView.git --recursive`
+### CocoaPods
+`pod 'SECoreTextView'`
+
+### Manual Install
+1. `git clone git@github.com:kishikawakatsumi/SECoreTextView.git --recursive`
+2. Copy files in `Lib` to your project.
+3. Add `CoreText.framework` to your target.
 
 ## 3rd party libraries (for demo apps)
 **twitter-text-objc**  

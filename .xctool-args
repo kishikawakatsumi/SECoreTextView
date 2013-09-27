@@ -1,0 +1,7 @@
+[
+  "-workspace", "SECoreTextView.xcworkspace",
+  "-scheme", "Tests",
+  "-configuration", "Debug",
+  "-sdk", "iphonesimulator",
+  "-arch", "i386"
+]
