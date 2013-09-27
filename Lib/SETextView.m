@@ -249,9 +249,11 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     _editing = editing;
     self.textLayout.editing = editing;
     
+#if TARGET_OS_IPHONE
     if (!editing) {
         self.caretView.hidden = YES;
     }
+#endif
 }
 
 - (void)setText:(NSString *)text
@@ -1528,25 +1530,27 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (BOOL)resignFirstResponder
 {
-    if (!self.isFirstResponder) {
-        return YES;
-    }
-    
     if (self.isEditing) {
         self.editing = NO;
         
         SETextSelection *textSelection = self.textLayout.textSelection;
         NSRange selectedRange = textSelection.selectedRange;
         textSelection.selectedRange = NSMakeRange(NSMaxRange(selectedRange), 0);
+        
+        if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]) {
+            [self.delegate textViewDidEndEditing:self];
+        }
     } else {
-        [self clearSelection];
+#if TARGET_OS_IPHONE
+        if (self.isFirstResponder) {
+#else
+        if (self == self.window.firstResponder) {
+#endif
+            [self clearSelection];
+        }
     }
     
     [self setNeedsDisplayInRect:self.bounds];
-    
-    if ([self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]) {
-        [self.delegate textViewDidEndEditing:self];
-    }
     
     return [super resignFirstResponder];
 }
