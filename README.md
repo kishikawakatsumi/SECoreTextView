@@ -1,8 +1,8 @@
-SECoreTextView
+SECoreTextView 
 ==============
 
-![version](http://cocoapod-badges.herokuapp.com/v/SECoreTextView/badge.svg)
-![platform](http://cocoapod-badges.herokuapp.com/p/SECoreTextView/badge.svg)
+![version](http://cocoapod-badges.herokuapp.com/v/SECoreTextView/badge.svg)&nbsp;
+![platform](http://cocoapod-badges.herokuapp.com/p/SECoreTextView/badge.svg)&nbsp;
 [![Build Status](https://travis-ci.org/kishikawakatsumi/SECoreTextView.png?branch=master)](https://travis-ci.org/kishikawakatsumi/SECoreTextView)
 [![Coverage Status](https://coveralls.io/repos/kishikawakatsumi/SECoreTextView/badge.png?branch=master)](https://coveralls.io/r/kishikawakatsumi/SECoreTextView?branch=master)
 
