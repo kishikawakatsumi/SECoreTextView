@@ -42,7 +42,7 @@ SECoreTextView is multi-line rich text view library with clickable links, select
 
 ### Manual Install
 1. `git clone git@github.com:kishikawakatsumi/SECoreTextView.git --recursive`
-2. Copy files in `Lib` to your project.
+2. Copy files in `Lib` and `Resources` to your project.
 3. Add `CoreText.framework` to your target.
 
 ## 3rd party libraries (for demo apps)
