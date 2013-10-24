@@ -131,6 +131,11 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     return self;
 }
 
+- (void)dealloc
+{
+    [self.caretView stopBlink];
+}
+
 #pragma mark -
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString

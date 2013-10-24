@@ -12,6 +12,7 @@
 @interface SETextEditingCaret : UIView
 
 - (void)delayBlink;
+- (void)stopBlink;
 
 @end
 #endif

@@ -38,7 +38,19 @@ static const NSTimeInterval SETextEditingCaretBlinkAnimationDuration = 0.1;
 
 - (void)dealloc
 {
+    [self.blinkTimer invalidate];
+}
+
+- (void)delayBlink
+{
+    self.alpha = 1.0f;
+    self.blinkTimer.fireDate = [NSDate dateWithTimeIntervalSinceNow:SETextEditingCaretInitialBlinkDelay];
+}
+
+- (void)stopBlink
+{
     [_blinkTimer invalidate];
+    self.blinkTimer = nil;
 }
 
 - (void)blink
@@ -48,12 +60,6 @@ static const NSTimeInterval SETextEditingCaretBlinkAnimationDuration = 0.1;
     } completion:^(BOOL finished) {
         
     }];
-}
-
-- (void)delayBlink
-{
-    self.alpha = 1.0f;
-    self.blinkTimer.fireDate = [NSDate dateWithTimeIntervalSinceNow:SETextEditingCaretInitialBlinkDelay];
 }
 
 @end
