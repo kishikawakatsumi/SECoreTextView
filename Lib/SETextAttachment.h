@@ -10,6 +10,7 @@
 #import <CoreText/CoreText.h>
 
 #if !TARGET_OS_IPHONE
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_8
 enum {
 	kCTRunDelegateVersion1 = 1,
 	kCTRunDelegateCurrentVersion = kCTRunDelegateVersion1
@@ -33,6 +34,7 @@ CTRunDelegateRef CTRunDelegateCreate(const CTRunDelegateCallbacks* callbacks,
                                      void* refCon );
 void* CTRunDelegateGetRefCon(
                              CTRunDelegateRef runDelegate );
+#endif
 #endif
 
 @interface SETextAttachment : NSObject

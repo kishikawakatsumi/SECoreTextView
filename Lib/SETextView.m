@@ -133,7 +133,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (void)dealloc
 {
+#if TARGET_OS_IPHONE
     [self.caretView stopBlink];
+#endif
 }
 
 #pragma mark -
