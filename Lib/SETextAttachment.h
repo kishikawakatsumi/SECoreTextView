@@ -10,7 +10,7 @@
 #import <CoreText/CoreText.h>
 
 #if !TARGET_OS_IPHONE
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_8
+#if !defined(MAC_OS_X_VERSION_10_9) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_9
 enum {
 	kCTRunDelegateVersion1 = 1,
 	kCTRunDelegateCurrentVersion = kCTRunDelegateVersion1
