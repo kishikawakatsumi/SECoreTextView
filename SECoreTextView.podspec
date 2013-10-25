@@ -7,11 +7,11 @@ Pod::Spec.new do |s|
   s.author                = { "kishikawakatsumi" => "kishikawakatsumi@mac.com" }
   s.source                = { :git => "https://github.com/kishikawakatsumi/SECoreTextView.git", :tag => "v#{s.version}" }
   
-  s.ios.deployment_target = '5.0'
-  s.ios.frameworks = 'QuartzCore', 'CoreText'
+  s.ios.deployment_target = "5.0"
+  s.ios.frameworks        = "QuartzCore", "CoreText"
   
-  s.osx.deployment_target = '10.7'
-  s.osx.frameworks = 'ApplicationServices', 'CoreText'
+  s.osx.deployment_target = "10.7"
+  s.osx.frameworks        = "ApplicationServices", "CoreText"
   
   s.source_files          = "Lib/*"
   s.resources             = "Resources/SECoreTextView.bundle"
