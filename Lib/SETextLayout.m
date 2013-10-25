@@ -27,6 +27,7 @@
     if (self) {
         [self commonInit];
     }
+    
     return self;
 }
 
@@ -35,7 +36,7 @@
     self = [super init];
     if (self) {
         [self commonInit];
-        self.attributedString = [attributedString copy];
+        self.attributedString = attributedString.copy;
     }
     
     return self;
@@ -136,7 +137,7 @@
          }
      }];
     
-    _links = [links copy];
+    _links = links.copy;
 }
 
 - (void)calculateLines
@@ -189,7 +190,7 @@
         [lineLayouts addObject:lineLayout];
     }
     
-    _lineLayouts = [lineLayouts copy];
+    _lineLayouts = lineLayouts.copy;
 }
 
 - (void)update
