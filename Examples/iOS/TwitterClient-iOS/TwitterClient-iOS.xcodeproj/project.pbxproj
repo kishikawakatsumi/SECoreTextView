@@ -48,7 +48,7 @@
 		1469DBE517F35DC100ADDA7E /* SETextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DBD517F35DC100ADDA7E /* SETextView.m */; };
 		1469DBE717F35E3200ADDA7E /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DBE617F35E3200ADDA7E /* Twitter.framework */; };
 		1469DBE917F35E4300ADDA7E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DBE817F35E4300ADDA7E /* Accounts.framework */; };
-		1469DBEB17F35E5100ADDA7E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DBEA17F35E5100ADDA7E /* Social.framework */; };
+		1469DBEB17F35E5100ADDA7E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DBEA17F35E5100ADDA7E /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
