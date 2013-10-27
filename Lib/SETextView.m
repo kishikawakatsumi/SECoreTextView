@@ -164,7 +164,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
                                     font:(NSFont *)font
 {
     NSInteger length = attributedString.length;
-    NSMutableAttributedString *mutableAttributedString = [attributedString mutableCopy];
+    NSMutableAttributedString *mutableAttributedString = attributedString.mutableCopy;
     
     CTTextAlignment textAlignment = kCTTextAlignmentNatural;
     CGFloat lineHeight = 0.0f;
@@ -275,7 +275,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
-    _attributedText = [attributedText copy];
+    _attributedText = attributedText.copy;
     _text = _attributedText.string;
     
     [self setNeedsDisplayInRect:self.bounds];
@@ -444,7 +444,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 - (void)setAttributes:(NSDictionary *)attributes
 {
     NSInteger length = self.attributedText.length;
-    NSMutableAttributedString *attributedString = [self.attributedText mutableCopy];
+    NSMutableAttributedString *attributedString = self.attributedText.mutableCopy;
     
     if (attributes) {
         [attributedString addAttributes:attributes range:NSMakeRange(0, length)];
@@ -1591,10 +1591,10 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         // Need to also deal with overlapping ranges.
     }
     
-    NSMutableString *editingText = self.editingText;
-    [editingText replaceCharactersInRange:r.range withString:text];
+    NSMutableAttributedString *editingAttributedText = self.editingAttributedText;
+    [editingAttributedText replaceCharactersInRange:r.range withString:text];
     
-    self.text = editingText.copy;
+    self.attributedText = editingAttributedText;
     self.textLayout.textSelection.selectedRange = selectedRange;
     
     [self selectionChanged];
@@ -1675,7 +1675,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     
     selectedNSRange = NSMakeRange(markedTextRange.location + selectedRange.location, selectedRange.length);
     
-    self.attributedText = editingAttributedText.copy;
+    self.attributedText = editingAttributedText;
     self.textLayout.markedTextRange = markedTextRange;
     self.textLayout.textSelection.selectedRange = selectedNSRange;
     
@@ -1970,11 +1970,11 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     return shouldChangeTextInRange;
 }
 
-//- (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
-//{
-//    NSLog(@"%s", __func__);
-//    return @{UITextInputTextFontKey: self.font};
-//}
+- (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+{
+    SETextPosition *pos = (SETextPosition *)position;
+    return [self.attributedText attributesAtIndex:pos.index effectiveRange:NULL];
+}
 
 //- (UITextPosition *)positionWithinRange:(UITextRange *)range atCharacterOffset:(NSInteger)offset
 //{
