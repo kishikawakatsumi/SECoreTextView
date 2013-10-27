@@ -39,6 +39,7 @@
 
 - (CFIndex)stringIndexForPosition:(CGPoint)point
 {
+    point.x -= self.rect.origin.x;
     CFIndex index = CTLineGetStringIndexForPosition(self.line, point);
     return index;
 }

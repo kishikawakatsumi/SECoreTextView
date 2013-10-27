@@ -412,9 +412,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 #if TARGET_OS_IPHONE
     CTTextAlignment textAlignment;
     if (self.textAlignment == NSTextAlignmentRight) {
-        textAlignment = kCTTextAlignmentCenter;
-    } else if (self.textAlignment == NSTextAlignmentCenter) {
         textAlignment = kCTTextAlignmentRight;
+    } else if (self.textAlignment == NSTextAlignmentCenter) {
+        textAlignment = kCTTextAlignmentCenter;
     } else {
         textAlignment = (CTTextAlignment)self.textAlignment;
     }

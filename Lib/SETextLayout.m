@@ -107,7 +107,7 @@
         frameSize.height += [[UIFont systemFontOfSize:[UIFont labelFontSize]] leading]; // Workaround
     }
 	frameRect.origin.y = CGRectGetMaxY(frameRect) - frameSize.height;
-    frameRect.size = frameSize;
+    frameRect.size.height = frameSize.height;
 	
 	CGMutablePathRef path = CGPathCreateMutable();
 	CGPathAddRect(path, NULL, frameRect);
