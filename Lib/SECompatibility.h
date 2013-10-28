@@ -51,3 +51,7 @@ typedef NSEdgeInsets UIEdgeInsets;
 @end
 
 #endif
+
+@interface SECompatibility : NSObject
+
+@end

@@ -26,3 +26,7 @@ NSString * const NSLinkAttributeName = @"NSLink";
 
 @end
 #endif
+
+@implementation SECompatibility
+
+@end
