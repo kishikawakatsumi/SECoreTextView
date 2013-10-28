@@ -39,6 +39,7 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @property (nonatomic) NSColor *textColor;
 @property (nonatomic) NSColor *highlightedTextColor;
 @property (nonatomic) NSTextAlignment textAlignment;
+@property (nonatomic) NSLineBreakMode lineBreakMode;
 @property (nonatomic) CGFloat lineSpacing;
 @property (nonatomic) CGFloat lineHeight;
 @property (nonatomic) CGFloat paragraphSpacing;

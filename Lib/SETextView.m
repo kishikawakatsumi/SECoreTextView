@@ -418,16 +418,23 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     } else {
         textAlignment = (CTTextAlignment)self.textAlignment;
     }
+    /* Available in iOS 6.0 and later. */
 //    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
 #else
     CTTextAlignment textAlignment = self.textAlignment;
 #endif
+    CTLineBreakMode lineBreakMode = (CTLineBreakMode)self.lineBreakMode;
+    if (lineBreakMode == kCTLineBreakByTruncatingTail) {
+        lineBreakMode = kCTLineBreakByWordWrapping;
+    }
+    
     CGFloat lineSpacing = roundf(self.lineSpacing);
     CGFloat lineHeight = roundf(self.lineHeight);
     CGFloat paragraphSpacing = roundf(self.paragraphSpacing);
     
     CTParagraphStyleSetting setting[] = {
         { kCTParagraphStyleSpecifierAlignment, sizeof(textAlignment), &textAlignment},
+        { kCTParagraphStyleSpecifierLineBreakMode, sizeof(lineBreakMode), &lineBreakMode},
         { kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(lineHeight), &lineHeight },
         { kCTParagraphStyleSpecifierMaximumLineHeight, sizeof(lineHeight), &lineHeight },
         { kCTParagraphStyleSpecifierLineSpacing, sizeof(lineSpacing), &lineSpacing },
@@ -459,6 +466,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     
     self.textLayout.bounds = self.bounds;
     self.textLayout.attributedString = self.attributedText;
+    self.textLayout.lineBreakMode = self.lineBreakMode;
     
     [self.textLayout update];
 }

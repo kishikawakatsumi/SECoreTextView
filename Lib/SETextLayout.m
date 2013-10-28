@@ -15,6 +15,10 @@
 @interface SETextLayout () {
     CTFramesetterRef _framesetter;
     CTFrameRef _frame;
+    
+    /* Unused */
+    CTTypesetterRef _typesetter;
+    CFMutableArrayRef _lines;
 }
 
 @end
@@ -45,6 +49,7 @@
 - (void)commonInit
 {
     self.markedTextRange = NSMakeRange(NSNotFound, 0);
+    _lines = CFArrayCreateMutable(NULL, 0, NULL);
 }
 
 - (void)dealloc
@@ -91,6 +96,7 @@
     }
 }
 
+/* laying out with CTFramesetterRef */
 - (void)createFrame
 {
     if (_frame) {
@@ -118,6 +124,49 @@
 #if TARGET_OS_IPHONE
     _frameRect.origin.y = 0.0f;
 #endif
+}
+
+- (void)createTypesetter
+{
+    if (_typesetter) {
+        CFRelease(_typesetter);
+    }
+    
+    CFAttributedStringRef attributedString = (__bridge CFAttributedStringRef)self.attributedString;
+    if (attributedString) {
+        _typesetter = CTTypesetterCreateWithAttributedString(attributedString);
+    } else {
+        attributedString = CFAttributedStringCreate(NULL, CFSTR(""), NULL);
+        _typesetter = CTTypesetterCreateWithAttributedString(attributedString);
+        CFRelease(attributedString);
+    }
+}
+
+/* laying out with CTTypesetterRef */
+- (void)layoutLines
+{
+    CGRect frameRect = _bounds;
+    CGFloat width = CGRectGetWidth(frameRect);
+    CGPoint textPosition = CGPointMake(floor(CGRectGetMinX(frameRect)),
+                                       floor(CGRectGetMaxY(frameRect)));
+    CFIndex start = 0;
+    NSUInteger length = _attributedString.length;
+    while (start < length && textPosition.y > frameRect.origin.y) {
+        CFIndex count = CTTypesetterSuggestLineBreak(_typesetter, start, width);
+        CTLineRef line = CTTypesetterCreateLine(_typesetter, CFRangeMake(start, count));
+        CFArrayAppendValue(_lines, line);
+        CFRelease(line);
+        
+        CGFloat ascent;
+        CGFloat descent;
+        CGFloat leading;
+        CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
+        
+        textPosition.y -= ceil(ascent);
+        textPosition.y -= ceilf(descent + leading + 1); // +1 matches best to CTFramesetter's behavior
+        
+        start += count;
+    }
 }
 
 - (void)detectLinks
@@ -148,7 +197,9 @@
     CTFrameGetLineOrigins(_frame, CFRangeMake(0, 0), lineOrigins);
     
     NSMutableArray *lineLayouts = [[NSMutableArray alloc] initWithCapacity:lineCount];
-    for (NSInteger index = 0; index < lineCount; index++) {
+    NSInteger index = 0;
+    BOOL isTruncated = NO;
+    for (; index < lineCount; index++) {
         CGPoint origin = lineOrigins[index];
         CTLineRef line = CFArrayGetValueAtIndex(lines, index);
         
@@ -175,6 +226,11 @@
 #else
         lineRect.origin.y += _frameRect.origin.y;
 #endif
+        if (lineRect.origin.y < 0.0f) {
+            isTruncated = YES;
+            break;
+        }
+        
         SELineLayout *lineLayout = [[SELineLayout alloc] initWithLine:line index:index rect:lineRect metrics:metrics];
         
         for (SELinkText *link in self.links) {
@@ -188,6 +244,26 @@
         }
         
         [lineLayouts addObject:lineLayout];
+    }
+    
+    if (isTruncated) {
+        NSInteger truncatedLineIndex = index - 1;
+        SELineLayout *lineLayout = lineLayouts[truncatedLineIndex];
+        
+        NSDictionary *attributes = [self.attributedString attributesAtIndex:0 effectiveRange:NULL];
+        CFAttributedStringRef truncationText = CFAttributedStringCreate(NULL, CFSTR("\u2026"), (__bridge CFDictionaryRef)attributes);
+        CTLineRef truncationToken = CTLineCreateWithAttributedString(truncationText);
+        CFRelease(truncationText);
+        
+        CTLineRef line = lineLayout.line;
+        CFRange stringRange = CTLineGetStringRange(line);
+        CGFloat offset = CTLineGetOffsetForStringIndex(line, stringRange.location + stringRange.length - 1, NULL);
+        
+        CTLineRef truncationLine = CTLineCreateTruncatedLine(lineLayout.line, offset - 1.0f, kCTLineTruncationEnd, truncationToken);
+        SELineLayout *truncationLineLayout = [[SELineLayout alloc] initWithLine:truncationLine index:lineLayout.index rect:lineLayout.rect metrics:lineLayout.metrics];
+        truncationLineLayout.truncated = YES;
+        [lineLayouts replaceObjectAtIndex:truncatedLineIndex withObject:truncationLineLayout];
+        CFRelease(truncationToken);
     }
     
     _lineLayouts = lineLayouts.copy;
@@ -211,7 +287,19 @@
 #endif
 
 	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
-	CTFrameDraw(_frame, context);
+    
+    if (self.lineBreakMode == kCTLineBreakByTruncatingTail) {
+        NSArray *lineLayouts = self.lineLayouts;
+        for (SELineLayout *lineLayout in lineLayouts) {
+            CGRect lineRect = lineLayout.rect;
+            CGContextSetTextPosition(context, lineRect.origin.x, lineRect.origin.y + lineLayout.metrics.descent);
+            
+            CTLineRef line = lineLayout.line;
+            CTLineDraw(line, context);
+        }
+    } else {
+        CTFrameDraw(_frame, context);
+    }
 }
 
 - (void)drawInContext:(CGContextRef)context

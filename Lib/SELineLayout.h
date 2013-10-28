@@ -32,6 +32,8 @@ typedef struct {
 @property (nonatomic, readonly) BOOL containsLink;
 @property (nonatomic, readonly) NSUInteger numberOfLinks;
 
+@property (nonatomic, getter = isTruncated) BOOL truncated;
+
 - (id)initWithLine:(CTLineRef)line index:(NSInteger)index rect:(CGRect)rect metrics:(SELineMetrics)metrics;
 
 - (NSRange)stringRange;
