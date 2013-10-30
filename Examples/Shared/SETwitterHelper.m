@@ -45,14 +45,15 @@
     }
     
     NSFont *font = [NSFont systemFontOfSize:13.0f];
-    id tweetfont = (__bridge id)CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL);
+    CTFontRef tweetfont = CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL);
     
     NSColor *tweetColor = [NSColor blackColor];
     NSColor *hashTagColor = [NSColor grayColor];
     NSColor *linkColor = [NSColor blueColor];
     
-	NSDictionary *attributes = @{(id)kCTForegroundColorAttributeName: (id)tweetColor.CGColor, (id)kCTFontAttributeName: tweetfont};
+	NSDictionary *attributes = @{(id)kCTForegroundColorAttributeName: (id)tweetColor.CGColor, (id)kCTFontAttributeName: (__bridge id)tweetfont};
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+    CFRelease(tweetfont);
     
     NSArray *textEentities = [TwitterText entitiesInText:text];
     for (TwitterTextEntity *textEentity in textEentities) {

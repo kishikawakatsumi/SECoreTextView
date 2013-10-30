@@ -77,7 +77,7 @@
 		1469DB9D17F35C3300ADDA7E /* SETimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SETimelineViewController.h; sourceTree = "<group>"; };
 		1469DB9E17F35C3300ADDA7E /* SETimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SETimelineViewController.m; sourceTree = "<group>"; };
 		1469DB9F17F35C3300ADDA7E /* SETweetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SETweetViewController.h; sourceTree = "<group>"; };
-		1469DBA017F35C3300ADDA7E /* SETweetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SETweetViewController.m; sourceTree = "<group>"; };
+		1469DBA017F35C3300ADDA7E /* SETweetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SETweetViewController.m; sourceTree = "<group>"; wrapsLines = 0; };
 		1469DBA117F35C3300ADDA7E /* SEWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEWebViewController.h; sourceTree = "<group>"; };
 		1469DBA217F35C3300ADDA7E /* SEWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEWebViewController.m; sourceTree = "<group>"; };
 		1469DBA817F35C7D00ADDA7E /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };

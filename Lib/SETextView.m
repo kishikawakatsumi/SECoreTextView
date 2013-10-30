@@ -633,8 +633,10 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     }
     
     NSInteger lineNumber = 0;
+#if TARGET_OS_IPHONE
     CGRect startRect = CGRectZero;
     CGRect endRect = CGRectZero;
+#endif
     
     CGFloat lineSpacing = self.lineSpacing;
     CGFloat previousLineOffset = 0.0f;
@@ -681,18 +683,19 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         
         UIRectFill(selectionRect);
         
+#if TARGET_OS_IPHONE
         if (lineNumber == 0) {
             startRect = selectionRect;
             endRect = selectionRect;
         } else {
             endRect = selectionRect;
         }
+#endif
         
 #if TARGET_OS_IPHONE
         previousLineOffset = CGRectGetMaxY(selectionRect);
 #else
         previousLineOffset = CGRectGetMinY(selectionRect);
-//        NSLog(@"%f %f", CGRectGetMaxY(selectionRect), CGRectGetMinY(selectionRect));
 #endif
         
         lineNumber++;
@@ -1801,7 +1804,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 - (UITextPosition *)positionWithinRange:(UITextRange *)range farthestInDirection:(UITextLayoutDirection)direction
 {
     SETextRange *r = (SETextRange *)range;
-    NSInteger pos = r.range.location;
+    NSInteger pos;
     
     switch (direction) {
         case UITextLayoutDirectionUp:
@@ -1820,7 +1823,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 - (UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position inDirection:(UITextLayoutDirection)direction
 {
     SETextPosition *pos = (SETextPosition *)position;
-    NSRange result = NSMakeRange(pos.index, 1);
+    NSRange result;
     
     switch (direction) {
         case UITextLayoutDirectionUp:
@@ -2056,7 +2059,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         }
         
         NSMutableAttributedString *editingAttributedText = self.editingAttributedText;
-        NSRange deleteRange;
+        NSRange deleteRange = NSMakeRange(0, 0);
         
         if (markedTextRange && markedTextNSRange.location != NSNotFound) {
             deleteRange = markedTextNSRange;
