@@ -26,6 +26,8 @@
 
 @property (nonatomic) NSRange markedTextRange;
 @property (nonatomic, getter = isEditing) BOOL editing;
+
+@property (nonatomic) CTTextAlignment textAlignment;
 @property (nonatomic) CTLineBreakMode lineBreakMode;
 
 - (id)initWithAttributedString:(NSAttributedString *)attributedString;

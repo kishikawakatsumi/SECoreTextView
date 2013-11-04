@@ -446,6 +446,8 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(setting, sizeof(setting) / sizeof(CTParagraphStyleSetting));
     [self setAttributes:@{(id)kCTParagraphStyleAttributeName: (__bridge id)paragraphStyle}];
     CFRelease(paragraphStyle);
+    
+    self.textLayout.textAlignment = textAlignment;
 }
 
 - (void)setAttributes:(NSDictionary *)attributes

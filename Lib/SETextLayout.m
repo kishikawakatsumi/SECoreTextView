@@ -142,7 +142,7 @@
     }
 }
 
-/* laying out with CTTypesetterRef */
+/* laying out with CTTypesetterRef (Unused) */
 - (void)layoutLines
 {
     CGRect frameRect = _bounds;
@@ -167,7 +167,7 @@
         
         start += count;
     }
-}
+} /* Unused */
 
 - (void)detectLinks
 {
@@ -226,12 +226,23 @@
 #else
         lineRect.origin.y += _frameRect.origin.y;
 #endif
+        
+        CGRect drawingRect = lineRect;
+#if TARGET_OS_IPHONE
+        drawingRect.origin.y = CGRectGetHeight(_bounds) - CGRectGetMaxY(lineRect);
+        if (drawingRect.origin.y < 0.0f) {
+            isTruncated = YES;
+            break;
+        }
+#else
         if (lineRect.origin.y < 0.0f) {
             isTruncated = YES;
             break;
         }
+#endif
         
         SELineLayout *lineLayout = [[SELineLayout alloc] initWithLine:line index:index rect:lineRect metrics:metrics];
+        lineLayout.drawingRect = drawingRect;
         
         for (SELinkText *link in self.links) {
             CGRect linkRect = [lineLayout rectOfStringWithRange:link.range];
@@ -260,7 +271,23 @@
         CGFloat offset = CTLineGetOffsetForStringIndex(line, stringRange.location + stringRange.length - 1, NULL);
         
         CTLineRef truncationLine = CTLineCreateTruncatedLine(lineLayout.line, offset - 1.0f, kCTLineTruncationEnd, truncationToken);
-        SELineLayout *truncationLineLayout = [[SELineLayout alloc] initWithLine:truncationLine index:lineLayout.index rect:lineLayout.rect metrics:lineLayout.metrics];
+        
+        CGFloat width = CTLineGetTypographicBounds(truncationLine, NULL, NULL, NULL);
+        CGRect rect = lineLayout.rect;
+        if (self.textAlignment == kCTTextAlignmentCenter) {
+            rect.origin.x += (rect.size.width - width) / 2;
+        } else if (self.textAlignment == kCTTextAlignmentRight) {
+            rect.origin.x += rect.size.width - width;
+        }
+        rect.size.width = width;
+        
+        SELineLayout *truncationLineLayout = [[SELineLayout alloc] initWithLine:truncationLine index:lineLayout.index rect:rect metrics:lineLayout.metrics];
+        
+        CGRect drawingRect = lineLayout.drawingRect;
+        drawingRect.origin.x = rect.origin.x;
+        drawingRect.size.width = rect.size.width;
+        truncationLineLayout.drawingRect = drawingRect;
+        
         truncationLineLayout.truncated = YES;
         [lineLayouts replaceObjectAtIndex:truncatedLineIndex withObject:truncationLineLayout];
         CFRelease(truncationToken);
@@ -282,7 +309,7 @@
 - (void)drawFrameInContext:(CGContextRef)context
 {
 #if TARGET_OS_IPHONE
-    CGContextTranslateCTM(context, 0, self.bounds.size.height);
+    CGContextTranslateCTM(context, 0, CGRectGetHeight(self.bounds));
     CGContextScaleCTM(context, 1.0, -1.0);
 #endif
 
@@ -291,7 +318,7 @@
     if (self.lineBreakMode == kCTLineBreakByTruncatingTail) {
         NSArray *lineLayouts = self.lineLayouts;
         for (SELineLayout *lineLayout in lineLayouts) {
-            CGRect lineRect = lineLayout.rect;
+            CGRect lineRect = lineLayout.drawingRect;
             CGContextSetTextPosition(context, lineRect.origin.x, lineRect.origin.y + lineLayout.metrics.descent);
             
             CTLineRef line = lineLayout.line;
