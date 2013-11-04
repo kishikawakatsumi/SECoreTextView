@@ -1298,6 +1298,17 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     return self.isEditable && self.isEditing;
 }
 
+- (BOOL)becomeFirstResponder
+{
+	if (!self.isFirstResponder) {
+		if (self.isEditable) {
+			[self beginEditing];
+		}
+	}
+	
+	return [super becomeFirstResponder];
+}
+
 #else
 #pragma mark - OS X mouse events
 
@@ -1973,11 +1984,11 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     return shouldChangeTextInRange;
 }
 
-- (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
-{
-    SETextPosition *pos = (SETextPosition *)position;
-    return [self.attributedText attributesAtIndex:pos.index effectiveRange:NULL];
-}
+//- (NSDictionary *)textStylingAtPosition:(UITextPosition *)position inDirection:(UITextStorageDirection)direction
+//{
+//    SETextPosition *pos = (SETextPosition *)position;
+//    return [self.attributedText attributesAtIndex:pos.index effectiveRange:NULL];
+//}
 
 //- (UITextPosition *)positionWithinRange:(UITextRange *)range atCharacterOffset:(NSInteger)offset
 //{
