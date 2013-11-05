@@ -230,12 +230,12 @@
         CGRect drawingRect = lineRect;
 #if TARGET_OS_IPHONE
         drawingRect.origin.y = CGRectGetHeight(_bounds) - CGRectGetMaxY(lineRect);
-        if (drawingRect.origin.y < 0.0f) {
+        if (self.lineBreakMode == kCTLineBreakByTruncatingTail && drawingRect.origin.y < 0.0f) {
             isTruncated = YES;
             break;
         }
 #else
-        if (lineRect.origin.y < 0.0f) {
+        if (self.lineBreakMode == kCTLineBreakByTruncatingTail && lineRect.origin.y < 0.0f) {
             isTruncated = YES;
             break;
         }
