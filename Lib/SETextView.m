@@ -1287,6 +1287,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
+    if (action == @selector(cut:) && self.selectedText.length > 0 && self.editable) {
+        return YES;
+    }
     if (action == @selector(copy:) && self.selectedText.length > 0) {
         return YES;
     }
@@ -1491,6 +1494,19 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         self.attributedText = self.originalAttributedTextWhenHighlighting;
         self.originalAttributedTextWhenHighlighting = nil;
     }
+}
+
+- (void)cut:(id)sender
+{
+#if TARGET_OS_IPHONE
+    if (self.selectedText.length > 0) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = self.selectedText;
+        [self insertText:@""];
+    }
+#else
+    [self copy:nil];
+#endif
 }
 
 - (void)copy:(id)sender
