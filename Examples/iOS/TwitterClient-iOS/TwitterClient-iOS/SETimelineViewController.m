@@ -53,7 +53,7 @@ static const CGFloat FONT_SIZE = 14.0f;
     return YES;
 }
 
-#pragma mark - Table view data source
+#pragma mark -
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
