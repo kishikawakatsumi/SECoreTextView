@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @class SELinkText;
 
 #if TARGET_OS_IPHONE
-@interface SETextView : UIView <UITextInput>
+@interface SETextView : UIView <UITextInput, UITextInputTraits>
 #else
 @interface SETextView : NSView
 #endif
@@ -68,6 +68,17 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 
 @property (readwrite) UIView *inputView;
 @property (readwrite) UIView *inputAccessoryView;
+
+#if TARGET_OS_IPHONE
+@property (nonatomic) UITextAutocapitalizationType autocapitalizationType;
+@property (nonatomic) UITextAutocorrectionType autocorrectionType;
+@property (nonatomic) UITextSpellCheckingType spellCheckingType;
+@property (nonatomic) UIKeyboardType keyboardType;
+@property (nonatomic) UIKeyboardAppearance keyboardAppearance;
+@property (nonatomic) UIReturnKeyType returnKeyType;
+@property (nonatomic) BOOL enablesReturnKeyAutomatically;
+@property (nonatomic, getter = isSecureTextEntry) BOOL secureTextEntry;
+#endif
 
 - (id)initWithFrame:(CGRect)frame;
 

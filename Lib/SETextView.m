@@ -96,6 +96,15 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     
     [self setupTextSelectionControls];
     [self setupTextEditingControls];
+    
+    self.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+    self.autocorrectionType = UITextAutocorrectionTypeDefault;
+    self.spellCheckingType = UITextSpellCheckingTypeDefault;
+    self.keyboardType = UIKeyboardTypeDefault;
+    self.keyboardAppearance = UIKeyboardAppearanceDefault;
+    self.returnKeyType = UIReturnKeyDefault;
+    self.enablesReturnKeyAutomatically = NO;
+    self.secureTextEntry = NO;
 #endif
 }
 
