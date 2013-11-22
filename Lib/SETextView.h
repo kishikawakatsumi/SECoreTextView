@@ -56,7 +56,7 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
 @property (nonatomic) BOOL showsEditingMenuAutomatically;
 #endif
 
-@property (nonatomic, readonly) NSRange selectedRange;
+@property (nonatomic) NSRange selectedRange;
 @property (nonatomic, readonly) NSString *selectedText;
 @property (nonatomic, readonly) NSAttributedString *selectedAttributedText;
 

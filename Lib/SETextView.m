@@ -300,6 +300,11 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     return self.textLayout.textSelection.selectedRange;
 }
 
+- (void)setSelectedRange:(NSRange)selectedRange
+{
+	self.selectedTextRange = [SETextRange rangeWithNSRange:selectedRange];
+}
+
 - (NSString *)selectedText
 {
     return [self.text substringWithRange:self.selectedRange];
@@ -1690,9 +1695,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
 {
-    if (markedText.length == 0 && NSMaxRange(selectedRange) == 0) {
-        return;
-    }
+//    if (markedText.length == 0 && NSMaxRange(selectedRange) == 0) {
+//        return;
+//    }
     
     NSRange selectedNSRange = self.selectedRange;
     NSRange markedTextRange = self.textLayout.markedTextRange;
