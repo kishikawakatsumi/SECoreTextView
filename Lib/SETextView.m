@@ -300,10 +300,12 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     return self.textLayout.textSelection.selectedRange;
 }
 
+#if TARGET_OS_IPHONE
 - (void)setSelectedRange:(NSRange)selectedRange
 {
 	self.selectedTextRange = [SETextRange rangeWithNSRange:selectedRange];
 }
+#endif
 
 - (NSString *)selectedText
 {
