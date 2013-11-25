@@ -283,6 +283,8 @@
         
         SELineLayout *truncationLineLayout = [[SELineLayout alloc] initWithLine:truncationLine index:lineLayout.index rect:rect metrics:lineLayout.metrics];
         
+        CFRelease(truncationLine);
+        
         CGRect drawingRect = lineLayout.drawingRect;
         drawingRect.origin.x = rect.origin.x;
         drawingRect.size.width = rect.size.width;

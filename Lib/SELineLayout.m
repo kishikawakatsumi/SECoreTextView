@@ -16,7 +16,7 @@
 {
     self = [super init];
     if (self) {
-        _line = line;
+        _line = CFRetain(line);
         _index = index;
         _rect = rect;
         _metrics = metrics;
@@ -24,6 +24,11 @@
         _links = [[NSArray alloc] init];
     }
     return self;
+}
+
+-(void)dealloc
+{
+    CFRelease(_line);
 }
 
 - (NSRange)stringRange
