@@ -299,6 +299,7 @@
 				1469DB6417F358A700ADDA7E /* Products */,
 			);
 			sourceTree = "<group>";
+			wrapsLines = 0;
 		};
 		1469DB6417F358A700ADDA7E /* Products */ = {
 			isa = PBXGroup;

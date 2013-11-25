@@ -1700,6 +1700,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 //    if (markedText.length == 0 && NSMaxRange(selectedRange) == 0) {
 //        return;
 //    }
+	if (selectedRange.location == NSNotFound) {
+		return;
+	}
     
     NSRange selectedNSRange = self.selectedRange;
     NSRange markedTextRange = self.textLayout.markedTextRange;
