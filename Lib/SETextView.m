@@ -176,7 +176,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
                                  constraintSize:constraintSize
                                     lineSpacing:lineSpacing
                                paragraphSpacing:0.0f
-                                           font:nil];
+                                           font:font];
 }
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
@@ -189,7 +189,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     NSMutableAttributedString *mutableAttributedString = attributedString.mutableCopy;
     
     CTTextAlignment textAlignment = kCTTextAlignmentNatural;
+    lineSpacing = roundf(lineSpacing);
     CGFloat lineHeight = 0.0f;
+    paragraphSpacing = roundf(paragraphSpacing);
     
     CTParagraphStyleSetting setting[] = {
         { kCTParagraphStyleSpecifierAlignment, sizeof(textAlignment), &textAlignment},
