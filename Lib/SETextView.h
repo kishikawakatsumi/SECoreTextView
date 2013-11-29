@@ -95,6 +95,11 @@ typedef NS_ENUM(NSUInteger, SETextAttachmentDrawingOptions) {
                           constraintSize:(CGSize)constraintSize
                              lineSpacing:(CGFloat)lineSpacing
                                     font:(NSFont *)font;
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                             lineSpacing:(CGFloat)lineSpacing
+                        paragraphSpacing:(CGFloat)paragraphSpacing
+                                    font:(NSFont *)font;
 
 - (void)addObject:(id)object size:(CGSize)size atIndex:(NSInteger)index;
 - (void)addObject:(id)object size:(CGSize)size replaceRange:(NSRange)range;

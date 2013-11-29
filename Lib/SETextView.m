@@ -172,12 +172,24 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
                              lineSpacing:(CGFloat)lineSpacing
                                     font:(NSFont *)font
 {
+    return [self frameRectWithAttributtedString:attributedString
+                                 constraintSize:constraintSize
+                                    lineSpacing:lineSpacing
+                               paragraphSpacing:0.0f
+                                           font:nil];
+}
+
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                             lineSpacing:(CGFloat)lineSpacing
+                        paragraphSpacing:(CGFloat)paragraphSpacing
+                                    font:(NSFont *)font
+{
     NSInteger length = attributedString.length;
     NSMutableAttributedString *mutableAttributedString = attributedString.mutableCopy;
     
     CTTextAlignment textAlignment = kCTTextAlignmentNatural;
     CGFloat lineHeight = 0.0f;
-    CGFloat paragraphSpacing = 0.0f;
     
     CTParagraphStyleSetting setting[] = {
         { kCTParagraphStyleSpecifierAlignment, sizeof(textAlignment), &textAlignment},
