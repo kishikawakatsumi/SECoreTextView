@@ -4,7 +4,7 @@ SECoreTextView
 [![Version](https://cocoapod-badges.herokuapp.com/v/SECoreTextView/badge.png)](https://cocoapod-badges.herokuapp.com/v/PEPhotoCropEditor/badge.png)
 [![Platform](https://cocoapod-badges.herokuapp.com/p/SECoreTextView/badge.png)](https://cocoapod-badges.herokuapp.com/p/PEPhotoCropEditor/badge.png)
 [![Build Status](https://travis-ci.org/kishikawakatsumi/SECoreTextView.png?branch=master)](https://travis-ci.org/kishikawakatsumi/SECoreTextView)
-[![Coverage Status](https://coveralls.io/repos/kishikawakatsumi/SECoreTextView/badge.png?branch=master)](https://coveralls.io/r/kishikawakatsumi/SECoreTextView?branch=master)
+[![Analytics](https://ga-beacon.appspot.com/UA-4291014-9/JavaScriptBridge/README.md)](https://github.com/igrigorik/ga-beacon)
 
 SECoreTextView is multi-line rich text view library with clickable links, selectable text, embedding images and editing.
 
