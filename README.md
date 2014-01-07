@@ -1,4 +1,4 @@
-SECoreTextView ![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png) 
+SECoreTextView ![License MIT](https://go-shields.herokuapp.com/license-MIT-yellow.png) 
 ==============
 
 [![Version](https://cocoapod-badges.herokuapp.com/v/SECoreTextView/badge.png)](https://cocoapod-badges.herokuapp.com/v/PEPhotoCropEditor/badge.png)
