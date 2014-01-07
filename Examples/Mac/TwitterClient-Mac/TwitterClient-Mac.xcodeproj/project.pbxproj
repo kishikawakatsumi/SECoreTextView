@@ -40,8 +40,6 @@
 		14EDE33F17F55C6400ABF2C6 /* default_user_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 14EDE33917F55C6400ABF2C6 /* default_user_icon@2x.png */; };
 		14EDE34017F55C6400ABF2C6 /* SEImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE33B17F55C6400ABF2C6 /* SEImageCache.m */; };
 		14EDE34117F55C6400ABF2C6 /* SETwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE33D17F55C6400ABF2C6 /* SETwitterHelper.m */; };
-		14EDE34617F55C7900ABF2C6 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE34317F55C7900ABF2C6 /* TwitterText.m */; };
-		14EDE34717F55C7900ABF2C6 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE34517F55C7900ABF2C6 /* TwitterTextEntity.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,10 +103,6 @@
 		14EDE33B17F55C6400ABF2C6 /* SEImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEImageCache.m; path = ../../../Shared/SEImageCache.m; sourceTree = "<group>"; };
 		14EDE33C17F55C6400ABF2C6 /* SETwitterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETwitterHelper.h; path = ../../../Shared/SETwitterHelper.h; sourceTree = "<group>"; };
 		14EDE33D17F55C6400ABF2C6 /* SETwitterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETwitterHelper.m; path = ../../../Shared/SETwitterHelper.m; sourceTree = "<group>"; wrapsLines = 0; };
-		14EDE34217F55C7900ABF2C6 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "../../../../Vendor/twitter-text-objc/lib/TwitterText.h"; sourceTree = "<group>"; };
-		14EDE34317F55C7900ABF2C6 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "../../../../Vendor/twitter-text-objc/lib/TwitterText.m"; sourceTree = "<group>"; };
-		14EDE34417F55C7900ABF2C6 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "../../../../Vendor/twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = "<group>"; };
-		14EDE34517F55C7900ABF2C6 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "../../../../Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,7 +174,6 @@
 				1469DC6817F3613900ADDA7E /* MainMenu.xib */,
 				1469DC1B17F35FDB00ADDA7E /* Lib */,
 				1469DC1C17F35FE100ADDA7E /* Shared */,
-				1469DC1D17F35FE700ADDA7E /* Vendor */,
 				1469DBFF17F35F2300ADDA7E /* Supporting Files */,
 			);
 			path = "TwitterClient-Mac";
@@ -249,25 +242,6 @@
 				14EDE33917F55C6400ABF2C6 /* default_user_icon@2x.png */,
 			);
 			name = Shared;
-			sourceTree = "<group>";
-		};
-		1469DC1D17F35FE700ADDA7E /* Vendor */ = {
-			isa = PBXGroup;
-			children = (
-				1469DC5817F360B100ADDA7E /* twitter-text-objc */,
-			);
-			name = Vendor;
-			sourceTree = "<group>";
-		};
-		1469DC5817F360B100ADDA7E /* twitter-text-objc */ = {
-			isa = PBXGroup;
-			children = (
-				14EDE34217F55C7900ABF2C6 /* TwitterText.h */,
-				14EDE34317F55C7900ABF2C6 /* TwitterText.m */,
-				14EDE34417F55C7900ABF2C6 /* TwitterTextEntity.h */,
-				14EDE34517F55C7900ABF2C6 /* TwitterTextEntity.m */,
-			);
-			name = "twitter-text-objc";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -341,7 +315,6 @@
 				14EDE33617F55AA100ABF2C6 /* SETextSelectionView.m in Sources */,
 				14EDE32E17F55AA100ABF2C6 /* SETextAttachment.m in Sources */,
 				1469DC0517F35F2300ADDA7E /* main.m in Sources */,
-				14EDE34717F55C7900ABF2C6 /* TwitterTextEntity.m in Sources */,
 				14EDE33017F55AA100ABF2C6 /* SETextGeometry.m in Sources */,
 				14EDE32B17F55AA100ABF2C6 /* SELineLayout.m in Sources */,
 				14EDE33717F55AA100ABF2C6 /* SETextView.m in Sources */,
@@ -358,7 +331,6 @@
 				14EDE33217F55AA100ABF2C6 /* SETextLayout.m in Sources */,
 				14EDE32917F55AA100ABF2C6 /* SECompatibility.m in Sources */,
 				1469DC6717F3610700ADDA7E /* SEUserIconImageView.m in Sources */,
-				14EDE34617F55C7900ABF2C6 /* TwitterText.m in Sources */,
 				14EDE32A17F55AA100ABF2C6 /* SEConstants.m in Sources */,
 				14EDE32F17F55AA100ABF2C6 /* SETextEditingCaret.m in Sources */,
 				14EDE34017F55C6400ABF2C6 /* SEImageCache.m in Sources */,

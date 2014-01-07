@@ -48,28 +48,43 @@
     CTFontRef tweetfont = CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL);
     
     NSColor *tweetColor = [NSColor blackColor];
-    NSColor *hashTagColor = [NSColor grayColor];
+    NSColor *hashtagColor = [NSColor grayColor];
+    UIColor *cashtagColor = [UIColor grayColor];
     NSColor *linkColor = [NSColor blueColor];
     
 	NSDictionary *attributes = @{(id)kCTForegroundColorAttributeName: (id)tweetColor.CGColor, (id)kCTFontAttributeName: (__bridge id)tweetfont};
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
     CFRelease(tweetfont);
     
-    NSArray *textEentities = [TwitterText entitiesInText:text];
-    for (TwitterTextEntity *textEentity in textEentities) {
-        if (textEentity.type == TwitterTextEntityScreenName) {
-            NSString *screenName = [text substringWithRange:textEentity.range];
-			[attributedString addAttributes:@{NSLinkAttributeName: screenName, (id)kCTForegroundColorAttributeName: (id)linkColor.CGColor}
-                                      range:textEentity.range];
-        } else if (textEentity.type == TwitterTextEntityHashtag) {
-            NSString *hashTag = [text substringWithRange:textEentity.range];
-			[attributedString addAttributes:@{NSLinkAttributeName: hashTag, (id)kCTForegroundColorAttributeName: (id)hashTagColor.CGColor}
-                                      range:textEentity.range];
-        }
+    NSDictionary *entities = tweet[@"entities"];
+    NSArray *userMentions = entities[@"user_mentions"];
+    for (NSDictionary *userMention in userMentions) {
+        NSArray *indices = userMention[@"indices"];
+        NSInteger first = [indices.firstObject integerValue];
+        NSInteger last = [indices.lastObject integerValue];
+        [attributedString addAttributes:@{NSLinkAttributeName: userMention, (id)kCTForegroundColorAttributeName: (id)linkColor.CGColor}
+                                  range:NSMakeRange(first, last - first)];
+    }
+    NSArray *hashtags = entities[@"hashtags"];
+    for (NSDictionary *hashtag in hashtags) {
+        NSArray *indices = hashtag[@"indices"];
+        NSInteger first = [indices.firstObject integerValue];
+        NSInteger last = [indices.lastObject integerValue];
+        [attributedString addAttributes:@{NSLinkAttributeName: hashtag, (id)kCTForegroundColorAttributeName: (id)hashtagColor.CGColor}
+                                  range:NSMakeRange(first, last - first)];
+    }
+    NSArray *symbols = entities[@"symbols"];
+    for (NSDictionary *symbol in symbols) {
+        NSArray *indices = symbol[@"indices"];
+        NSInteger first = [indices.firstObject integerValue];
+        NSInteger last = [indices.lastObject integerValue];
+        [attributedString addAttributes:@{NSLinkAttributeName: symbol, (id)kCTForegroundColorAttributeName: (id)cashtagColor.CGColor}
+                                  range:NSMakeRange(first, last - first)];
     }
     
-    NSDictionary *entities = tweet[@"entities"];
     NSArray *urls = entities[@"urls"];
+    NSArray *media = entities[@"media"];
+    urls = [urls arrayByAddingObjectsFromArray:media];
     for (NSDictionary *url in urls.reverseObjectEnumerator) {
         NSArray *indices = url[@"indices"];
         

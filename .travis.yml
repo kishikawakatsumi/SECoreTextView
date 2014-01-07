@@ -1,3 +1,7 @@
 language: objective-c
+before_install:
+  - gem install xcpretty
 script:
-  - make build-ios build-osx
+  - rake "clean['TwitterClient-iOS RichTextEditor TwitterClient-Mac']"
+  - rake "build['TwitterClient-iOS RichTextEditor TwitterClient-Mac']"
+   

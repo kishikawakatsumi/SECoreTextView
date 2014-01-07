@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreText/CoreText.h>
-#import "TwitterText.h"
 
 @interface SETwitterHelper : NSObject
 

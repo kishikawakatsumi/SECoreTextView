@@ -18,8 +18,6 @@
 		1469DB4B17F3587F00ADDA7E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1469DB4A17F3587F00ADDA7E /* Default-568h@2x.png */; };
 		1469DB8A17F358E300ADDA7E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DB8917F358E300ADDA7E /* QuartzCore.framework */; };
 		1469DB8C17F358F000ADDA7E /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DB8B17F358F000ADDA7E /* CoreText.framework */; };
-		1469DB9617F35B4700ADDA7E /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DB9317F35B4700ADDA7E /* TwitterText.m */; };
-		1469DB9717F35B4700ADDA7E /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DB9517F35B4700ADDA7E /* TwitterTextEntity.m */; };
 		1469DBA317F35C3300ADDA7E /* SEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DB9A17F35C3200ADDA7E /* SEAppDelegate.m */; };
 		1469DBA417F35C3300ADDA7E /* SETimelineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DB9C17F35C3200ADDA7E /* SETimelineCell.m */; };
 		1469DBA517F35C3300ADDA7E /* SETimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DB9E17F35C3300ADDA7E /* SETimelineViewController.m */; };
@@ -66,10 +64,6 @@
 		1469DB4A17F3587F00ADDA7E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		1469DB8917F358E300ADDA7E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1469DB8B17F358F000ADDA7E /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		1469DB9217F35B4700ADDA7E /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "../../../../Vendor/twitter-text-objc/lib/TwitterText.h"; sourceTree = "<group>"; };
-		1469DB9317F35B4700ADDA7E /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "../../../../Vendor/twitter-text-objc/lib/TwitterText.m"; sourceTree = "<group>"; };
-		1469DB9417F35B4700ADDA7E /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "../../../../Vendor/twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = "<group>"; };
-		1469DB9517F35B4700ADDA7E /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "../../../../Vendor/twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = "<group>"; };
 		1469DB9917F35C3200ADDA7E /* SEAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEAppDelegate.h; sourceTree = "<group>"; };
 		1469DB9A17F35C3200ADDA7E /* SEAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEAppDelegate.m; sourceTree = "<group>"; };
 		1469DB9B17F35C3200ADDA7E /* SETimelineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SETimelineCell.h; sourceTree = "<group>"; };
@@ -192,7 +186,6 @@
 				1469DBA817F35C7D00ADDA7E /* MainStoryboard.storyboard */,
 				1469DBB517F35D7300ADDA7E /* Lib */,
 				1469DBAA17F35D2E00ADDA7E /* Shared */,
-				1469DB9117F35B2600ADDA7E /* Vendor */,
 				1469DB3B17F3587F00ADDA7E /* Supporting Files */,
 			);
 			path = "TwitterClient-iOS";
@@ -210,25 +203,6 @@
 				1469DB4A17F3587F00ADDA7E /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		1469DB9117F35B2600ADDA7E /* Vendor */ = {
-			isa = PBXGroup;
-			children = (
-				1469DB9817F35B6000ADDA7E /* twitter-text-objc */,
-			);
-			name = Vendor;
-			sourceTree = "<group>";
-		};
-		1469DB9817F35B6000ADDA7E /* twitter-text-objc */ = {
-			isa = PBXGroup;
-			children = (
-				1469DB9217F35B4700ADDA7E /* TwitterText.h */,
-				1469DB9317F35B4700ADDA7E /* TwitterText.m */,
-				1469DB9417F35B4700ADDA7E /* TwitterTextEntity.h */,
-				1469DB9517F35B4700ADDA7E /* TwitterTextEntity.m */,
-			);
-			name = "twitter-text-objc";
 			sourceTree = "<group>";
 		};
 		1469DBAA17F35D2E00ADDA7E /* Shared */ = {
@@ -355,8 +329,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1469DB4117F3587F00ADDA7E /* main.m in Sources */,
-				1469DB9617F35B4700ADDA7E /* TwitterText.m in Sources */,
-				1469DB9717F35B4700ADDA7E /* TwitterTextEntity.m in Sources */,
 				1469DBA317F35C3300ADDA7E /* SEAppDelegate.m in Sources */,
 				1469DBA417F35C3300ADDA7E /* SETimelineCell.m in Sources */,
 				1469DBA517F35C3300ADDA7E /* SETimelineViewController.m in Sources */,
