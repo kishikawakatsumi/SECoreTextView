@@ -37,6 +37,47 @@ static NSString * const ZERO_WIDTH_SPACE = @"\u200B";
 static NSString * const LINE_SEPARATOR = @"\u2028";
 static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
+@implementation NSString (Unicode6)
+
+- (NSUInteger)numberOfCharacters
+{
+    NSUInteger length = self.length;
+    NSUInteger count = 0;
+    for (NSUInteger i = 0; i < length; i++) {
+        unichar c = [self characterAtIndex:i];
+		
+        if (0xD83C == c) {
+            unichar c1 = [self characterAtIndex:i + 1];
+            if ((0xDDE6 <= c1) && (c1 <= 0xDDFF)) {
+                unichar c2 = [self characterAtIndex:i + 2];
+                if (0xD83C == c2) {
+                    unichar c3 = [self characterAtIndex:i + 3];
+                    if ((0xDDE6 <= c3) && (c3 <= 0xDDFF)) {
+                        i += 3;
+                        ++count;
+                        continue;
+                    }
+                }
+            }
+            i++;
+            ++count;
+        } else if (0xD800 <= c && c <= 0xDBFF) {
+            i++;
+            ++count;
+        } else if (0xDC00 <= c && c <= 0xDFFF) {
+			
+        } else if (0x20E3 == c) {
+			
+        } else {
+            ++count;
+        }
+    }
+	
+    return count;
+}
+
+@end
+
 @interface SETextView ()
 
 @property (nonatomic) SETextLayout *textLayout;
@@ -448,8 +489,6 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     } else {
         textAlignment = (CTTextAlignment)self.textAlignment;
     }
-    /* Available in iOS 6.0 and later. */
-//    CTTextAlignment textAlignment = NSTextAlignmentToCTTextAlignment(self.textAlignment);
 #else
     CTTextAlignment textAlignment = self.textAlignment;
 #endif
@@ -630,8 +669,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         [attachmentsToLeave addObject:attachment];
         
         for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+			CGRect lineRect = lineLayout.rect;
             CGRect rect = [lineLayout rectOfStringWithRange:range];
-            if (!CGRectIsEmpty(rect)) {
+            if (!CGRectIsEmpty(rect) && CGRectGetMaxX(rect) <= (CGRectGetMaxX(lineRect) - lineLayout.truncationTokenWidth)) {
                 id object = attachment.object;
                 CGSize size = attachment.size;
                 rect.origin.x += (CGRectGetWidth(rect) - size.width) / 2;
@@ -1323,7 +1363,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     if (action == @selector(copy:) && self.selectedText.length > 0) {
         return YES;
     }
-    if (action == @selector(paste:) && self.isEditing) {
+    if (action == @selector(paste:) && self.isEditing && [[UIPasteboard generalPasteboard] string]) {
         return YES;
     }
     if (action == @selector(select:) && self.text.length > 0 && self.selectedText.length == 0) {
@@ -1747,6 +1787,10 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     [self replaceCharactersInRange:replaceRange withString:markedText forAttributedString:editingAttributedText];
     
     selectedNSRange = NSMakeRange(markedTextRange.location + selectedRange.location, selectedRange.length);
+	
+	if (markedTextRange.length == 0) {
+		markedTextRange.location = NSNotFound;
+	}
     
     self.attributedText = editingAttributedText;
     self.textLayout.markedTextRange = markedTextRange;
@@ -1952,13 +1996,27 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         return CGRectMake(origin.x, origin.y, CGRectGetWidth(self.caretView.bounds), font.leading);
     }
     
-    NSString *lastCharacter = [text substringWithRange:NSMakeRange(index - 1, 1)];
+    if (index >= text.length) {
+        index = text.length;
+    }
+    
+    NSString *lastCharacter = (index > 0) ? [text substringWithRange:NSMakeRange(index - 1, 1)] : @"";
     if (index == text.length && [lastCharacter isEqualToString:@"\n"]) {
         CGRect rect = [self.textLayout rectOfStringForLastLine];
         rect.origin.y = CGRectGetMaxY(rect);
         rect.size.width = CGRectGetWidth(self.caretView.bounds);
         return rect;
     }
+	
+	if (index < text.length) {
+		unichar c = [text characterAtIndex:index];
+		if (CFStringIsSurrogateLowCharacter(c)) {
+			index++;
+			if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+				index += 2;
+			}
+		}
+	}
     
     CGRect rect;
     if (index > 0 && [lastCharacter isEqualToString:@"\n"]) {
@@ -2112,8 +2170,6 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     [self textChanged];
     
     [self hideEditingMenu];
-    
-    
 }
 
 - (void)deleteBackward
@@ -2139,11 +2195,46 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
             
             markedTextNSRange = NSMakeRange(NSNotFound, 0);
         } else if (selectedNSRange.length > 0) {
+			unichar c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
+			if (CFStringIsSurrogateLowCharacter(c)) {
+				selectedNSRange.location -= 1;
+				selectedNSRange.length += 1;
+				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+					selectedNSRange.location -= 2;
+					selectedNSRange.length += 2;
+				}
+			} else if (CFStringIsSurrogateHighCharacter(c)) {
+				c = [editingAttributedText.string characterAtIndex:selectedNSRange.location + 1];
+				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+					selectedNSRange.location -= 2;
+					selectedNSRange.length += 2;
+				}
+			}
+			
             deleteRange = selectedNSRange;
             selectedNSRange.length = 0;
         } else if (selectedNSRange.location > 0) {
-            selectedNSRange.location--;
-            selectedNSRange.length = 1;
+            selectedNSRange.location -= 1;
+			selectedNSRange.length = 1;
+			
+			unichar c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
+			if (CFStringIsSurrogateLowCharacter(c)) {
+				selectedNSRange.location -= 1;
+				selectedNSRange.length += 1;
+				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+					selectedNSRange.location -= 2;
+					selectedNSRange.length += 2;
+				}
+			} else if (CFStringIsSurrogateHighCharacter(c)) {
+				c = [editingAttributedText.string characterAtIndex:selectedNSRange.location + 1];
+				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+					selectedNSRange.location -= 2;
+					selectedNSRange.length += 2;
+				}
+			} else if (c == 0x20E3) {
+				selectedNSRange.location -= 1;
+				selectedNSRange.length += 1;
+			}
             
             deleteRange = selectedNSRange;
             
@@ -2240,11 +2331,24 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)aString forAttributedString:(NSMutableAttributedString *)attributdString
 {
+	if( aString == nil )
+	{
+		aString = @"";
+	}
+	
     id attribute = nil;
     NSUInteger location = range.location;
-    if (location > 0) {
-        attribute = [attributdString attribute:(id)kCTRunDelegateAttributeName atIndex:location - 1 effectiveRange:nil];
+	NSUInteger index = location;
+	if (location > attributdString.length) {
+		index = attributdString.length;
+	}
+    if (index > 0) {
+        attribute = [attributdString attribute:(id)kCTRunDelegateAttributeName atIndex:index - 1 effectiveRange:nil];
     }
+	if (NSMaxRange(range) > attributdString.length) {
+		return;
+	}
+	
     if (attribute) {
         [attributdString replaceCharactersInRange:range withAttributedString:[[NSAttributedString alloc] initWithString:aString]];
     } else {

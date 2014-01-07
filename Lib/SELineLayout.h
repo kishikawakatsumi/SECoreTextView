@@ -25,6 +25,7 @@ typedef struct {
 @property (nonatomic, readonly) NSInteger index;
 @property (nonatomic, readonly) CGRect rect;
 @property (nonatomic) CGRect drawingRect;
+@property (nonatomic) CGFloat truncationTokenWidth;
 @property (nonatomic, readonly) SELineMetrics metrics;
 
 @property (nonatomic, readonly) NSRange stringRange;

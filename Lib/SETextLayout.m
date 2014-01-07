@@ -228,6 +228,7 @@
 #endif
         
         CGRect drawingRect = lineRect;
+		if (index > 0) {
 #if TARGET_OS_IPHONE
         drawingRect.origin.y = CGRectGetHeight(_bounds) - CGRectGetMaxY(lineRect);
         if (self.lineBreakMode == kCTLineBreakByTruncatingTail && drawingRect.origin.y < 0.0f) {
@@ -240,6 +241,7 @@
             break;
         }
 #endif
+		}
         
         SELineLayout *lineLayout = [[SELineLayout alloc] initWithLine:line index:index rect:lineRect metrics:metrics];
         lineLayout.drawingRect = drawingRect;
@@ -289,6 +291,9 @@
         drawingRect.origin.x = rect.origin.x;
         drawingRect.size.width = rect.size.width;
         truncationLineLayout.drawingRect = drawingRect;
+		
+        CGFloat truncationTokenWidth = CTLineGetTypographicBounds(truncationToken, NULL, NULL, NULL);
+		truncationLineLayout.truncationTokenWidth = truncationTokenWidth;
         
         truncationLineLayout.truncated = YES;
         [lineLayouts replaceObjectAtIndex:truncatedLineIndex withObject:truncationLineLayout];
@@ -355,10 +360,23 @@
 
 - (CFIndex)stringIndexForClosestPosition:(CGPoint)point
 {
+	NSString *text = self.attributedString.string;
+	
     CFIndex lineNumber = 0;
     for (SELineLayout *lineLayout in self.lineLayouts) {
         if ([lineLayout containsPoint:point]) {
             CFIndex index = [lineLayout stringIndexForPosition:point];
+			
+			if (index < text.length) {
+				unichar c = [text characterAtIndex:index];
+				if (CFStringIsSurrogateLowCharacter(c)) {
+					index++;
+					if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+						index += 2;
+					}
+				}
+			}
+			
             if (index != kCFNotFound) {
                 return index;
             }
