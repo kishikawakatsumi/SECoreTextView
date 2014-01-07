@@ -41,15 +41,10 @@ SECoreTextView is multi-line rich text view library with clickable links, select
 `pod 'SECoreTextView'`
 
 ### Manual Install
-1. `git clone git@github.com:kishikawakatsumi/SECoreTextView.git --recursive`
+1. `git clone git@github.com:kishikawakatsumi/SECoreTextView.git`
 2. Copy files in `Lib` and `Resources` to your project.
 3. Add `CoreText.framework` to your target.
 
-## 3rd party libraries (for demo apps)
-**twitter-text-objc**  
-[https://github.com/twitter/twitter-text-objc](https://github.com/twitter/twitter-text-objc) 
-Copyright 2012 Twitter, Inc.
-Licensed under the Apache License, Version 2.0: [www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0) 
  
 [Apache]: http://www.apache.org/licenses/LICENSE-2.0
 [MIT]: http://www.opensource.org/licenses/mit-license.php
