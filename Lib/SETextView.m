@@ -2200,15 +2200,20 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 				selectedNSRange.location -= 1;
 				selectedNSRange.length += 1;
 				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
-					selectedNSRange.location -= 2;
-					selectedNSRange.length += 2;
+					c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
+					if (c == 0xD83C) {
+						selectedNSRange.location -= 2;
+						selectedNSRange.length += 2;
+					}
 				}
 			} else if (CFStringIsSurrogateHighCharacter(c)) {
-				c = [editingAttributedText.string characterAtIndex:selectedNSRange.location + 1];
-				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
-					selectedNSRange.location -= 2;
-					selectedNSRange.length += 2;
-				}
+                if (c == 0xD83C) {
+                    c = [editingAttributedText.string characterAtIndex:selectedNSRange.location + 1];
+                    if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+                        selectedNSRange.location -= 2;
+                        selectedNSRange.length += 2;
+                    }
+                }
 			}
 			
             deleteRange = selectedNSRange;
@@ -2222,15 +2227,20 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 				selectedNSRange.location -= 1;
 				selectedNSRange.length += 1;
 				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
-					selectedNSRange.location -= 2;
-					selectedNSRange.length += 2;
+					c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
+					if (c == 0xD83C) {
+						selectedNSRange.location -= 2;
+						selectedNSRange.length += 2;
+					}
 				}
 			} else if (CFStringIsSurrogateHighCharacter(c)) {
-				c = [editingAttributedText.string characterAtIndex:selectedNSRange.location + 1];
-				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
-					selectedNSRange.location -= 2;
-					selectedNSRange.length += 2;
-				}
+                if (c == 0xD83C) {
+                    c = [editingAttributedText.string characterAtIndex:selectedNSRange.location + 1];
+                    if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+                        selectedNSRange.location -= 2;
+                        selectedNSRange.length += 2;
+                    }
+                }
 			} else if (c == 0x20E3) {
 				selectedNSRange.location -= 1;
 				selectedNSRange.length += 1;
