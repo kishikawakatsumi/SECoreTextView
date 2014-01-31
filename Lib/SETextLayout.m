@@ -60,6 +60,9 @@
     if (_frame) {
         CFRelease(_frame);
     }
+    if (_lines) {
+        CFRelease(_lines);
+    }
 }
 
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
