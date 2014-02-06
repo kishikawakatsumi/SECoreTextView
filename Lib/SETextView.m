@@ -104,6 +104,8 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 @property (nonatomic) SETextSelectionView *textSelectionView;
 @property (nonatomic) SETextEditingCaret *caretView;
+
+@property (nonatomic, copy) NSAttributedString *storedAttributedText;
 #endif
 
 @end
@@ -1572,6 +1574,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     if (self.selectedText.length > 0) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = self.selectedText;
+        self.storedAttributedText = self.selectedAttributedText;
         [self insertText:@""];
     }
 #else
@@ -1585,6 +1588,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     if (self.selectedText.length > 0) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = self.selectedText;
+        self.storedAttributedText = self.selectedAttributedText;
     }
 #else
     if (self.selectedAttributedText.length > 0) {
@@ -1599,7 +1603,13 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 {
 #if TARGET_OS_IPHONE
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    [self insertText:pasteboard.string];
+    NSAttributedString *storedAttributedText = self.storedAttributedText;
+    if (storedAttributedText && [pasteboard.string isEqualToString:[storedAttributedText string]]) {
+        [self insertAttributedText:storedAttributedText];
+    }
+    else {
+        [self insertText:pasteboard.string];
+    }
 #endif
 }
 
