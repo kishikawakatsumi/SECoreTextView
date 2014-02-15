@@ -653,6 +653,32 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     }
 }
 
+- (void)drawTextDecorations
+{
+    [self.attributedText enumerateAttribute:NSStrikethroughStyleAttributeName inRange:NSMakeRange(0, self.attributedText.length) options:kNilOptions usingBlock:^(id value, NSRange range, BOOL *stop) {
+        if (!value) {
+            return;
+        }
+        
+        for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+            CGRect strikeRect = [lineLayout rectOfStringWithRange:range];
+            if (!CGRectIsEmpty(strikeRect)) {
+                if (self.textColor) {
+                    [self.textColor set];
+                }
+                else {
+                    [[UIColor blackColor] set];
+                }
+                
+                UIBezierPath *path = [UIBezierPath bezierPath];
+                [path moveToPoint:CGPointMake(CGRectGetMinX(strikeRect), CGRectGetMidY(strikeRect))];
+                [path addLineToPoint:CGPointMake(CGRectGetMaxX(strikeRect), CGRectGetMidY(strikeRect))];
+                [path stroke];
+            }
+        }
+    }];
+}
+
 - (void)drawTextAttachmentsInContext:(CGContextRef)context
 {
     NSMutableSet *attachmentsToLeave = [[NSMutableSet alloc] init];
@@ -911,6 +937,10 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     }
     
     [self highlightClickedLink];
+    
+#if TARGET_OS_IPHONE
+    [self drawTextDecorations];
+#endif
     
     [self drawTextAttachmentsInContext:context];
     
