@@ -8,6 +8,10 @@ SECoreTextView ![License MIT](https://go-shields.herokuapp.com/license-MIT-yello
 
 SECoreTextView is multi-line rich text view library with clickable links, selectable text, embedding images and editing.
 
+
+<a href="http://vimeo.com/75470039"><img src="https://raw2.github.com/kishikawakatsumi/SECoreTextView/master/Screenshots/movie01.gif" style="width: 250px; height: 360px;" alt="Movie 1" /></a>
+
+
 ## Features
 ### Multi-Line Rich text
 <img src="https://raw.github.com/kishikawakatsumi/SECoreTextView/master/Screenshots/iOS_01.png" alt="iOS ScreenShot 1" width="225px" style="width: 225px;" />
