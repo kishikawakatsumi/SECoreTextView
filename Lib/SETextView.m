@@ -653,6 +653,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     }
 }
 
+#if TARGET_OS_IPHONE
 - (void)drawTextDecorations
 {
     [self.attributedText enumerateAttribute:NSStrikethroughStyleAttributeName inRange:NSMakeRange(0, self.attributedText.length) options:kNilOptions usingBlock:^(id value, NSRange range, BOOL *stop) {
@@ -678,6 +679,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         }
     }];
 }
+#endif
 
 - (void)drawTextAttachmentsInContext:(CGContextRef)context
 {
