@@ -2397,6 +2397,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     if (index > 0) {
         attribute = [attributdString attribute:(id)kCTRunDelegateAttributeName atIndex:index - 1 effectiveRange:nil];
     }
+    else if ([attributdString length] > 0) {
+        attribute = [attributdString attribute:(id)kCTRunDelegateAttributeName atIndex:0 effectiveRange:nil];
+    }
 	if (NSMaxRange(range) > attributdString.length) {
 		return;
 	}
