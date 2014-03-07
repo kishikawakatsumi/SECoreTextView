@@ -37,47 +37,6 @@ static NSString * const ZERO_WIDTH_SPACE = @"\u200B";
 static NSString * const LINE_SEPARATOR = @"\u2028";
 static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
-@implementation NSString (Unicode6)
-
-- (NSUInteger)numberOfCharacters
-{
-    NSUInteger length = self.length;
-    NSUInteger count = 0;
-    for (NSUInteger i = 0; i < length; i++) {
-        unichar c = [self characterAtIndex:i];
-		
-        if (0xD83C == c) {
-            unichar c1 = [self characterAtIndex:i + 1];
-            if ((0xDDE6 <= c1) && (c1 <= 0xDDFF)) {
-                unichar c2 = [self characterAtIndex:i + 2];
-                if (0xD83C == c2) {
-                    unichar c3 = [self characterAtIndex:i + 3];
-                    if ((0xDDE6 <= c3) && (c3 <= 0xDDFF)) {
-                        i += 3;
-                        ++count;
-                        continue;
-                    }
-                }
-            }
-            i++;
-            ++count;
-        } else if (0xD800 <= c && c <= 0xDBFF) {
-            i++;
-            ++count;
-        } else if (0xDC00 <= c && c <= 0xDFFF) {
-			
-        } else if (0x20E3 == c) {
-			
-        } else {
-            ++count;
-        }
-    }
-	
-    return count;
-}
-
-@end
-
 @interface SETextView ()
 
 @property (nonatomic) SETextLayout *textLayout;
