@@ -28,14 +28,14 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-	if (self) {
-		self.backgroundColor = [UIColor clearColor];
+    if (self) {
+        self.backgroundColor = [UIColor clearColor];
         
         UIImage *mask = [UIImage imageNamed:@"SECoreTextView.bundle/kb-loupe-mask"];
-		self.mask = mask;
+        self.mask = mask;
         
-		self.loupe = [UIImage imageNamed:@"SECoreTextView.bundle/kb-loupe-hi"];
-		self.loupeFrame = [UIImage imageNamed:@"SECoreTextView.bundle/kb-loupe-lo"];
+        self.loupe = [UIImage imageNamed:@"SECoreTextView.bundle/kb-loupe-hi"];
+        self.loupeFrame = [UIImage imageNamed:@"SECoreTextView.bundle/kb-loupe-lo"];
         
         CGImageRef maskImageRef = self.mask.CGImage;
         _maskRef = CGImageMaskCreate(CGImageGetWidth(maskImageRef),
@@ -46,9 +46,9 @@
                                      CGImageGetDataProvider(maskImageRef),
                                      NULL,
                                      true);
-	}
+    }
     
-	return self;
+    return self;
 }
 
 - (void)dealloc
@@ -58,7 +58,7 @@
 
 - (void)setTouchPoint:(CGPoint)point
 {
-	_touchPoint = point;
+    _touchPoint = point;
     self.center = CGPointMake(point.x, point.y - 65);
 }
 
@@ -96,7 +96,7 @@
 
 - (void)moveToPoint:(CGPoint)point
 {
-	self.touchPoint = point;
+    self.touchPoint = point;
     [self setNeedsDisplay];
 }
 
@@ -124,34 +124,34 @@
 
 - (void)drawRect:(CGRect)rect
 {
-	UIGraphicsBeginImageContext(self.magnifyToView.bounds.size);
-	[self.magnifyToView.layer renderInContext:UIGraphicsGetCurrentContext()];
-	UIImage *captureImage = UIGraphicsGetImageFromCurrentImageContext();
-	UIGraphicsEndImageContext();
-	
-	CGImageRef captureImageRef = captureImage.CGImage;
-
-	CGFloat scale = 1.2f;
-	CGRect box = CGRectMake(ceilf(self.touchPoint.x - self.mask.size.width / scale / 2),
-							ceilf(self.touchPoint.y - self.mask.size.height / scale / 2),
-							ceilf(self.mask.size.width / scale),
-							ceilf(self.mask.size.height / scale));
+    UIGraphicsBeginImageContext(self.magnifyToView.bounds.size);
+    [self.magnifyToView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *captureImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     
-	CGImageRef subImage = CGImageCreateWithImageInRect(captureImageRef, box);
-	CGImageRef maskedImage = CGImageCreateWithMask(subImage, _maskRef);
+    CGImageRef captureImageRef = captureImage.CGImage;
 
-	CGContextRef context = UIGraphicsGetCurrentContext();
+    CGFloat scale = 1.2f;
+    CGRect box = CGRectMake(ceilf(self.touchPoint.x - self.mask.size.width / scale / 2),
+                            ceilf(self.touchPoint.y - self.mask.size.height / scale / 2),
+                            ceilf(self.mask.size.width / scale),
+                            ceilf(self.mask.size.height / scale));
+    
+    CGImageRef subImage = CGImageCreateWithImageInRect(captureImageRef, box);
+    CGImageRef maskedImage = CGImageCreateWithMask(subImage, _maskRef);
 
-	CGAffineTransform xform = CGAffineTransformMake(1.0,  0.0,
-													0.0, -1.0,
-													0.0,  0.0);
-	CGContextConcatCTM(context, xform);
-	
-	CGRect area = CGRectMake(0, 0, self.mask.size.width, -self.mask.size.height);
-	
-	CGContextDrawImage(context, area, self.loupeFrame.CGImage);
-	CGContextDrawImage(context, area, maskedImage);
-	CGContextDrawImage(context, area, self.loupe.CGImage);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    CGAffineTransform xform = CGAffineTransformMake(1.0,  0.0,
+                                                    0.0, -1.0,
+                                                    0.0,  0.0);
+    CGContextConcatCTM(context, xform);
+    
+    CGRect area = CGRectMake(0, 0, self.mask.size.width, -self.mask.size.height);
+    
+    CGContextDrawImage(context, area, self.loupeFrame.CGImage);
+    CGContextDrawImage(context, area, maskedImage);
+    CGContextDrawImage(context, area, self.loupe.CGImage);
     
     CGImageRelease(subImage);
     CGImageRelease(maskedImage);

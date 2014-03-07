@@ -29,7 +29,7 @@
 
 - (UITextPosition *)end
 {
-	return [SETextPosition positionWithIndex:self.range.location + self.range.length];
+    return [SETextPosition positionWithIndex:self.range.location + self.range.length];
 }
 
 - (BOOL)isEmpty

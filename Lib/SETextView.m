@@ -319,7 +319,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 #if TARGET_OS_IPHONE
 - (void)setSelectedRange:(NSRange)selectedRange
 {
-	self.selectedTextRange = [SETextRange rangeWithNSRange:selectedRange];
+    self.selectedTextRange = [SETextRange rangeWithNSRange:selectedRange];
 }
 #endif
 
@@ -381,9 +381,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     
     CFStringRef fontName = (__bridge CFStringRef)self.font.fontName;
     CGFloat fontSize = self.font.pointSize;
-	CTFontRef ctfont = CTFontCreateWithName(fontName, fontSize, NULL);
+    CTFontRef ctfont = CTFontCreateWithName(fontName, fontSize, NULL);
     [self setAttributes:@{(id)kCTFontAttributeName: (__bridge id)ctfont}];
-	CFRelease(ctfont);
+    CFRelease(ctfont);
 }
 
 - (void)setTextColorAttributes
@@ -658,7 +658,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         [attachmentsToLeave addObject:attachment];
         
         for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
-			CGRect lineRect = lineLayout.rect;
+            CGRect lineRect = lineLayout.rect;
             CGRect rect = [lineLayout rectOfStringWithRange:range];
             if (!CGRectIsEmpty(rect) && CGRectGetMaxX(rect) <= (CGRectGetMaxX(lineRect) - lineLayout.truncationTokenWidth)) {
                 id object = attachment.object;
@@ -882,7 +882,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (void)drawRect:(CGRect)dirtyRect
 {
-	[super drawRect:dirtyRect];
+    [super drawRect:dirtyRect];
     
 #if TARGET_OS_IPHONE
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -1376,13 +1376,13 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 
 - (BOOL)becomeFirstResponder
 {
-	if (!self.isFirstResponder) {
-		if (self.isEditable) {
-			[self beginEditing];
-		}
-	}
-	
-	return [super becomeFirstResponder];
+    if (!self.isFirstResponder) {
+        if (self.isEditable) {
+            [self beginEditing];
+        }
+    }
+    
+    return [super becomeFirstResponder];
 }
 
 #else
@@ -1755,9 +1755,9 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 //    if (markedText.length == 0 && NSMaxRange(selectedRange) == 0) {
 //        return;
 //    }
-	if (selectedRange.location == NSNotFound) {
-		return;
-	}
+    if (selectedRange.location == NSNotFound) {
+        return;
+    }
     
     NSRange selectedNSRange = self.selectedRange;
     NSRange markedTextRange = self.textLayout.markedTextRange;
@@ -1784,14 +1784,14 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         markedTextRange.location = selectedNSRange.location;
         markedTextRange.length = markedText.length;
     }
-	
+    
     [self replaceCharactersInRange:replaceRange withString:markedText forAttributedString:editingAttributedText];
     
     selectedNSRange = NSMakeRange(markedTextRange.location + selectedRange.location, selectedRange.length);
-	
-	if (markedTextRange.length == 0) {
-		markedTextRange.location = NSNotFound;
-	}
+    
+    if (markedTextRange.length == 0) {
+        markedTextRange.location = NSNotFound;
+    }
     
     self.attributedText = editingAttributedText;
     self.textLayout.markedTextRange = markedTextRange;
@@ -1873,7 +1873,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         case UITextLayoutDirectionDown:
             break;
     }
-	
+    
     if (newPos < 0) {
         newPos = 0;
     }
@@ -2008,16 +2008,16 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         rect.size.width = CGRectGetWidth(self.caretView.bounds);
         return rect;
     }
-	
-	if (index < text.length) {
-		unichar c = [text characterAtIndex:index];
-		if (CFStringIsSurrogateLowCharacter(c)) {
-			index++;
-			if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
-				index += 2;
-			}
-		}
-	}
+    
+    if (index < text.length) {
+        unichar c = [text characterAtIndex:index];
+        if (CFStringIsSurrogateLowCharacter(c)) {
+            index++;
+            if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+                index += 2;
+            }
+        }
+    }
     
     CGRect rect;
     if (index > 0 && [lastCharacter isEqualToString:@"\n"]) {
@@ -2196,18 +2196,18 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
             
             markedTextNSRange = NSMakeRange(NSNotFound, 0);
         } else if (selectedNSRange.length > 0) {
-			unichar c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
-			if (CFStringIsSurrogateLowCharacter(c)) {
-				selectedNSRange.location -= 1;
-				selectedNSRange.length += 1;
-				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
-					c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
-					if (c == 0xD83C) {
-						selectedNSRange.location -= 2;
-						selectedNSRange.length += 2;
-					}
-				}
-			} else if (CFStringIsSurrogateHighCharacter(c)) {
+            unichar c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
+            if (CFStringIsSurrogateLowCharacter(c)) {
+                selectedNSRange.location -= 1;
+                selectedNSRange.length += 1;
+                if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+                    c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
+                    if (c == 0xD83C) {
+                        selectedNSRange.location -= 2;
+                        selectedNSRange.length += 2;
+                    }
+                }
+            } else if (CFStringIsSurrogateHighCharacter(c)) {
                 if (c == 0xD83C) {
                     c = [editingAttributedText.string characterAtIndex:selectedNSRange.location + 1];
                     if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
@@ -2215,26 +2215,26 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
                         selectedNSRange.length += 2;
                     }
                 }
-			}
-			
+            }
+            
             deleteRange = selectedNSRange;
             selectedNSRange.length = 0;
         } else if (selectedNSRange.location > 0) {
             selectedNSRange.location -= 1;
-			selectedNSRange.length = 1;
-			
-			unichar c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
-			if (CFStringIsSurrogateLowCharacter(c)) {
-				selectedNSRange.location -= 1;
-				selectedNSRange.length += 1;
-				if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
-					c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
-					if (c == 0xD83C) {
-						selectedNSRange.location -= 2;
-						selectedNSRange.length += 2;
-					}
-				}
-			} else if (CFStringIsSurrogateHighCharacter(c)) {
+            selectedNSRange.length = 1;
+            
+            unichar c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
+            if (CFStringIsSurrogateLowCharacter(c)) {
+                selectedNSRange.location -= 1;
+                selectedNSRange.length += 1;
+                if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+                    c = [editingAttributedText.string characterAtIndex:selectedNSRange.location];
+                    if (c == 0xD83C) {
+                        selectedNSRange.location -= 2;
+                        selectedNSRange.length += 2;
+                    }
+                }
+            } else if (CFStringIsSurrogateHighCharacter(c)) {
                 if (c == 0xD83C) {
                     c = [editingAttributedText.string characterAtIndex:selectedNSRange.location + 1];
                     if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
@@ -2242,10 +2242,10 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
                         selectedNSRange.length += 2;
                     }
                 }
-			} else if (c == 0x20E3) {
-				selectedNSRange.location -= 1;
-				selectedNSRange.length += 1;
-			}
+            } else if (c == 0x20E3) {
+                selectedNSRange.location -= 1;
+                selectedNSRange.length += 1;
+            }
             
             deleteRange = selectedNSRange;
             
@@ -2340,33 +2340,31 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     [self insertText:replacementCharacter];
 }
 
-- (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)aString forAttributedString:(NSMutableAttributedString *)attributdString
+- (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)aString forAttributedString:(NSMutableAttributedString *)attributedString
 {
-	if( aString == nil )
-	{
-		aString = @"";
-	}
-	
+    if (!aString) {
+        aString = @"";
+    }
+    
     id attribute = nil;
     NSUInteger location = range.location;
-	NSUInteger index = location;
-	if (location > attributdString.length) {
-		index = attributdString.length;
-	}
+    NSUInteger index = location;
+    if (location > attributedString.length) {
+        index = attributedString.length;
+    }
     if (index > 0) {
-        attribute = [attributdString attribute:(id)kCTRunDelegateAttributeName atIndex:index - 1 effectiveRange:nil];
+        attribute = [attributedString attribute:(id)kCTRunDelegateAttributeName atIndex:index - 1 effectiveRange:nil];
+    } else if (attributedString.length > 0) {
+        attribute = [attributedString attribute:(id)kCTRunDelegateAttributeName atIndex:0 effectiveRange:nil];
     }
-    else if ([attributdString length] > 0) {
-        attribute = [attributdString attribute:(id)kCTRunDelegateAttributeName atIndex:0 effectiveRange:nil];
+    if (NSMaxRange(range) > attributedString.length) {
+        return;
     }
-	if (NSMaxRange(range) > attributdString.length) {
-		return;
-	}
-	
+    
     if (attribute) {
-        [attributdString replaceCharactersInRange:range withAttributedString:[[NSAttributedString alloc] initWithString:aString]];
+        [attributedString replaceCharactersInRange:range withAttributedString:[[NSAttributedString alloc] initWithString:aString]];
     } else {
-        [attributdString replaceCharactersInRange:range withString:aString];
+        [attributedString replaceCharactersInRange:range withString:aString];
     }
 }
 #endif

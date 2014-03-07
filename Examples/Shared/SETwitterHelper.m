@@ -52,7 +52,7 @@
     UIColor *cashtagColor = [UIColor grayColor];
     NSColor *linkColor = [NSColor blueColor];
     
-	NSDictionary *attributes = @{(id)kCTForegroundColorAttributeName: (id)tweetColor.CGColor, (id)kCTFontAttributeName: (__bridge id)tweetfont};
+    NSDictionary *attributes = @{(id)kCTForegroundColorAttributeName: (id)tweetColor.CGColor, (id)kCTFontAttributeName: (__bridge id)tweetfont};
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
     CFRelease(tweetfont);
     

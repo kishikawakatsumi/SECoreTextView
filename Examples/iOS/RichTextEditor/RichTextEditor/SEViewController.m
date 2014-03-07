@@ -143,15 +143,15 @@ static const CGFloat defaultFontSize = 18.0f;
 {
     self.scrollView.scrollEnabled = NO;
     
-	CGRect keyboardBounds;
+    CGRect keyboardBounds;
     [notification.userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardBounds];
-	
+    
     keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
     
-	CGRect containerFrame = self.scrollView.frame;
+    CGRect containerFrame = self.scrollView.frame;
     containerFrame.size.height = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(keyboardBounds);
     
-	self.scrollView.frame = containerFrame;
+    self.scrollView.frame = containerFrame;
     
     self.scrollView.scrollEnabled = YES;
 }
@@ -160,15 +160,15 @@ static const CGFloat defaultFontSize = 18.0f;
 {
     self.scrollView.scrollEnabled = NO;
     
-	CGRect keyboardBounds;
+    CGRect keyboardBounds;
     [notification.userInfo[UIKeyboardFrameEndUserInfoKey] getValue:&keyboardBounds];
-	
+    
     keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
     
-	CGRect containerFrame = self.scrollView.frame;
+    CGRect containerFrame = self.scrollView.frame;
     containerFrame.size.height = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(keyboardBounds);
-	
-	self.scrollView.frame = containerFrame;
+    
+    self.scrollView.frame = containerFrame;
     
     self.scrollView.scrollEnabled = YES;
 }

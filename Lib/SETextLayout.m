@@ -107,7 +107,7 @@
     }
     
     CGRect frameRect = _bounds;
-	CGSize frameSize = CTFramesetterSuggestFrameSizeWithConstraints(_framesetter,
+    CGSize frameSize = CTFramesetterSuggestFrameSizeWithConstraints(_framesetter,
                                                                     CFRangeMake(0, _attributedString.length),
                                                                     NULL,
                                                                     CGSizeMake(frameRect.size.width, CGFLOAT_MAX),
@@ -115,13 +115,13 @@
     if (self.isEditing) {
         frameSize.height += [[UIFont systemFontOfSize:[UIFont labelFontSize]] leading]; // Workaround
     }
-	frameRect.origin.y = CGRectGetMaxY(frameRect) - frameSize.height;
+    frameRect.origin.y = CGRectGetMaxY(frameRect) - frameSize.height;
     frameRect.size.height = frameSize.height;
-	
-	CGMutablePathRef path = CGPathCreateMutable();
-	CGPathAddRect(path, NULL, frameRect);
-	_frame = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, 0), path, NULL);
-	CGPathRelease(path);
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddRect(path, NULL, frameRect);
+    _frame = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, 0), path, NULL);
+    CGPathRelease(path);
     
     _frameRect = frameRect;
 #if TARGET_OS_IPHONE
@@ -231,7 +231,7 @@
 #endif
         
         CGRect drawingRect = lineRect;
-		if (index > 0) {
+        if (index > 0) {
 #if TARGET_OS_IPHONE
         drawingRect.origin.y = CGRectGetHeight(_bounds) - CGRectGetMaxY(lineRect);
         if (self.lineBreakMode == kCTLineBreakByTruncatingTail && drawingRect.origin.y < 0.0f) {
@@ -244,7 +244,7 @@
             break;
         }
 #endif
-		}
+        }
         
         SELineLayout *lineLayout = [[SELineLayout alloc] initWithLine:line index:index rect:lineRect metrics:metrics];
         lineLayout.drawingRect = drawingRect;
@@ -294,9 +294,9 @@
         drawingRect.origin.x = rect.origin.x;
         drawingRect.size.width = rect.size.width;
         truncationLineLayout.drawingRect = drawingRect;
-		
+        
         CGFloat truncationTokenWidth = CTLineGetTypographicBounds(truncationToken, NULL, NULL, NULL);
-		truncationLineLayout.truncationTokenWidth = truncationTokenWidth;
+        truncationLineLayout.truncationTokenWidth = truncationTokenWidth;
         
         truncationLineLayout.truncated = YES;
         [lineLayouts replaceObjectAtIndex:truncatedLineIndex withObject:truncationLineLayout];
@@ -323,7 +323,7 @@
     CGContextScaleCTM(context, 1.0, -1.0);
 #endif
 
-	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+    CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     
     if (self.lineBreakMode == kCTLineBreakByTruncatingTail) {
         NSArray *lineLayouts = self.lineLayouts;
@@ -363,23 +363,23 @@
 
 - (CFIndex)stringIndexForClosestPosition:(CGPoint)point
 {
-	NSString *text = self.attributedString.string;
-	
+    NSString *text = self.attributedString.string;
+    
     CFIndex lineNumber = 0;
     for (SELineLayout *lineLayout in self.lineLayouts) {
         if ([lineLayout containsPoint:point]) {
             CFIndex index = [lineLayout stringIndexForPosition:point];
-			
-			if (index < text.length) {
-				unichar c = [text characterAtIndex:index];
-				if (CFStringIsSurrogateLowCharacter(c)) {
-					index++;
-					if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
-						index += 2;
-					}
-				}
-			}
-			
+            
+            if (index < text.length) {
+                unichar c = [text characterAtIndex:index];
+                if (CFStringIsSurrogateLowCharacter(c)) {
+                    index++;
+                    if ((0xDDE6 <= c && c <= 0xDDFF) || c == 0x20E3) {
+                        index += 2;
+                    }
+                }
+            }
+            
             if (index != kCFNotFound) {
                 return index;
             }

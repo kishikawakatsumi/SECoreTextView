@@ -12,8 +12,8 @@
 #if !TARGET_OS_IPHONE
 #if !defined(MAC_OS_X_VERSION_10_9) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_9
 enum {
-	kCTRunDelegateVersion1 = 1,
-	kCTRunDelegateCurrentVersion = kCTRunDelegateVersion1
+    kCTRunDelegateVersion1 = 1,
+    kCTRunDelegateCurrentVersion = kCTRunDelegateVersion1
 };
 
 typedef void (*CTRunDelegateDeallocateCallback) (void *refCon);
@@ -22,11 +22,11 @@ typedef CGFloat (*CTRunDelegateGetDescentCallback) (void *refCon);
 typedef CGFloat (*CTRunDelegateGetWidthCallback) (void *refCon);
 
 typedef struct {
-	CFIndex							version;
-	CTRunDelegateDeallocateCallback	dealloc;
-	CTRunDelegateGetAscentCallback	getAscent;
-	CTRunDelegateGetDescentCallback	getDescent;
-	CTRunDelegateGetWidthCallback	getWidth;
+    CFIndex                          version;
+    CTRunDelegateDeallocateCallback  dealloc;
+    CTRunDelegateGetAscentCallback   getAscent;
+    CTRunDelegateGetDescentCallback  getDescent;
+    CTRunDelegateGetWidthCallback    getWidth;
 } CTRunDelegateCallbacks;
 
 typedef const struct __CTRunDelegate * CTRunDelegateRef;

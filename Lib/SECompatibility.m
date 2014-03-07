@@ -18,9 +18,9 @@ NSString * const NSLinkAttributeName = @"NSLink";
     const NSInteger numberOfComponents = [self numberOfComponents];
     CGFloat components[numberOfComponents];
     CGColorSpaceRef colorSpace = [[self colorSpace] CGColorSpace];
-	
+    
     [self getComponents:(CGFloat *)&components];
-	
+    
     return CGColorCreate(colorSpace, components);
 }
 
