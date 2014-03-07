@@ -58,7 +58,3 @@ SECoreTextView is multi-line rich text view library with clickable links, select
 ## License
 
 SECoreTextView is available under the [MIT license][MIT]. See the LICENSE file for more info.
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kishikawakatsumi/secoretextview/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
