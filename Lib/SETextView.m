@@ -415,7 +415,23 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 {
     NSString *replacementString = OBJECT_REPLACEMENT_CHARACTER;
     
-    for (SETextAttachment *attachment in self.attachments) {
+    NSArray *attachments = [self.attachments.allObjects sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        SETextAttachment *attachment1 = obj1;
+        SETextAttachment *attachment2 = obj2;
+        NSRange range1 = attachment1.range;
+        NSRange range2 = attachment2.range;
+        NSUInteger maxRange1 = NSMaxRange(range1);
+        NSUInteger maxRange2 = NSMaxRange(range2);
+        if (maxRange1 < maxRange2) {
+            return NSOrderedDescending;
+        } else if (maxRange1 > maxRange2) {
+            return NSOrderedAscending;
+        } else {
+            return NSOrderedSame;
+        }
+    }];
+    
+    for (SETextAttachment *attachment in attachments) {
         NSMutableAttributedString *editingAttributedText = self.editingAttributedText;
         if (!attachment.replacedString) {
             if (attachment.range.length > 0) {
