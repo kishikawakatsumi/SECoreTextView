@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                  = "SECoreTextView"
-  s.version               = "0.8.2"
+  s.version               = "0.8.3"
   s.summary               = "Multi-line rich text view library with clickable links, selectable text, embeding images and editing."
   s.homepage              = "https://github.com/kishikawakatsumi/SECoreTextView"
   s.social_media_url      = "https://twitter.com/k_katsumi"
