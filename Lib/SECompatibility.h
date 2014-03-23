@@ -26,6 +26,7 @@ typedef UIEdgeInsets NSEdgeInsets;
 #define NSTextInputClient UITextInput
 
 extern NSString * const NSLinkAttributeName;
+extern NSString * const NSStrikethroughStyleAttributeName;
 
 #else
 #import <Cocoa/Cocoa.h>

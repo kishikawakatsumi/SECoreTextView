@@ -10,6 +10,7 @@
 
 #if TARGET_OS_IPHONE
 NSString * const NSLinkAttributeName = @"NSLink";
+NSString * const NSStrikethroughStyleAttributeName = @"NSStrikethrough";
 #else
 @implementation NSColor (Compatibility)
 
