@@ -46,6 +46,7 @@
 		1469DBE717F35E3200ADDA7E /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DBE617F35E3200ADDA7E /* Twitter.framework */; };
 		1469DBE917F35E4300ADDA7E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DBE817F35E4300ADDA7E /* Accounts.framework */; };
 		1469DBEB17F35E5100ADDA7E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DBEA17F35E5100ADDA7E /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		D94F7A641AB685C700D96592 /* SEViewCaptureHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D94F7A631AB685C700D96592 /* SEViewCaptureHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,6 +114,8 @@
 		1469DBE617F35E3200ADDA7E /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		1469DBE817F35E4300ADDA7E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		1469DBEA17F35E5100ADDA7E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		D94F7A621AB685C700D96592 /* SEViewCaptureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEViewCaptureHelper.h; path = ../../../../Lib/SEViewCaptureHelper.h; sourceTree = "<group>"; };
+		D94F7A631AB685C700D96592 /* SEViewCaptureHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEViewCaptureHelper.m; path = ../../../../Lib/SEViewCaptureHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +251,8 @@
 				1469DBBB17F35DC100ADDA7E /* SEConstants.m */,
 				1469DBB817F35DC100ADDA7E /* SECompatibility.h */,
 				1469DBB917F35DC100ADDA7E /* SECompatibility.m */,
+				D94F7A621AB685C700D96592 /* SEViewCaptureHelper.h */,
+				D94F7A631AB685C700D96592 /* SEViewCaptureHelper.m */,
 				14178A8D17F3AB8800C70E04 /* SECoreTextView.bundle */,
 			);
 			name = Lib;
@@ -338,6 +343,7 @@
 				1469DBDB17F35DC100ADDA7E /* SESelectionGrabber.m in Sources */,
 				1469DBDC17F35DC100ADDA7E /* SETextAttachment.m in Sources */,
 				1469DBDD17F35DC100ADDA7E /* SETextEditingCaret.m in Sources */,
+				D94F7A641AB685C700D96592 /* SEViewCaptureHelper.m in Sources */,
 				1469DBDE17F35DC100ADDA7E /* SETextGeometry.m in Sources */,
 				1469DBDF17F35DC100ADDA7E /* SETextInput.m in Sources */,
 				1469DBE017F35DC100ADDA7E /* SETextLayout.m in Sources */,

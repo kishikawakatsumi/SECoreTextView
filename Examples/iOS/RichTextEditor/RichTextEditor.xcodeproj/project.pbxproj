@@ -82,6 +82,7 @@
 		14EDE30217F55A7C00ABF2C6 /* SETextSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE2F117F55A7C00ABF2C6 /* SETextSelectionView.m */; };
 		14EDE30317F55A7C00ABF2C6 /* SETextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE2F317F55A7C00ABF2C6 /* SETextView.m */; };
 		14EDE30517F55A8F00ABF2C6 /* SECoreTextView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 14EDE30417F55A8F00ABF2C6 /* SECoreTextView.bundle */; };
+		D94F7A671AB685D200D96592 /* SEViewCaptureHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D94F7A661AB685D200D96592 /* SEViewCaptureHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -152,7 +153,6 @@
 		1469DC7817F3770F00ADDA7E /* SEStampInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEStampInputView.m; sourceTree = "<group>"; };
 		1469DC7A17F3773D00ADDA7E /* SEInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SEInputAccessoryView.h; sourceTree = "<group>"; };
 		1469DC7B17F3773D00ADDA7E /* SEInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SEInputAccessoryView.m; sourceTree = "<group>"; };
-		14EDE2D417F55A7C00ABF2C6 /* NSMutableAttributedString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableAttributedString+Helper.h"; path = "../../../../Lib/NSMutableAttributedString+Helper.h"; sourceTree = "<group>"; };
 		14EDE2D617F55A7C00ABF2C6 /* SECompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SECompatibility.h; path = ../../../../Lib/SECompatibility.h; sourceTree = "<group>"; };
 		14EDE2D717F55A7C00ABF2C6 /* SECompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SECompatibility.m; path = ../../../../Lib/SECompatibility.m; sourceTree = "<group>"; };
 		14EDE2D817F55A7C00ABF2C6 /* SEConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEConstants.h; path = ../../../../Lib/SEConstants.h; sourceTree = "<group>"; };
@@ -184,6 +184,8 @@
 		14EDE2F217F55A7C00ABF2C6 /* SETextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETextView.h; path = ../../../../Lib/SETextView.h; sourceTree = "<group>"; };
 		14EDE2F317F55A7C00ABF2C6 /* SETextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETextView.m; path = ../../../../Lib/SETextView.m; sourceTree = "<group>"; };
 		14EDE30417F55A8F00ABF2C6 /* SECoreTextView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SECoreTextView.bundle; path = ../../../../Resources/SECoreTextView.bundle; sourceTree = "<group>"; };
+		D94F7A651AB685D200D96592 /* SEViewCaptureHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEViewCaptureHelper.h; path = ../../../../Lib/SEViewCaptureHelper.h; sourceTree = "<group>"; };
+		D94F7A661AB685D200D96592 /* SEViewCaptureHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEViewCaptureHelper.m; path = ../../../../Lib/SEViewCaptureHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -276,13 +278,14 @@
 				14EDE2EB17F55A7C00ABF2C6 /* SETextMagnifierCaret.m */,
 				14EDE2EC17F55A7C00ABF2C6 /* SETextMagnifierRanged.h */,
 				14EDE2ED17F55A7C00ABF2C6 /* SETextMagnifierRanged.m */,
+				D94F7A651AB685D200D96592 /* SEViewCaptureHelper.h */,
+				D94F7A661AB685D200D96592 /* SEViewCaptureHelper.m */,
 				14EDE2E217F55A7C00ABF2C6 /* SETextEditingCaret.h */,
 				14EDE2E317F55A7C00ABF2C6 /* SETextEditingCaret.m */,
 				14EDE2D817F55A7C00ABF2C6 /* SEConstants.h */,
 				14EDE2D917F55A7C00ABF2C6 /* SEConstants.m */,
 				14EDE2D617F55A7C00ABF2C6 /* SECompatibility.h */,
 				14EDE2D717F55A7C00ABF2C6 /* SECompatibility.m */,
-				14EDE2D417F55A7C00ABF2C6 /* NSMutableAttributedString+Helper.h */,
 				14EDE30417F55A8F00ABF2C6 /* SECoreTextView.bundle */,
 			);
 			name = Lib;
@@ -486,6 +489,7 @@
 				14EDE2F517F55A7C00ABF2C6 /* SECompatibility.m in Sources */,
 				1469DC7C17F3773E00ADDA7E /* SEInputAccessoryView.m in Sources */,
 				14EDE2F817F55A7C00ABF2C6 /* SELinkText.m in Sources */,
+				D94F7A671AB685D200D96592 /* SEViewCaptureHelper.m in Sources */,
 				14EDE30017F55A7C00ABF2C6 /* SETextMagnifierRanged.m in Sources */,
 				14EDE30317F55A7C00ABF2C6 /* SETextView.m in Sources */,
 			);
