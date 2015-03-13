@@ -44,7 +44,7 @@
         return [_attributedStringCache objectForKey:text];
     }
     
-    NSFont *font = [NSFont systemFontOfSize:13.0f];
+    UIFont *font = [UIFont systemFontOfSize:13.0f];
     CTFontRef tweetfont = CTFontCreateWithName((__bridge CFStringRef)font.fontName, font.pointSize, NULL);
     
     NSColor *tweetColor = [NSColor blackColor];

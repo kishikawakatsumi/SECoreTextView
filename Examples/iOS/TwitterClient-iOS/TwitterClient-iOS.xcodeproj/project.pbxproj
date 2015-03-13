@@ -28,7 +28,6 @@
 		1469DBB217F35D4B00ADDA7E /* default_user_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1469DBAC17F35D4B00ADDA7E /* default_user_icon@2x.png */; };
 		1469DBB317F35D4B00ADDA7E /* SEImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DBAE17F35D4B00ADDA7E /* SEImageCache.m */; };
 		1469DBB417F35D4B00ADDA7E /* SETwitterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DBB017F35D4B00ADDA7E /* SETwitterHelper.m */; };
-		1469DBD617F35DC100ADDA7E /* NSMutableAttributedString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DBB717F35DC100ADDA7E /* NSMutableAttributedString+Helper.m */; };
 		1469DBD717F35DC100ADDA7E /* SECompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DBB917F35DC100ADDA7E /* SECompatibility.m */; };
 		1469DBD817F35DC100ADDA7E /* SEConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DBBB17F35DC100ADDA7E /* SEConstants.m */; };
 		1469DBD917F35DC100ADDA7E /* SELineLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 1469DBBD17F35DC100ADDA7E /* SELineLayout.m */; };
@@ -81,8 +80,6 @@
 		1469DBAE17F35D4B00ADDA7E /* SEImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SEImageCache.m; path = ../../../Shared/SEImageCache.m; sourceTree = "<group>"; };
 		1469DBAF17F35D4B00ADDA7E /* SETwitterHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SETwitterHelper.h; path = ../../../Shared/SETwitterHelper.h; sourceTree = "<group>"; };
 		1469DBB017F35D4B00ADDA7E /* SETwitterHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SETwitterHelper.m; path = ../../../Shared/SETwitterHelper.m; sourceTree = "<group>"; };
-		1469DBB617F35DC100ADDA7E /* NSMutableAttributedString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableAttributedString+Helper.h"; path = "../../../../Lib/NSMutableAttributedString+Helper.h"; sourceTree = "<group>"; };
-		1469DBB717F35DC100ADDA7E /* NSMutableAttributedString+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableAttributedString+Helper.m"; path = "../../../../Lib/NSMutableAttributedString+Helper.m"; sourceTree = "<group>"; };
 		1469DBB817F35DC100ADDA7E /* SECompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SECompatibility.h; path = ../../../../Lib/SECompatibility.h; sourceTree = "<group>"; };
 		1469DBB917F35DC100ADDA7E /* SECompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SECompatibility.m; path = ../../../../Lib/SECompatibility.m; sourceTree = "<group>"; };
 		1469DBBA17F35DC100ADDA7E /* SEConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEConstants.h; path = ../../../../Lib/SEConstants.h; sourceTree = "<group>"; };
@@ -251,8 +248,6 @@
 				1469DBBB17F35DC100ADDA7E /* SEConstants.m */,
 				1469DBB817F35DC100ADDA7E /* SECompatibility.h */,
 				1469DBB917F35DC100ADDA7E /* SECompatibility.m */,
-				1469DBB617F35DC100ADDA7E /* NSMutableAttributedString+Helper.h */,
-				1469DBB717F35DC100ADDA7E /* NSMutableAttributedString+Helper.m */,
 				14178A8D17F3AB8800C70E04 /* SECoreTextView.bundle */,
 			);
 			name = Lib;
@@ -336,7 +331,6 @@
 				1469DBA717F35C3300ADDA7E /* SEWebViewController.m in Sources */,
 				1469DBB317F35D4B00ADDA7E /* SEImageCache.m in Sources */,
 				1469DBB417F35D4B00ADDA7E /* SETwitterHelper.m in Sources */,
-				1469DBD617F35DC100ADDA7E /* NSMutableAttributedString+Helper.m in Sources */,
 				1469DBD717F35DC100ADDA7E /* SECompatibility.m in Sources */,
 				1469DBD817F35DC100ADDA7E /* SEConstants.m in Sources */,
 				1469DBD917F35DC100ADDA7E /* SELineLayout.m in Sources */,

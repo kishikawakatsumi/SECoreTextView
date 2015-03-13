@@ -169,23 +169,38 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
                                            font:nil];
 }
 
+#if TARGET_OS_IPHONE
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                             lineSpacing:(CGFloat)lineSpacing
+                                    font:(UIFont *)font
+#else
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
                              lineSpacing:(CGFloat)lineSpacing
                                     font:(NSFont *)font
+#endif
 {
     return [self frameRectWithAttributtedString:attributedString
                                  constraintSize:constraintSize
                                     lineSpacing:lineSpacing
                                paragraphSpacing:0.0f
-                                           font:font];
+                                           font:(id)font];
 }
 
+#if TARGET_OS_IPHONE
++ (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
+                          constraintSize:(CGSize)constraintSize
+                             lineSpacing:(CGFloat)lineSpacing
+                        paragraphSpacing:(CGFloat)paragraphSpacing
+                                    font:(UIFont *)font
+#else
 + (CGRect)frameRectWithAttributtedString:(NSAttributedString *)attributedString
                           constraintSize:(CGSize)constraintSize
                              lineSpacing:(CGFloat)lineSpacing
                         paragraphSpacing:(CGFloat)paragraphSpacing
                                     font:(NSFont *)font
+#endif
 {
     NSInteger length = attributedString.length;
     NSMutableAttributedString *mutableAttributedString = attributedString.mutableCopy;
@@ -467,7 +482,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
         textAlignment = (CTTextAlignment)self.textAlignment;
     }
 #else
-    CTTextAlignment textAlignment = self.textAlignment;
+    CTTextAlignment textAlignment = (CTTextAlignment)self.textAlignment;
 #endif
     CTLineBreakMode lineBreakMode = (CTLineBreakMode)self.lineBreakMode;
     if (lineBreakMode == kCTLineBreakByTruncatingTail) {
@@ -514,7 +529,7 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     
     self.textLayout.bounds = self.bounds;
     self.textLayout.attributedString = self.attributedText;
-    self.textLayout.lineBreakMode = self.lineBreakMode;
+    self.textLayout.lineBreakMode = (CTLineBreakMode)self.lineBreakMode;
     
     [self.textLayout update];
 }
