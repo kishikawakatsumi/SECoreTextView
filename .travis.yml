@@ -3,9 +3,10 @@ env:
   global:
   - LANG=en_US.UTF-8
   - LC_ALL=en_US.UTF-8
-before_install:
-  - gem install xcpretty
+install:
+  - bundle install --path=vendor/bundle --binstubs=vendor/bin
 script:
-  - rake "clean['TwitterClient-iOS RichTextEditor TwitterClient-Mac']"
-  - rake "build['TwitterClient-iOS RichTextEditor TwitterClient-Mac']"
-   
+  - bundle exec rake
+branches:
+  only:
+    - master
