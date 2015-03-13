@@ -70,12 +70,12 @@ static const CGFloat defaultFontSize = 18.0f;
     
     UIColor *linkColor = [UIColor blueColor];
     
-    NSFont *normalFont = [NSFont systemFontOfSize:defaultFontSize];
+    UIFont *normalFont = [UIFont systemFontOfSize:defaultFontSize];
     CTFontRef ctNormalFont = CTFontCreateWithName((__bridge CFStringRef)normalFont.fontName, normalFont.pointSize, NULL);
     self.normalFont = (__bridge id)ctNormalFont;
     CFRelease(ctNormalFont);
     
-    NSFont *boldFont = [NSFont boldSystemFontOfSize:defaultFontSize];
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:defaultFontSize];
     CTFontRef ctBoldFont = CTFontCreateWithName((__bridge CFStringRef)boldFont.fontName, boldFont.pointSize, NULL);
     self.boldFont = (__bridge id)ctBoldFont;
     CFRelease(ctBoldFont);

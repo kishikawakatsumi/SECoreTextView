@@ -20,7 +20,6 @@
 		1469DC6A17F3613900ADDA7E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1469DC6817F3613900ADDA7E /* MainMenu.xib */; };
 		1469DC7217F3633400ADDA7E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1469DC7117F3633400ADDA7E /* ApplicationServices.framework */; };
 		14EDE30717F55A9800ABF2C6 /* SECoreTextView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 14EDE30617F55A9800ABF2C6 /* SECoreTextView.bundle */; };
-		14EDE32817F55AA100ABF2C6 /* NSMutableAttributedString+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE30917F55AA100ABF2C6 /* NSMutableAttributedString+Helper.m */; };
 		14EDE32917F55AA100ABF2C6 /* SECompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE30B17F55AA100ABF2C6 /* SECompatibility.m */; };
 		14EDE32A17F55AA100ABF2C6 /* SEConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE30D17F55AA100ABF2C6 /* SEConstants.m */; };
 		14EDE32B17F55AA100ABF2C6 /* SELineLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 14EDE30F17F55AA100ABF2C6 /* SELineLayout.m */; };
@@ -66,7 +65,6 @@
 		1469DC7117F3633400ADDA7E /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		14EDE30617F55A9800ABF2C6 /* SECoreTextView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SECoreTextView.bundle; path = ../../../../Resources/SECoreTextView.bundle; sourceTree = "<group>"; };
 		14EDE30817F55AA100ABF2C6 /* NSMutableAttributedString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableAttributedString+Helper.h"; path = "../../../../Lib/NSMutableAttributedString+Helper.h"; sourceTree = "<group>"; };
-		14EDE30917F55AA100ABF2C6 /* NSMutableAttributedString+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableAttributedString+Helper.m"; path = "../../../../Lib/NSMutableAttributedString+Helper.m"; sourceTree = "<group>"; };
 		14EDE30A17F55AA100ABF2C6 /* SECompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SECompatibility.h; path = ../../../../Lib/SECompatibility.h; sourceTree = "<group>"; };
 		14EDE30B17F55AA100ABF2C6 /* SECompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SECompatibility.m; path = ../../../../Lib/SECompatibility.m; sourceTree = "<group>"; };
 		14EDE30C17F55AA100ABF2C6 /* SEConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEConstants.h; path = ../../../../Lib/SEConstants.h; sourceTree = "<group>"; };
@@ -225,7 +223,6 @@
 				14EDE30A17F55AA100ABF2C6 /* SECompatibility.h */,
 				14EDE30B17F55AA100ABF2C6 /* SECompatibility.m */,
 				14EDE30817F55AA100ABF2C6 /* NSMutableAttributedString+Helper.h */,
-				14EDE30917F55AA100ABF2C6 /* NSMutableAttributedString+Helper.m */,
 				14EDE30617F55A9800ABF2C6 /* SECoreTextView.bundle */,
 			);
 			name = Lib;
@@ -320,7 +317,6 @@
 				14EDE33717F55AA100ABF2C6 /* SETextView.m in Sources */,
 				14EDE32D17F55AA100ABF2C6 /* SESelectionGrabber.m in Sources */,
 				14EDE33117F55AA100ABF2C6 /* SETextInput.m in Sources */,
-				14EDE32817F55AA100ABF2C6 /* NSMutableAttributedString+Helper.m in Sources */,
 				14EDE33317F55AA100ABF2C6 /* SETextMagnifierCaret.m in Sources */,
 				14EDE33417F55AA100ABF2C6 /* SETextMagnifierRanged.m in Sources */,
 				14EDE33517F55AA100ABF2C6 /* SETextSelection.m in Sources */,
