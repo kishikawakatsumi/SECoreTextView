@@ -64,7 +64,6 @@
 		1469DC6917F3613900ADDA7E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		1469DC7117F3633400ADDA7E /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		14EDE30617F55A9800ABF2C6 /* SECoreTextView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SECoreTextView.bundle; path = ../../../../Resources/SECoreTextView.bundle; sourceTree = "<group>"; };
-		14EDE30817F55AA100ABF2C6 /* NSMutableAttributedString+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableAttributedString+Helper.h"; path = "../../../../Lib/NSMutableAttributedString+Helper.h"; sourceTree = "<group>"; };
 		14EDE30A17F55AA100ABF2C6 /* SECompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SECompatibility.h; path = ../../../../Lib/SECompatibility.h; sourceTree = "<group>"; };
 		14EDE30B17F55AA100ABF2C6 /* SECompatibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SECompatibility.m; path = ../../../../Lib/SECompatibility.m; sourceTree = "<group>"; };
 		14EDE30C17F55AA100ABF2C6 /* SEConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SEConstants.h; path = ../../../../Lib/SEConstants.h; sourceTree = "<group>"; };
@@ -222,7 +221,6 @@
 				14EDE30D17F55AA100ABF2C6 /* SEConstants.m */,
 				14EDE30A17F55AA100ABF2C6 /* SECompatibility.h */,
 				14EDE30B17F55AA100ABF2C6 /* SECompatibility.m */,
-				14EDE30817F55AA100ABF2C6 /* NSMutableAttributedString+Helper.h */,
 				14EDE30617F55A9800ABF2C6 /* SECoreTextView.bundle */,
 			);
 			name = Lib;
