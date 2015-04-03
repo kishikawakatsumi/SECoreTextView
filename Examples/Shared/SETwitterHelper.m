@@ -62,24 +62,27 @@
         NSArray *indices = userMention[@"indices"];
         NSInteger first = [indices.firstObject integerValue];
         NSInteger last = [indices.lastObject integerValue];
-        [attributedString addAttributes:@{NSLinkAttributeName: userMention, (id)kCTForegroundColorAttributeName: (id)linkColor.CGColor}
-                                  range:NSMakeRange(first, last - first)];
+        NSRange range = NSMakeRange(first, last - first);
+        [attributedString addAttributes:@{NSLinkAttributeName: [text substringWithRange:range], (id)kCTForegroundColorAttributeName: (id)linkColor.CGColor}
+                                  range:range];
     }
     NSArray *hashtags = entities[@"hashtags"];
     for (NSDictionary *hashtag in hashtags) {
         NSArray *indices = hashtag[@"indices"];
         NSInteger first = [indices.firstObject integerValue];
         NSInteger last = [indices.lastObject integerValue];
-        [attributedString addAttributes:@{NSLinkAttributeName: hashtag, (id)kCTForegroundColorAttributeName: (id)hashtagColor.CGColor}
-                                  range:NSMakeRange(first, last - first)];
+        NSRange range = NSMakeRange(first, last - first);
+        [attributedString addAttributes:@{NSLinkAttributeName: [text substringWithRange:range], (id)kCTForegroundColorAttributeName: (id)hashtagColor.CGColor}
+                                  range:range];
     }
     NSArray *symbols = entities[@"symbols"];
     for (NSDictionary *symbol in symbols) {
         NSArray *indices = symbol[@"indices"];
         NSInteger first = [indices.firstObject integerValue];
         NSInteger last = [indices.lastObject integerValue];
-        [attributedString addAttributes:@{NSLinkAttributeName: symbol, (id)kCTForegroundColorAttributeName: (id)cashtagColor.CGColor}
-                                  range:NSMakeRange(first, last - first)];
+        NSRange range = NSMakeRange(first, last - first);
+        [attributedString addAttributes:@{NSLinkAttributeName: [text substringWithRange:range], (id)kCTForegroundColorAttributeName: (id)cashtagColor.CGColor}
+                                  range:range];
     }
     
     NSArray *urls = entities[@"urls"];
