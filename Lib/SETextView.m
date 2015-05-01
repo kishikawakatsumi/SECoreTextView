@@ -671,6 +671,37 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
 }
 #endif
 
+#if TARGET_OS_IPHONE
+- (void)drawTextBackgroundColorRect
+{
+    [self.attributedText enumerateAttribute:NSBackgroundColorAttributeName inRange:NSMakeRange(0, self.attributedText.length) options:kNilOptions usingBlock:^(id value, NSRange range, BOOL *stop) {
+        if (!value) {
+            return;
+        }
+        
+        for (SELineLayout *lineLayout in self.textLayout.lineLayouts) {
+            CGRect rect = [lineLayout rectOfStringWithRange:range];
+            if (!CGRectIsEmpty(rect)) {
+                UIColor *color = (UIColor *)value;
+                if (![color isKindOfClass: [UIColor class]]) {
+                    return;
+                }
+                UIBezierPath *path = [UIBezierPath bezierPath];
+                
+                [path moveToPoint:CGPointMake(CGRectGetMinX(rect), CGRectGetMidY(rect))];
+                [path addLineToPoint:CGPointMake(CGRectGetMaxX(rect), CGRectGetMidY(rect))];
+                
+                path.lineWidth = rect.size.height;
+                [color setStroke];
+                
+                [path stroke];
+            }
+        }
+    }];
+}
+#endif
+
+
 - (void)drawTextAttachmentsInContext:(CGContextRef)context
 {
     NSMutableSet *attachmentsToLeave = [[NSMutableSet alloc] init];
@@ -932,6 +963,10 @@ static NSString * const PARAGRAPH_SEPARATOR = @"\u2029";
     
 #if TARGET_OS_IPHONE
     [self drawTextDecorations];
+#endif
+    
+#if TARGET_OS_IPHONE
+    [self drawTextBackgroundColorRect];
 #endif
     
     [self drawTextAttachmentsInContext:context];
